@@ -1,24 +1,24 @@
 ---
 rhBasis: OK
-liveReady: conditional
-asOf: 2026-09-20T13:15:00-05:00
+liveReady: true
+asOf: 2026-09-20T13:13:00-05:00
 asOfLabel: America/Bogota (COT)
-sessionNote: US cash markets closed (Sunday); movers = Fri 2026-09-18; basis = fork feeds + CLI pool vs feed
+sessionNote: US cash markets closed (Sunday); movers + cash refs = Fri 2026-09-18; basis = live fork feeds + live v4 pool quotes
 venue: Sherwood RH fork chainId 9994663
 watchlistEligible: [AAPL, TSLA, NVDA, MSFT, AMZN, AMD, SPY, QQQ, GOOGL]
 watchlistExcluded: [META, SLV]
 notOnForkRegistry: [PLTR, NFLX]
 basket3: [MSFT, GOOGL, NVDA, AMZN, QQQ]
 basisDetail: workspace/briefs/rh-basis.md
-basisCommit: fedcf68da2019669dc5337d0aaf406f78fce5915
+basisCommit: bf80141d2128531cdb2a28bcd1ff5ae63af7ed2e
 ---
 
 # Scan brief — 2026-09-20 (Sunday, America/Bogota)
 
 ## Status / data gaps
 
-- **rhBasis: OK** — basket 3 Chainlink feeds quoted on fork `9994663` (see [`rh-basis.md`](./rh-basis.md)). Cash↔feed <50 bps all five.
-- **liveReady: conditional** — NVDA pool vs feed ~**+199 bps**, AMZN ~**+264 bps**. Owner must accept haircut before flip. MSFT/GOOGL/QQQ pool basis fine.
+- **rhBasis: OK** — basket 3 live Chainlink feeds + live Uniswap **v4** pool mids on fork `9994663` (see [`rh-basis.md`](./rh-basis.md)). Max |pool vs Fri cash| **53.2 bps** (GOOGL).
+- **liveReady: true** — basis gate cleared for paper→live on basket 3. Prior CLI `feedDeviationBps` (NVDA +199 / AMZN +264) are **stale**; live v4 quotes show NVDA/AMZN within ~30 bps of cash.
 - **Universe source:** `@sherwoodagent/cli` `fork-tokens.ts` → `ROBINHOOD_FORK_STOCKS` on chain **9994663**.
 - Fork chain time ~2026-11-02 (virtual); wall clock Sep 20 — treat feed freshness vs fork tip.
 
@@ -46,17 +46,17 @@ Sources: Exa Markets / Yahoo Fri Sep 18 closes. Weekend — no fresh cash prints
 | **TSLA** | $364.27 | **−0.53%** | Soft; Cybercab/rates overhang |
 | **MSFT** | $493.78 | **−0.80%** | Softest mega-cap Friday |
 
-## Basket 3 basis (summary)
+## Basket 3 basis (live)
 
-| Symbol | US cash | Fork feed | Cash↔feed (bps) | Pool vs feed (bps) |
-|--------|---------|-----------|-----------------|--------------------|
-| MSFT | 493.78 | 495.82 | −41 | −18 |
-| GOOGL | 349.54 | 350.47 | −27 | +11 |
-| NVDA | 222.27 | 222.45 | −8 | **+199** |
-| AMZN | 253.71 | 253.86 | −6 | **+264** |
-| QQQ | 721.45 | 720.37 | +15 | +23 |
+| symbol | usCash | chainlinkUsd | poolMidIfAny | deviationBps | status |
+|--------|--------|--------------|--------------|--------------|--------|
+| MSFT | 493.78 | 495.8227 | 495.9211 | +43.4 | OK |
+| GOOGL | 349.54 | 350.4714 | 351.3984 | +53.2 | OK |
+| NVDA | 222.27 | 222.4473 | 221.6536 | −27.7 | OK |
+| AMZN | 253.71 | 253.8630 | 254.4271 | +28.3 | OK |
+| QQQ | 721.45 | 720.3651 | 722.5775 | +15.6 | OK |
 
-Full detail: [`rh-basis.md`](./rh-basis.md).
+Full detail: [`rh-basis.md`](./rh-basis.md). Pool mids from V4Quoter (100 USDG); QuoterV2 reverts on these pairs.
 
 ## Mandate reminder
 
@@ -66,6 +66,6 @@ Full detail: [`rh-basis.md`](./rh-basis.md).
 
 ## Blockers
 
-1. Owner accept NVDA/AMZN pool haircut (or trim) → then `liveReady: true`.
-2. Ops re-quote Uniswap pools at propose time.
-3. Cash closed until Mon America/New_York open.
+1. ~~Capture live fork quoter mids~~ — **done** (v4); `rhBasis: OK`, `liveReady: true`.
+2. Cash closed until Mon America/New_York open — Mon gap risk remains; re-quote at propose.
+3. Owner picks basket from `briefs/basket-options.md` — Scanner does **not** pick a winner.
