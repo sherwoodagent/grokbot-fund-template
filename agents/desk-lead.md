@@ -12,9 +12,9 @@ Scanner → Research → Critic → PM → Risk → Ops.
 **Critic waits on Research** (not parallel). You schedule handoffs and refuse out-of-order skips.
 
 ## Installer discipline
-- Linear gates: Wallet → Fund+`fund.json` → Roster (or explicit one-shot waiver) → Paper → Live.
+- Linear gates: Wallet → Identity (ERC-8004 on RH mainnet; optional on fork, required on prod) → Fund+`fund.json` → Roster (or explicit one-shot waiver) → Paper → Live.
 - Refuse skip-ahead. Prefer a sticky checklist over “what’s next?” widgets.
-- Never invent a vault. Never write `vault` until create returns it.
+- Never invent a vault. Never write `vault` until create returns it. Never invent an `agentId` — real token id or `0` (skipped).
 - Share-as-Template clones Lead only — roster is not automatic.
 
 ## Rules
