@@ -1,4 +1,4 @@
-# Research Brief — Bull Case (Paper Loop)
+# Research Brief — Bull Case (Paper Loop) — Quality Patch
 
 **Role:** Research (persona lens: `lynch_buffett`)  
 **Dated:** Sunday, Sep 20, 2026 (America/Bogota, UTC-5)  
@@ -9,7 +9,7 @@
 
 **Disclaimer:** This brief applies a *lynch_buffett-style checklist* (circle of competence, durable demand/moat vs fashion, growth without fantasy multiples, fair price over cheap garbage). It does **not** claim personal endorsement by Warren Buffett or Peter Lynch.
 
-**Proxy gap (from scan):** Prices and narratives below use **US listed equities as proxy** for RH-tokenized names. On-chain RH fork quotes, liquidity, and basis vs cash were **not** retrieved — PM/Risk should treat RH vs US cash as an open gap.
+**Patch note:** Rewritten to clear Critic quality REJECT (valuation tables, RH basis note, primary KPIs, NFLX asymmetry). Prior brief lacked falsifiable math.
 
 ---
 
@@ -17,45 +17,144 @@
 
 | Priority | Ticker | One-line thesis |
 |----------|--------|-----------------|
-| 1 | **NFLX** | Soft-sell after Wells Fargo Underweight / Street-low $57 PT may be a *fair-price* entry into a still-understandable global streaming franchise — not a “cheap garbage” story if engagement holds. |
-| 2 | **AMZN** | Durable retail + AWS demand with a real logistics/cloud moat; Friday’s modest bid and FTC Prime-refund noise (cap unchanged) look more like housekeeping than franchise damage. |
+| 1 | **NFLX** | Soft-sell after Wells Fargo Underweight / Street-low **$57** PT may be a *fair-price* entry into a still-understandable streaming franchise — **only if** engagement holds and RH basis is later known; asymmetry to $57 is real (~20%+). |
+| 2 | **AMZN** | Durable retail + AWS cash engine with a narratable moat; Fri modest bid is **not** a soft-sell dislocation — hold as quality compounder at a *fair* (not distressed) multiple, subject to RH basis haircut. |
 
 **Passed for this pass (not candidates):**  
-- **AMD** — Friday strength tied to unconfirmed ~10% channel price-hike talk; value lens says do not chase momentum blindly. `lens:lynch_buffett`  
-- **TSLA** — Robotaxi/Optimus narrative + reported negative FCF sit closer to fashion/fantasy-multiple risk than circle-of-competence value. `lens:lynch_buffett`  
-- **PLTR** — Quiet Friday tape; weekend UBS AI-pick note is narrative, not a soft-sell on price — leave for another loop unless valuation compresses. `lens:lynch_buffett`
+- **AMD** — Fri strength on unconfirmed ~10% channel hike; value lens: do not chase. `lens:lynch_buffett`  
+- **TSLA** — Robotaxi/Optimus + negative FCF closer to fashion/fantasy multiple. `lens:lynch_buffett`  
+- **PLTR** — Quiet Fri tape; weekend UBS note is narrative, not a soft-sell. `lens:lynch_buffett`
+
+---
+
+## Valuation table (US cash proxy — Fri Sep 18, 2026)
+
+Prices from Exa Markets session closes (same source as scan). Multiples from secondary market-data aggregators cited below — **not** fabricated 10-Q text. EV where unavailable is marked.
+
+### NFLX
+
+| Field | Value | Source |
+|-------|-------|--------|
+| Spot (Fri close) | **$71.78** (−4.69% vs $75.31 prior) | [Exa NFLX 2026-09-18](https://exa.ai/library/markets/stock/NFLX?date=2026-09-18) |
+| Market cap | ~**$300–307B** (provider range; Signals ~$306.8B near $72) | [Signals.AI NFLX](https://signals.ai/symbol/nflx); [Invest Insider](https://investinsidernews.com/stock-market/stock-market-today-sept-18-netflix-falls-on-analyst-downgrade-and-slashed-price-target/) (~$299B) |
+| EV | **Not retrieved** this pass (honest gap) | — |
+| Trailing P/E | ~**22.0–23.7x** | Signals ~22.5; GuruFocus ~23.73 |
+| FCF yield | ~**3.6–3.7%** (TTM) | [Signals.AI](https://signals.ai/symbol/nflx) |
+| P/S | ~**6.2–6.3x** | Signals |
+| Wells Fargo PT | **$57** (Underweight; cut from **$80**) | [GuruFocus](https://www.gurufocus.com/news/9088313/netflix-drops-48-as-wells-fargo-cuts-its-target-to-57); [ECM Source](https://ecmsource.com/netflix-downgraded-underweight-wells-fargo-target-57-september-2026/) |
+
+**Wells $57 vs spot — downside math (required):**  
+- Spot **$71.78** → Wells **$57**: downside = $(71.78 − 57) / 71.78 ≈ **20.6%**.  
+- Spot is still ~**25.9%** *above* Wells PT ($71.78 / $57 − 1).  
+- Pre-sell Fri open context (~$75.31 prior close) → $57 ≈ **24.3%** downside from prior close.  
+Critic is correct: soft-sell ≠ margin of safety until engagement KPIs rebut the Wells thesis. `lens:lynch_buffett`
+
+### AMZN
+
+| Field | Value | Source |
+|-------|-------|--------|
+| Spot (Fri close) | **$253.51** (+0.92% vs $251.19 prior) | [Exa AMZN 2026-09-18](https://exa.ai/library/markets/stock/AMZN?date=2026-09-18) |
+| Market cap | ~**$2.74T** | [StockAnalysis AMZN stats](https://stockanalysis.com/stocks/amzn/statistics/) (as of Sep 18/20, 2026 data pull; close cited there ~$253.71 — small source variance vs Exa) |
+| Enterprise value | ~**$2.87T** | StockAnalysis |
+| Trailing P/E | ~**20.4x** | StockAnalysis |
+| Forward P/E | ~**27.6x** | StockAnalysis |
+| EV/Sales | ~**3.69x** | StockAnalysis |
+| FCF yield | **−0.42%** (TTM FCF outflow; AI capex) | StockAnalysis; confirms Amazon IR TTM FCF outflow |
+
+**Read:** AMZN is **not** a distressed soft-sell on Friday’s tape. Value case is “pay a fair multiple for a durable cash machine,” not “catch a falling knife.” Negative TTM FCF yield is the honest cost of AWS/AI build — priced as growth infrastructure, not deep value. `lens:lynch_buffett`
+
+---
+
+## RH basis: UNKNOWN
+
+**Attempted paths (Sun Sep 20, 2026):**
+1. **Sherwood docs / skill** — Chain `9994663` is the Tenderly RH mainnet fork; stock tokens (TSLA/AMZN/PLTR/NFLX/AMD) exist on protocol, routing via Uniswap/Synthra-class adapters ([sherwood.sh/skill.md](https://sherwood.sh/skill.md); [docs.sherwood.sh deployments](https://docs.sherwood.sh/protocol/strategies/uniswap)).
+2. **Sherwood HTTP API** — `GET https://api.sherwood.sh/chains` returns chain `9994663` (“Robinhood Chain (fork)”) with vault/factory addresses, but **`priceRouter`: `0x000…000`** and **only WETH + WOOD** in the public `tokens` map — **no TSLA/AMZN/PLTR/NFLX/AMD quote endpoints** exposed.
+3. **Tenderly public RPC** — `eth_chainId` → `0x9881a7` (= **9994663**) succeeded at the bundled fork RPC from skill.md. No public documented method returned mid-market tokenized equity quotes for the watchlist without token addresses + Quoter calldata (addresses not in public API token map).
+4. **app.sherwood.sh** — No public `/api/.../tokens` or markets quote path found (404 HTML).
+
+**Conclusion:** On-chain RH mid, depth, and **basis vs US cash = UNKNOWN** for TSLA/AMZN/PLTR/NFLX/AMD this pass.
+
+**Recommended haircut / sizing gate (Research → PM/Risk):**  
+- **Do not size** RH-token exposure as if it equals US cash until a live Synthra/Uniswap quoter mid (or Chainlink stock feed print) is captured and basis vs Exa Fri close is measured.  
+- Until then, treat any paper basket as **US-proxy narrative only** and apply an explicit **basis/liquidity haircut** (PM/Risk owns the number; Research suggests a conservative default of **wide — e.g. treat 7d paper PnL as unreliable** if basis unknown).  
+- Kill if basis later prints so wide that the cash thesis cannot transfer on-chain.
+
+---
+
+## Primary KPI support (real figures; no fake 10-Q text)
+
+### NFLX — engagement / membership
+
+| KPI | Figure | Primary vs secondary | Source |
+|-----|--------|----------------------|--------|
+| Paid memberships | **>325M** at YE 2025 (company stopped quarterly sub prints; milestone disclosure) | **Primary** (co. shareholder letter / earnings coverage of co. letter) | [Variety — Q4’25 letter summary](https://variety.com/2026/tv/news/netflix-q4-2025-financial-earnings-subscribers-1236635615/) |
+| H1’26 view hours | **>97B hours**, **+2% YoY** (vs +1.5% in 2025); company calls engagement “healthy” despite Olympics/World Cup | **Primary** (Q2’26 shareholder letter / 8-K exhibits summarized by StockTitan + OpenCapital filing mirrors) | [StockTitan NFLX 8-K summary](https://www.stocktitan.net/sec-filings/NFLX/8-k-netflix-inc-reports-material-event-c9fc6c407c82.html); [OpenCapital 8-K](https://www.opencapital.sh/filings/0001065280-26-000211); co. letter PDF via IR CDN ([q4cdn FINAL-Q2-26](https://s22.q4cdn.com/959853165/files/doc_financials/2026/q2/FINAL-Q2-26-Shareholder-Letter.pdf)) |
+| Q2’26 revenue | **$12.6B**, **+13% YoY** (+12% FXN); op. margin **~33%** | **Primary** | Same 8-K / letter |
+| 2026 guide (narrowed) | Revenue **$51.0–$51.4B**; op. margin **31.5%**; ads ~**$3B** | **Primary** | Same |
+| Wells engagement thesis | Street-low **$57** Underweight; Barron’s/GuruFocus summarize softer engagement / content-slate worry (Cahall) | **Secondary** (analyst note via press — **not** company KPI) | [GuruFocus](https://www.gurufocus.com/news/9088313/netflix-drops-48-as-wells-fargo-cuts-its-target-to-57) |
+
+**Gap flag (honest):** We do **not** have the full Wells Fargo note PDF or a primary Top-100-originals hours series in this brief. Company aggregate view-hours (**+2% H1’26**) and Wells’ bearish engagement framing can **coexist** if Wells is focused on *quality/hit-rate of originals* rather than total hours. **KPI gap remains** until next co. engagement print or a primary note excerpt. Do not invent 10-Q language. `lens:lynch_buffett`
+
+### AMZN — AWS / growth
+
+| KPI | Figure | Primary vs secondary | Source |
+|-----|--------|----------------------|--------|
+| Q2’26 net sales | **$200.6B**, **+20% YoY** | **Primary** | [Amazon IR — Q2 2026 results](https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Second-Quarter-Results/) |
+| Q2’26 operating income | **$27.5B**, **+43% YoY** | **Primary** | Amazon IR |
+| **AWS** sales | **$42.2B**, **+37% YoY** (fastest in 18 quarters); ~**$169B** annualized run-rate | **Primary** | Amazon IR |
+| AWS operating income | **$16.6B** (vs $10.2B YoY) | **Primary** | Amazon IR |
+| AWS backlog | **$496B** (mgmt commentary) | **Primary** (earnings call / IR narrative) | Amazon IR; [Motley Fool transcript](https://www.fool.com/earnings/call-transcripts/2026/08/07/amazon-amzn-q2-2026-earnings-call-transcript/) |
+| TTM FCF | Outflow (**−$7.6B** IR; StockAnalysis ≈ **−$11.6B** depending on definition/timing) | **Primary** / aggregator | Amazon IR; StockAnalysis |
+| 2026 cash CapEx guide | Raised to **~$220B** (AI infra) | **Primary** | Amazon IR / CNBC earnings wrap |
+| FTC Prime refunds | Refunds up to **$200**; aggregate settlement cap still **$2.5B** | **Secondary** news | [StockTi](https://stockti.com/amazon-expands-prime-refunds-up-to-200-settlement-cap-unchanged) |
+
+**Gap flag:** Next print (est. late Oct 2026 per StockAnalysis) must confirm AWS growth does not decelerate vs the Q2 re-acceleration story. Capex/FCF tradeoff is already visible in negative FCF yield. `lens:lynch_buffett`
+
+---
+
+## Asymmetry (NFLX) — quantify downside vs upside case
+
+| Scenario | Level | Δ vs Fri spot $71.78 | Notes |
+|----------|-------|----------------------|-------|
+| **Bear / Wells** | **$57** | **≈ −20.6%** | Published Street-low PT; Critic kill geometry |
+| Soft bear (halfway to Wells) | ~$64.4 | ≈ −10.3% | If engagement scare half-prices |
+| Spot (Fri) | $71.78 | 0% | Post-downgrade print |
+| Prior close (pre-gap) | $75.31 | ≈ +4.9% | Mean-revert tape only |
+| **Bull case A — prior Wells PT restored** | **$80** | **≈ +11.5%** | If Cahall thesis fails and house re-rates to old PT |
+| **Bull case B — GF Value (model, secondary)** | ~$102 | ≈ +42% | [GuruFocus GF Value](https://www.gurufocus.com/news/9087974/nflx-looks-261-undervalued-on-gf-value-despite-recent-downgrade) — **model, not a desk target** |
+
+**Asymmetry read (honest):** Near-term **published** path is skewed: **~21% downside to Wells $57** vs **~12% upside to the *prior* Wells $80** if the engagement scare fades. The soft-sell is **not** positively asymmetric on the Wells tape alone. Bull needs either (a) primary engagement rebuttal on the next print, or (b) a higher non-Wells consensus path — neither is proven in this brief. 7d paper loop has limited edge proving Street wrong. `lens:lynch_buffett`
+
+**AMZN asymmetry:** No equivalent Street-low PT shock this week. Consensus avg PT ~**$328** (~**+29%** vs ~$254) per StockAnalysis — but that is **crowded AWS narrative upside**, not a value dislocation. Downside is multiple compression if AWS decelerates / CapEx stays elevated (FCF already negative). Not a soft-sell entry. `lens:lynch_buffett`
 
 ---
 
 ## Thesis bullets (≤8)
 
-1. **NFLX — soft-sell, not scrap metal:** Fri close **$71.78 (−4.69%)** after Wells Fargo cut to Underweight with a Street-low **$57** PT; selloffs driven by one bank’s engagement/content-slate worry can create a *fair* (not necessarily deep-value) entry if the subscriber/engagement story still works. `lens:lynch_buffett`  
-   Sources: [Exa Markets NFLX 2026-09-18](https://exa.ai/library/markets/stock/); [GuruFocus — Wells Fargo / ~4.8% drop](https://www.gurufocus.com/news/9088313/netflix-drops-48-as-wells-fargo-cuts-its-target-to-57); [ECM Source — Underweight / $57](https://ecmsource.com/netflix-downgraded-underweight-wells-fargo-target-57-september-2026/).
+1. **NFLX — priced soft-sell with open engagement fight:** Fri **$71.78** after Wells **Underweight / $57**; ~**20.6%** further downside if Wells is right. Fair-price entry only if co. H1 view-hours (**+2%**) prove more relevant than Wells’ hit-rate worry. `lens:lynch_buffett`
+2. **NFLX — circle of competence:** Streaming KPIs (price, churn proxies, view hours, ads) are observable without exotic models — prefer that over opaque AI-capex fashion on this desk. `lens:lynch_buffett`
+3. **NFLX — multiple not fantasy-cheap:** Trailing P/E ~**22–24x** with FCF yield ~**3.6%** is compressed vs history but **not** deep value; “fair” not “cigar butt.” `lens:lynch_buffett`
+4. **AMZN — moat you can narrate:** Retail + fulfillment + **AWS +37%** (primary IR) is durable demand; Fri **$253.51** is quiet tape, not a bargain bin. `lens:lynch_buffett`
+5. **AMZN — pay fair for the cash machine:** EV/S ~**3.7x**, trailing P/E ~**20x**, but **negative FCF yield** from AI CapEx — growth-without-fantasy means insisting on AWS delivery, not slides. `lens:lynch_buffett`
+6. **AMZN — settlement optics ≠ franchise break:** Prime refunds to **$200** with **$2.5B** cap unchanged (secondary) is process, not open-ended liability — still monitor regulatory tax on trust. `lens:lynch_buffett`
+7. **RH venue:** Both names are on the tokenized watchlist; **RH basis UNKNOWN** → do not size until quote/basis known. `lens:lynch_buffett`
+8. **Value flavor over chase:** Soft-sell **NFLX** (with asymmetric risk disclosed) + durable **AMZN** beat chasing **AMD** on unconfirmed partner hikes. `lens:lynch_buffett`
 
-2. **NFLX — circle of competence:** Streaming is a product you can *see and use* — pricing power, content slate, and churn are observable without needing exotic models; prefer that over opaque AI-capex stories on this desk. `lens:lynch_buffett`
+---
 
-3. **NFLX — durable demand vs fashion:** Global paid streaming remains a habit business when content and UX hold; the Wells note is a *fashion/fear* spike on Friday’s tape, not proof the category died overnight. `lens:lynch_buffett`
+## What is already priced in (Critic ask)
 
-4. **AMZN — moat you can narrate:** Retail scale + fulfillment + **AWS** is the classic “hard to displace” stack; Friday **$253.51 (+0.92%)** is quiet tape, not a momentum chase. `lens:lynch_buffett`  
-   Source: [Exa Markets AMZN 2026-09-18](https://exa.ai/library/markets/stock/).
-
-5. **AMZN — settlement noise ≠ franchise break:** Reports of Prime refunds up to **$200** with the **$2.5B aggregate settlement cap unchanged** read as process expansion, not a new open-ended liability; fair-price lens cares more about AWS/retail cash engines than headline refund optics. `lens:lynch_buffett`  
-   Source: [StockTi — Prime refunds / cap unchanged](https://stockti.com/amazon-expands-prime-refunds-up-to-200-settlement-cap-unchanged).
-
-6. **AMZN — growth without fantasy multiples (relative to peers on this list):** AWS/AI demand is real infrastructure spend, not a pure narrative token; still insist on paying a *fair* price for the cash machine rather than extrapolating every AI slide. `lens:lynch_buffett`  
-   Context note (narrative only): [Blockchain.News — AWS framing](https://blockchain.news/news/20260919-price-prediction-amzn-aws-firepower-makes-320-the-path).
-
-7. **Prefer watchlist RH-tokenized set:** Both names are on the mandated tokenized watchlist (TSLA/AMZN/PLTR/NFLX/AMD); no off-list hunting. `lens:lynch_buffett`
-
-8. **Value flavor over chase:** Soft-sell **NFLX** + durable **AMZN** beat chasing **AMD** on unconfirmed partner price hikes (channel reports only; AMD IR silent per scan). `lens:lynch_buffett`  
-   AMD context (why we skip): [Wccftech — ~10% hike reports](https://wccftech.com/amd-notifies-partners-of-10-price-hike/); [TweakTown — same channel reporting](https://www.tweaktown.com/news/113605/amd-reportedly-plans-a-10-percent-price-hike-for-chips-starting-in-q4-2026/index.html).
+- **NFLX:** One-bank engagement/content scare and a **~4.7%** Fri gap are **partially** priced; **Wells $57 path is not fully priced** (stock still ~26% above that PT). What’s *not* proven priced-out: sustained engagement deterioration vs co. +2% hours print.  
+- **AMZN:** AWS strength and AI CapEx are **widely** in the narrative multiple; Fri bid does **not** price a value dislocation. FTC refund optics look largely contained at the **$2.5B** frame (secondary).
 
 ---
 
 ## What would change my mind
 
-- **NFLX:** Confirmed, sustained deterioration in engagement / paid memberships / content ROI (beyond one-bank PT drama), or a break of the franchise’s pricing power that turns “fair soft-sell” into value trap. `lens:lynch_buffett`  
-- **AMZN:** Evidence that AWS growth or retail unit economics are structurally impaired (not one-off regulatory refund optics), or cash-proxy vs RH-token basis so wide that the paper thesis cannot transfer on-chain. `lens:lynch_buffett`
+- **NFLX:** Next engagement / paid-membership / viewing-hours print deteriorates vs H1’26 **or** price trades through **$65** without KPI rebuttal **or** second major house cuts on engagement — then soft-sell → value trap. Conversely, primary Top-100 originals hours stabilizing + ads on track to ~$3B would strengthen the fair-price case. `lens:lynch_buffett`  
+- **AMZN:** AWS growth or op. income decelerates vs Q2 run-rate on next print **or** CapEx/FCF path worsens without backlog conversion **or** liability expands beyond **$2.5B** settlement frame. `lens:lynch_buffett`  
+- **Both:** Live RH quote showing material adverse basis vs US cash → thesis does not transfer; **do not size**. `lens:lynch_buffett`
 
 ---
 
@@ -63,18 +162,34 @@
 
 | Item | Link |
 |------|------|
-| Scan inputs | `workspace/briefs/scan.md` (this repo) |
-| Mandate | `workspace/mandate.md` |
-| NFLX / AMD / AMZN Fri session proxies | [Exa Markets](https://exa.ai/library/markets/stock/) (`date=2026-09-18`) |
-| NFLX Wells Fargo downgrade | [GuruFocus](https://www.gurufocus.com/news/9088313/netflix-drops-48-as-wells-fargo-cuts-its-target-to-57), [ECM Source](https://ecmsource.com/netflix-downgraded-underweight-wells-fargo-target-57-september-2026/) |
+| Scan / Critic / Mandate | `workspace/briefs/scan.md`, `critic.md`, `workspace/mandate.md` |
+| NFLX / AMZN Fri closes | [Exa NFLX](https://exa.ai/library/markets/stock/NFLX?date=2026-09-18), [Exa AMZN](https://exa.ai/library/markets/stock/AMZN?date=2026-09-18) |
+| NFLX multiples | [Signals.AI](https://signals.ai/symbol/nflx), GuruFocus valuation notes |
+| NFLX Wells downgrade | [GuruFocus](https://www.gurufocus.com/news/9088313/netflix-drops-48-as-wells-fargo-cuts-its-target-to-57), [ECM Source](https://ecmsource.com/netflix-downgraded-underweight-wells-fargo-target-57-september-2026/) |
+| NFLX primary KPIs | [StockTitan 8-K](https://www.stocktitan.net/sec-filings/NFLX/8-k-netflix-inc-reports-material-event-c9fc6c407c82.html), [IR shareholder letter PDF](https://s22.q4cdn.com/959853165/files/doc_financials/2026/q2/FINAL-Q2-26-Shareholder-Letter.pdf), [Variety YE’25 subs](https://variety.com/2026/tv/news/netflix-q4-2025-financial-earnings-subscribers-1236635615/) |
+| AMZN multiples | [StockAnalysis](https://stockanalysis.com/stocks/amzn/statistics/) |
+| AMZN primary KPIs | [Amazon IR Q2 2026](https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Second-Quarter-Results/) |
 | AMZN Prime refunds | [StockTi](https://stockti.com/amazon-expands-prime-refunds-up-to-200-settlement-cap-unchanged) |
-| AMD channel hike (not used as buy thesis) | [Wccftech](https://wccftech.com/amd-notifies-partners-of-10-price-hike/), [TweakTown](https://www.tweaktown.com/news/113605/amd-reportedly-plans-a-10-percent-price-hike-for-chips-starting-in-q4-2026/index.html) |
+| RH fork / API | [sherwood.sh/skill.md](https://sherwood.sh/skill.md), `GET https://api.sherwood.sh/chains` (priceRouter zero on 9994663) |
 
-**Not claimed:** No 10-K/10-Q excerpts invented; no Buffett/Lynch personal buy endorsement; no RH on-chain fills.
+**Not claimed:** No invented 10-K/10-Q excerpts; no Buffett/Lynch personal endorsement; no RH on-chain fills or measured basis.
+
+---
+
+## Quality-gate checklist (vs Critic REJECT)
+
+| Critic requirement | Status |
+|--------------------|--------|
+| Valuation table per candidate (price, mkt cap/EV, multiple) | **Closed** for both (NFLX EV still unavailable — stated honestly) |
+| Wells $57 vs spot downside math (~20%+) | **Closed** (~20.6% from $71.78) |
+| RH fork basis note | **Closed as UNKNOWN** + haircut / do-not-size until known |
+| Primary KPI support | **Closed** with primary IR/letter figures; Wells engagement detail remains **secondary gap** (flagged) |
+| Asymmetry quantified | **Closed** (NFLX −20.6% vs +11.5% to prior Wells $80) |
+| `lens:lynch_buffett`; 1–3 candidates; no sizing | **Closed** (2 candidates) |
 
 ---
 
 ## Handoff
 
-- **Critic / PM / Risk:** Own pushback, basket construction, and sizing (≤30% single name, ≤5 names, 7d).  
+- **Critic / PM / Risk:** Own pushback, basket construction, and sizing (≤30% single name, ≤5 names, 7d). Default: treat RH as untradeable-for-size until basis prints.  
 - **Research scope ends here** — did not write `critic.md`, `draft.json`, or `risk.md`.
