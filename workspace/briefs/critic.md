@@ -1,103 +1,87 @@
-# Critic Brief — Bear Case vs Owner Basket 3 (AI Delivery)
+# Critic Brief — Basket 3 Research re-check (quick pass)
 
 **Role:** Critic (`lens:burry`)  
 **Dated:** Sunday, Sep 20, 2026 (America/Bogota, UTC-5)  
-**Attack surface:** Owner **PICKED** Option 3 — AI Delivery (anchored)  
-**Weights (bps):** MSFT **2800** · GOOGL **2500** · NVDA **2000** · AMZN **1500** · QQQ **1200** · sum **10000** · 7d  
-**Inputs:** `workspace/briefs/basket-options.md` · `workspace/briefs/scan.md` (rhBasis UNKNOWN, liveReady false) · prior `research.md` (AMZN only overlap; NFLX-era — **misaligned**)  
-**Mandate:** value · ≤5 · ≤3000 bps · PortfolioStrategy · RH fork `9994663`
+**Attack surface:** Owner Basket 3 — AI Delivery · MSFT 2800 / GOOGL 2500 / NVDA 2000 / AMZN 1500 / QQQ 1200  
+**Inputs:** `research.md` @ [23ab7bb](https://github.com/sherwoodagent/grokbot-fund-template/commit/23ab7bbd4a8a984c16f102addb5f7a3e2eeb3bc7) · `scan.md` (rhBasis OK, liveReady true) · `rh-basis.md` (max |pool−cash| ~53 bps)  
+**Prior Critic:** depth gap + rhBasis UNKNOWN kills (superseded for *process*)
 
 **Disclaimer:** Stylized burry checklist — not Michael Burry.
 
-**Default:** Reject the long until the *thesis* is proven. Soft one-day tape ≠ margin of safety. Crowded AI narrative ≠ value. `lens:burry`
+---
+
+## Quality gate on THIS Research
+
+**CLEARED** — Research depth kill is closed.
+
+| Prior Critic demand | Status |
+|---------------------|--------|
+| Valuation table for MSFT / GOOGL / NVDA / AMZN / QQQ | **Closed** (Fri cash + multiples cited) |
+| Primary KPIs + real IR/SEC links | **Closed** (MSFT FY26 Q4 IR; GOOGL/AMZN SEC Ex. 99.1; NVDA Q2 FY27 IR/SEC) |
+| Per-name falsifiers | **Closed** |
+| Honest gaps (GOOGL trailing P/E / OI&E; AMZN −FCF; QQQ top-hold overlap) | **Closed** (stated, not invented) |
+| RH basis | **Closed as OK** — cites `rh-basis.md`; live v4 + Chainlink; max ~**53 bps** (GOOGL). Matches Scanner. |
+
+**CLEARED ≠ live cheerlead.** Risk still re-gates. Re-quote at propose. Mon gap remains. `lens:burry`
+
+**Blockers Critic removes:** (1) Research depth thin on MSFT/GOOGL/NVDA/QQQ — **lifted**. (2) rhBasis UNKNOWN process kill — **lifted** (OK ≤~55 bps).
+
+**Blockers Critic does *not* remove:** crowded AI-factor thesis; QQQ nested beta; NVDA vs value mandate; MSFT soft-day folklore. Those are Risk/PM conviction calls, not quality REJECTS.
 
 ---
 
-## Quality gate (this option)
+## Bear bullets (≤8) — still attack the thesis
 
-**CLEARED** for paper Critic of Option 3 (scan + basket-options enough to falsify the book).
+1. **One factor, five tickers:** MSFT+GOOGL+NVDA+AMZN+QQQ remains AI-delivery correlation. Depth tables don’t break cluster risk. Mon gap still hits all five. `lens:burry`
 
-**Caveats (non-optional for Risk/PM):**
-1. **`research.md` is misaligned** — still NFLX/AMZN soft-sell pass; **no** Research valuation/KPI tables for MSFT, GOOGL, NVDA, QQQ. Thesis depth outside AMZN is thin.
-2. **`rhBasis: UNKNOWN` / `liveReady: false`** — blocks **live** size. Paper REVISE / US-proxy only.
-3. Mandate **value** flavor vs a book that is mostly **AI-factor beta** (cloud + semis + Nasdaq sleeve).
+2. **NVDA still fails value screen:** Trailing P/E ~**28×**, Fri **+1.3%** — satellite cap is optics; you own fashion-multiple semi beta in a *value* book. `lens:burry`
 
-CLEARED ≠ Critic endorsement of sizing. `lens:burry`
+3. **QQQ still nested leverage:** Research admits top-hold overlap with NVDA/MSFT/AMZN/GOOGL. Ballast that is the thesis is not ballast. `lens:burry`
 
----
+4. **MSFT soft Fri ≠ fair-price edge:** Azure **+43%** / RPO **$678B** prove franchise quality — not that −0.8% was a dislocation. Crowded narrative. `lens:burry`
 
-## Bear bullets (≤8) — basket 3 specifically
+5. **GOOGL “cheapest trailing” has fog:** Research flags Q2 unrealized equity gains in OI&E. Trailing **17.5×** can lie; Cloud **+82%** is the real claim — and it’s already priced as AI delivery. `lens:burry`
 
-1. **One factor, five tickers:** MSFT + GOOGL + NVDA + AMZN + QQQ is **AI delivery correlation** dressed as diversification. What’s priced that isn’t true: that “anchored” weights break the mega-AI cluster. Mon gap hits all five. `lens:burry`
+6. **AMZN — CapEx tax intact:** Trailing P/E ~**20×**, FCF yield **−0.42%**. Pay-fair for AWS **+37%** is fine; “cash engine” without free cash is still CapEx fashion. `lens:burry`
 
-2. **NVDA 2000 bps fails the value screen:** Fri **+1.3%** on chip leadership; X itself flagged PEG-trap on NVDA/AMD. Capping below AMD is anti-chase theater — you still own fashion-multiple semi beta in a *value* mandate. `lens:burry`
+7. **Basis OK is a snapshot, not a fill:** ~53 bps on 100 USDG probe; fork tip clock ≠ wall Sunday; Mon open + size impact can reopen the gate. Re-quote or kill. `lens:burry`
 
-3. **QQQ 1200 is nested leverage:** Nasdaq sleeve reloads NVDA/mega AI exposure already in the single names. Ballast that correlates with the thesis is not ballast. `lens:burry`
-
-4. **MSFT “soft print = value entry” is folklore:** Fri **−0.8%** is noise, not a dislocation. Azure/backlog narrative is **crowded** weekend X chatter — consensus euphoria as risk. Soft day ≠ fair-price edge for 7d. `lens:burry`
-
-5. **GOOGL chart-bulls ≠ margin of safety:** Fri ~**+0.6%** + high-engagement setup posts = sentiment heat, not cash-yield proof. TPU/external HW story is narrative. `lens:burry`
-
-6. **AMZN — still paying fair for CapEx fashion:** Prior Research: EV/S ~**3.7×**, trailing P/E ~**20×**, **negative FCF** / ~**$220B** CapEx guide. 1500 bps of “cash engine” that is funding AI build — when AWS decelerates, multiple first. `lens:burry`
-
-7. **RH UNKNOWN is a hard transfer kill for size:** No measured fork mid vs Fri cash for any of the five. 7d paper PnL is unreliable theater until basis prints. `lens:burry`
-
-8. **Asymmetry for 7d is ugly:** Upside needs AI narrative *continuation* into Mon open; downside is factor unwind + any single name’s CapEx/earnings air-pocket. Crowded books don’t pay you for being late to the bounce. `lens:burry`
+8. **7d asymmetry still crowded-side:** Upside = narrative continuation; downside = factor unwind. Depth cleared the *homework* kill, not the *edge* kill. `lens:burry`
 
 ---
 
-## Explicit kill criteria
+## Explicit kill criteria (updated)
 
-### Per name
-
-| Name | Weight | Kill / falsify (any one) |
-|------|--------|---------------------------|
-| **MSFT** | 2800 | Azure / cloud growth or backlog narrative breaks on next print **or** Fri softness extends >**3%** Mon without thesis change **or** CapEx/FCF path worsens vs Street frame. |
-| **GOOGL** | 2500 | Ads/search/cloud print disappoints **or** AI-capex ROI narrative cracks **or** Mon gap >**3%** adverse without offset from other sleeves. |
-| **NVDA** | 2000 | Semi complex mean-reverts hard Mon (e.g. >**5%** adverse) **or** PEG/competition scare reprices **or** fork basis for NVDA widens beyond Risk limit **or** owner later requires **zero semi beta**. |
-| **AMZN** | 1500 | AWS sales or op. income decelerates vs Q2 run-rate **or** CapEx/FCF worsens without backlog conversion **or** liability expands beyond **$2.5B** settlement frame. |
-| **QQQ** | 1200 | ETF fork route / deviation spikes (fee-tier / empty-pool warnings) **or** Nasdaq leadership reverses >**2%** Mon while single names fail to offset. |
-
-### Basket-level
-
-| Kill | Condition |
-|------|-----------|
-| **Factor unwind** | MSFT+GOOGL+NVDA+AMZN move together >**2.5%** adverse Mon open (proves “diversification” false). |
-| **RH / process** | Live RH quoter mid shows material adverse basis vs US cash on any leg → **do not size**; draft that sizes tokens *as if* cash without measured basis → **process kill**. |
-| **Value-mandate breach** | Book behaves as pure AI momentum (NVDA+QQQ driving PnL) with MSFT soft-entry thesis abandoned. |
-| **Research gap** | PM sizes live *or* large paper conviction without Research pass on MSFT/GOOGL/NVDA/QQQ → Risk should **REJECT depth**. |
+| Name | Kill (any one) |
+|------|----------------|
+| **MSFT** | Azure growth decelerates vs +43% **or** commercial RPO growth collapses **or** CapEx/FCF worsens without backlog conversion **or** Mon gap >**3%** adverse without thesis change. |
+| **GOOGL** | Cloud re-decelerates **or** Search monetization breaks **or** regulatory remedy impairs cash engine **or** Mon gap >**3%** adverse. |
+| **NVDA** | Data Center guide cut **or** GM cracks >**200 bps** **or** hyperscaler CapEx pause **or** Mon semi gap >**5%** **or** basis widens beyond Risk limit on re-quote. |
+| **AMZN** | AWS decelerates vs +37% **or** CapEx/FCF worsens without backlog conversion **or** retail margin shock. |
+| **QQQ** | ETF fork route/liquidity fails **or** Risk rejects ETF sleeves **or** Nasdaq >**2%** adverse Mon without single-name offset. |
+| **Basket** | Cluster move >**2.5%** adverse Mon (diversification false) **or** re-quote shows material adverse basis vs cash **or** book PnL driven by NVDA+QQQ only (value-mandate breach). |
 
 ---
 
 ## Confidence the bull is wrong
 
-| Scope | Confidence bull is wrong | Note |
-|-------|--------------------------|------|
-| **Basket 3 (overall)** | **Med–High** | Crowded AI-factor book sold as value; nested QQQ beta; Research missing on 4/5 names. |
-| **MSFT** | **Med** | Soft Fri ≠ value entry; franchise may be fine; *timing/entry* suspect. |
-| **GOOGL** | **Med** | Sentiment heat > proven dislocation. |
-| **NVDA** | **High** | Fashion multiple inside a value mandate; Fri strength is the opposite of soft-sell. |
-| **AMZN** | **Med** | Same as prior pass — fair compounder, not this week’s bargain. |
-| **QQQ** | **High** | Nested AI beta, not ballast. |
-
----
-
-## What’s priced in (Critic read)
-
-- **Priced:** Weekend AI rebound narrative; MSFT soft as “buy quality”; NVDA/QQQ leadership; AMD omitted as anti-chase optics.
-- **Not proven priced-out:** Correlation risk across the five; CapEx/FCF tax on AMZN (and likely peers); RH basis; Mon mean-reversion after Fri chip bid.
+| Scope | Confidence | Note |
+|-------|------------|------|
+| **Research quality / depth** | **Low** bull-is-wrong on *homework* | Tables + KPIs + basis cite are real enough — depth REJECT withdrawn. |
+| **Basket 3 thesis / entry** | **Med** | Crowding + nested beta + value-mandate tension remain. |
+| **NVDA / QQQ sleeves** | **Med–High** | Still the soft underbelly of “value” framing. |
+| **MSFT / GOOGL / AMZN** | **Med** | Franchises may be fine; *this* entry is not a bargain print. |
 
 ---
 
 ## One-line kill summary
 
-**Kill live until rhBasis known; kill thesis if Mon AI-factor gap hits the cluster, NVDA/QQQ drive the book, or MSFT “soft = value” fails without Research depth on the new names.**
+**Depth + rhBasis process kills CLEARED; kill live only if re-quote/basis blows out, Mon AI-cluster gaps, or NVDA/QQQ drive a value-mandate breach — Risk still owns live APPROVE.**
 
 ---
 
 ## Handoff
 
-- **PM:** Option 3 paper-ok to *draft* with Risk haircut; Critic stance = **revise-down conviction**, not cheerlead. Prefer cutting NVDA and/or QQQ if forced to keep value flavor; do not treat MSFT −0.8% as a bargain.
-- **Risk:** Non-optional — rhBasis UNKNOWN, nested beta (QQQ), Research gap on MSFT/GOOGL/NVDA/QQQ, NVDA semi fashion in value mandate.
-- **Research:** If desk keeps Option 3, need a **new** Research pass on MSFT/GOOGL/NVDA/QQQ (not NFLX).
-- **Critic scope ends** — did not write `draft.json` or `risk.md`.
+- **Desk Lead / PM / Risk:** Critic **CLEARED** Research quality for Basket 3. Prior depth + UNKNOWN-basis blockers **removed**. Thesis bears remain — revise conviction, don’t rubber-stamp.
+- **Ops:** Re-quote at propose (size-aware); do not freeze Sunday 100 USDG probe.
+- **Critic scope ends** — no `draft.json` / `risk.md`.
