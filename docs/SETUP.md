@@ -1,10 +1,13 @@
 # Setup (beta installer)
 
-1. Install [Sherwood skill](https://sherwood.sh/skill.md) (includes incentivized-beta RPC/faucet/Privy notes once SHE-297 lands).
-2. Privy agent wallet: login → faucet → dust self-send (sign via Privy, broadcast raw to fork RPC).
-3. Create fund + deposit dust on chain `9994663`.
-4. In Grok Bot: create the 7 bots from `agents/*.md` (or ask Desk Lead to bootstrap).
-5. Copy `workspace/*` onto the shared computer; edit `mandate.md` + `watchlist.csv`.
-6. Pick a mandate flavor in `mandate.md`: `value` | `growth` | `contrarian` | `macro`.
-7. Paper loop first: Scanner → Research ↔ Critic → PM draft → Risk → (no chain).
-8. Then Ops dry-run propose; only then live propose/execute/settle.
+Order matters:
+
+1. **Wallet** — Install [Sherwood skill](https://sherwood.sh/skill.md); Privy agent login → faucet → dust self-send (Privy sign + raw broadcast to fork RPC).
+2. **Mandate** — Slug + flavor in `workspace/mandate.md`.
+3. **Create fund** — Sherwood QuickStart (on-chain fund / vault). Do not invent a vault address.
+4. **fund.json** — Write `vault` + `agent` + `subdomain` **after** QuickStart returns the vault. See `workspace/fund.json.example`.
+5. **Optional** — Create teammate bots from `agents/*.md` (or keep Desk Lead role-routing).
+6. **Paper loop** — Scanner → Research ↔ Critic → PM draft → Risk → (no chain).
+7. **Live** — Ops dry-run propose; only then live propose/execute/settle.
+
+Chain id for incentivized beta: `9994663` (confirm against current Sherwood skill if it drifts).

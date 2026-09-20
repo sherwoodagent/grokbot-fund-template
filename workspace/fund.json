@@ -1,7 +1,7 @@
 {
   "chainId": 9994663,
-  "rpc": "https://virtual.robinhood-chain.eu.rpc.tenderly.co/moonwell/wormhole-bridge/f509bc-4fdefe",
-  "vault": "0xYOUR_VAULT",
-  "agent": "0x3E11F357De42Ae396fCA812db5f8FA1C576DC225",
-  "subdomain": "grok-fund-beta"
+  "rpc": "",
+  "vault": "",
+  "agent": "",
+  "subdomain": ""
 }
