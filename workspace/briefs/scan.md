@@ -1,76 +1,83 @@
 ---
 rhBasis: UNKNOWN
 liveReady: false
-asOf: 2026-09-20T12:49:39-05:00
+asOf: 2026-09-20T13:02:00-05:00
 asOfLabel: America/Bogota (COT)
-sessionNote: US cash markets closed (Sunday); movers = Fri 2026-09-18 regular session (Yahoo Finance chart)
+sessionNote: US cash closed (Sunday); movers = Fri 2026-09-18 Yahoo Finance chart (close vs prior close)
 venue: Sherwood RH fork chainId 9994663
-watchlist: [TSLA, AMZN, PLTR, NFLX, AMD]
+universe: [AAPL, TSLA, NVDA, MSFT, AMZN, AMD, SPY, QQQ, GOOGL]
+excluded: [META (feed/pool), SLV (v3), PLTR (not on CLI fork-tokens), NFLX (not on CLI fork-tokens)]
 ---
 
-# Scan brief — 2026-09-20 (Sunday, America/Bogota)
+# Scan brief — widened fork universe — 2026-09-20 (Sunday)
 
-## Status / data gaps
+## Status / rhBasis
 
-- **rhBasis: UNKNOWN** — desk `fund.json` has `chainId: 9994663` but empty `rpc` / `vault`; RH assets API lists watchlist token deployments only on mainnet **4663**, not fork **9994663**. No reliable **fork** mids available → cannot compare RH-fork mid vs US cash.
-- **liveReady: false** — do not size or submit live PortfolioStrategy until fork mids are queryable and basis is checked.
-- DexScreener `chainId: robinhood` (mainnet 4663) had partial books for PLTR/NFLX/AMD earlier this scan window; those are **not** fork quotes and were rate-limited for TSLA/AMZN. Ignored for rhBasis.
-- X search API unavailable this run (client-not-enrolled); narratives from public news only.
+- **rhBasis: UNKNOWN** — no RH-fork (`9994663`) token mids vs US cash. RH assets API lists deployments on mainnet **4663** only; desk `fund.json` still has empty `rpc`/`vault` for the fork.
+- **liveReady: false** — empty basket was owner-rejected; do **not** size until fork mids are queryable and basis is OK.
+- Universe = CLI `fork-tokens` eligible stock tokens on fork **9994663**: AAPL TSLA NVDA MSFT AMZN AMD SPY QQQ GOOGL.
+- **Dropped:** META (feed/pool), SLV (v3), PLTR + NFLX (not on CLI fork registry this pass — mainnet 4663 listings do **not** prove fork eligibility).
 
-## Top movers (watchlist only)
+## Top activity (Fri 2026-09-18, US cash proxy)
 
-Source: **Yahoo Finance** `v8/finance/chart`, Fri **2026-09-18** close vs prior daily close. Weekend — no fresh cash prints.
+Source: Yahoo Finance `v8/finance/chart`, Fri close vs prior daily close.
 
-| Sym | Last (Fri) | Prior close | Δ % | Note |
-|-----|------------|-------------|-----|------|
-| **NFLX** | $71.79 | $75.31 | **-4.67%** | Largest downside; Wells Fargo UW cut |
-| **AMD** | $559.82 | $545.09 | **+2.70%** | Largest upside; AI/supply narrative |
-| AMZN | $253.71 | $251.19 | +1.00% | Mega-cap support Friday |
-| PLTR | $177.64 | $176.24 | +0.79% | Quiet tape; contract headlines |
-| TSLA | $364.27 | $366.20 | −0.53% | Flat; Cybercab/rates overhang |
+| Rank | Sym | Last | Prior | Δ % | Role |
+|------|-----|------|-------|-----|------|
+| 1 | **AMD** | $559.82 | $545.09 | **+2.70%** | Largest upside — semis bid |
+| 2 | **NVDA** | $222.27 | $219.34 | **+1.34%** | Semis/AI leadership |
+| 3 | **AMZN** | $253.71 | $251.19 | **+1.00%** | Mega-cap support |
+| 4 | **MSFT** | $493.78 | $497.75 | **−0.80%** | Softest mega-cap |
+| 5 | **GOOGL** | $349.54 | $347.33 | **+0.64%** | Modest bid |
+| 6 | **QQQ** | $721.45 | $716.92 | **+0.63%** | Nasdaq proxy green |
+| 7 | **TSLA** | $364.27 | $366.20 | **−0.53%** | Drift / failed bounce |
+| 8 | **AAPL** | $336.13 | $337.00 | **−0.26%** | Quiet |
+| 9 | **SPY** | $761.69 | $762.60 | **−0.12%** | Flat index — narrow tape |
 
-**Ranked movers:** NFLX (−4.67%), AMD (+2.70%), then AMZN / PLTR / TSLA in a sub-1% band.
+**Tape read:** Semis + mega-cap growth carried QQQ while SPY leaked — classic narrow risk bid ([QAXUS 2026-09-18 PM](https://qaxus.com/intel/markets-2026-09-18-pm)).
 
-## Narrative spikes (watchlist only)
+### Top activity names (for Desk Lead handoff)
+1. **AMD** (+2.70%) — primary activity / supply-AI narrative  
+2. **NVDA** (+1.34%) — Jensen guidance / chip-sales-double framing  
+3. **AMZN** (+1.00%) — mega-cap bid  
+4. **MSFT** (−0.80%) — relative soft / fade candidate among megas  
+5. **QQQ** (+0.63%) vs **SPY** (−0.12%) — growth-vs-broad split
 
-- **NFLX — Wells Fargo Underweight / PT $57:** Rare downgrade from Equal Weight; engagement + 2H26 content-slate concerns; Friday −4.7% drag on comms.  
-  https://www.marketscreener.com/news/wells-fargo-downgrades-netflix-to-underweight-from-equalweight-adjusts-price-target-to-57-from-80-ce785adadb88f12d  
-  https://ftinvest.us/2026/09/19/chip-rally-fuels-late-recovery-as-nasdaq-ends-week-in-positive-territory/
+## Narrative spikes (eligible only)
 
-- **AMD — supply squeeze / Street $600+ targets:** Management demand-ahead-of-supply; Piper Overweight $600; tape extended but Friday +2.7% on chip rally.  
-  https://blockchain.news/news/20260919-price-prediction-amd-supply-squeeze-600-targets-but-the  
-  https://ftinvest.us/2026/09/19/chip-rally-fuels-late-recovery-as-nasdaq-ends-week-in-positive-territory/
+- **NVDA / semis complex:** Huang chip-sales-double / ~70% rev growth toward Jan 2028 framing; NVDA +1.3%, PHLX semis firm; after-hours memory rotation noted.  
+  https://qaxus.com/intel/markets-2026-09-18-pm  
+  https://waverider.ai/market-analysis/market-summary-post-market-2026-09-18/
 
-- **PLTR — $48M Army ammo contract + OperatorOS aviation:** USG ammo-management award (~$48.1M); Surf Air OperatorOS first commercial (powered by Palantir). Stock only +0.8% Fri.  
-  https://www.gate.com/news/detail/PLTR/palantir-lands-48m-us-army-contract-for-ammunition-management-overhaul-24386462  
-  https://marketchameleon.com/articles/b/2026/9/18/pltr-operatoros-surf-air-mobility-sprintbach-first-commercial-contract
+- **AMD:** Extended AI/supply squeeze narrative; Friday +2.7% on chip rally (largest name in universe).  
+  https://exa.ai/library/markets/stock/AMD?date=2026-09-18
 
-- **AMZN — Jassy / AWS–Nvidia framing:** Jassy: customers will run on Nvidia “for as long as we can foresee”; Friday +1% with mega-caps. Lower edge vs NFLX/AMD movers.  
-  https://www.fool.com/investing/2026/09/19/these-15-words-from-amazon-s-andy-jassy-may-eliminate-nvidia-s-biggest-risk/
+- **QQQ vs SPY:** QQQ +0.6% / SPY ~flat — narrow mega-cap + semis tape, weak breadth.  
+  https://qaxus.com/intel/markets-2026-09-18-pm
 
-- **TSLA — Cybercab NHTSA AQ + yields:** NHTSA Audit Query AQ26002 on Cybercab FMVSS self-cert; shares ~$364, below post-earnings $374, rates pressure.  
-  https://www.nhtsa.gov/press-releases/investigation-tesla-cybercab-self-certification  
-  https://xinvestnews.com/news/tesla-stock-holds-below-374-as-5-treasury-yields-pressure-robotaxi-valuation/
+- **TSLA:** Failed gap-up / closed near lows; Goldman Q3 delivery trim (~435k vs ~456k cons) overhang.  
+  https://qaxus.com/intel/markets-2026-09-18-pm
 
-- **ARK trim (AMD + PLTR):** Ark Innovation sold PLTR/AMD (profit-taking framing) vs ACHR buys — secondary flow story, not a primary tape driver Sunday.  
-  https://www.fool.com/investing/2026/09/19/cathie-wood-sold-palantir-and-amd-then-poured-335/
+- **AMZN:** Mega-cap strength (+1%); Consumer Discretionary propped by AMZN.  
+  https://waverider.ai/market-analysis/market-summary-post-market-2026-09-18/
 
-## Names to ignore today
+- **AAPL / MSFT / GOOGL:** No single dominant Fri headline in this pass — AAPL quiet (−0.3%), MSFT soft (−0.8%), GOOGL modest (+0.6%).
 
-- **TSLA** — sub-1% Fri move; regulatory/yield narrative is known; no fresh weekend cash catalyst for a value-flavor 7d basket edge without rhBasis.
-- **AMZN** — modest +1%; narrative is Nvidia/AWS color, not a clear under/overvalued setup for this desk without fork mid.
-- **PLTR** — headlines constructive but price barely moved (+0.8%); valuation still rich; no RH-fork basis to lean on.
+## Names to deprioritize today
 
-**Focus candidates if/when liveReady flips:** NFLX (event downgrade / dislocation) and AMD (momentum + supply narrative) — still **research-only** until `rhBasis: OK`.
+- **SPY** — essentially flat; not an activity name for a value 7d basket edge.
+- **AAPL** — sub-0.3% move; no fresh Fri catalyst.
+- **TSLA** — known overhang; sub-1% drift; no fork mid for basis trade.
 
-## Mandate reminder (no weights)
+## Mandate / compliance
 
-- PortfolioStrategy only, value flavor, max 5 names, max 30% single, 7d default.
+- PortfolioStrategy · value flavor · max 5 names · max 30% single · 7d default.
 - Forbidden: opaque calldata, memecoins, unlisted venues.
-- Venue = RH fork **9994663** only — mainnet 4663 Dex quotes do not clear liveReady.
+- Venue = RH fork **9994663** only. Mainnet 4663 Dex/RH listings ≠ liveReady.
+- **No weights** (PM owns sizing).
 
-## Blockers for Desk Lead / Risk
+## Blockers
 
-1. Populate `fund.json` `rpc` (and vault) for chain **9994663**, or otherwise expose fork token mids for TSLA/AMZN/PLTR/NFLX/AMD.
-2. Re-run mid vs cash basis; only then may Scanner set `rhBasis: OK` and `liveReady: true`.
-3. Cash market closed until Mon open America/New_York — weekend briefs stay on Fri session prints.
+1. Need fork RPC / fork token mids for the 9 eligible names on **9994663**.
+2. Until then: `rhBasis: UNKNOWN`, `liveReady: false` — Research may draft, Ops must not go live.
+3. Cash closed until Mon America/New_York open — weekend briefs use Fri prints.
