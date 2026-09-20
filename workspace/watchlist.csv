@@ -1,6 +1,10 @@
 symbol,notes
-TSLA,tokenized equity — high beta
-AMZN,tokenized equity
-PLTR,tokenized equity
-NFLX,tokenized equity
-AMD,tokenized equity
+AAPL,tokenized equity — RH fork eligible
+TSLA,tokenized equity — high beta; RH fork eligible
+NVDA,tokenized equity — RH fork eligible
+MSFT,tokenized equity — RH fork eligible
+AMZN,tokenized equity — RH fork eligible
+AMD,tokenized equity — RH fork eligible
+SPY,tokenized ETF — RH fork eligible
+QQQ,tokenized ETF — RH fork eligible
+GOOGL,tokenized equity — RH fork eligible
