@@ -1,48 +1,50 @@
 # Ops status
 
-- **lifecycle:** `proposed` (Pending vote)
-- **updated:** 2026-09-20 13:30 America/Bogota (UTC-5)
+- **lifecycle:** `executed` (on-chain state: **Executed**)
+- **updated:** 2026-09-20 14:18:02 America/Bogota (UTC-5)
 - **chain:** 9994663 (RH fork — test capital only)
+- **watch:** proposal #1 executed; strategy open; settle after duration
 
 ## Fund
 - vault: `0xE075cc9e3F55007B6D7e63439AA4c8094B84288F` (Grok Fund Beta / `grok-fund-beta`)
 - agent (Privy): `0x3E11F357De42Ae396fCA812db5f8FA1C576DC225`
-- owner: same as agent
-- totalAssets: 500 USDG
-- rpc: Tenderly fork endpoint (moonwell/wormhole-bridge/f509bc-4fdefe)
+- totalAssets (pre-execute snapshot): 500 USDG
 
-## Live propose — AI Delivery anchored
+## Proposal #1
 | Field | Value |
 |-------|-------|
-| **proposal id** | **1** |
-| state | Pending |
 | name | AI Delivery anchored |
-| strategy | PortfolioStrategy clone `0xC8C43CA731f007c4dE3FD3e5c969D07c9Fabc56E` |
-| amount | 500 USDG |
-| tokens / weights | MSFT 2800 / GOOGL 2500 / NVDA 2000 / AMZN 1500 / QQQ 1200 |
-| routes | v4:3000:60 (all legs) |
-| duration | 7d |
-| proposer bond | 2250.367780758290425953 WOOD locked in ProposerBondEscrow |
-| WOOD remaining | ~2749.63 (15k faucet − 10k owner stake − bond) |
-| metadata | see on-chain proposal |
-
-## Gates
-| Gate | Status |
-|------|--------|
-| Privy wallet | PASS |
-| fund.json vault+agent | PASS |
-| Risk APPROVE | PASS (live-candidate + owner propose-now) |
-| RH basis / liveReady | PASS — re-quote max \|dev\| ~53 bps GOOGL |
-| live propose | **DONE** → proposal #1 Pending |
+| state | **Executed** |
+| clone | `0xC8C43CA731f007c4dE3FD3e5c969D07c9Fabc56E` |
+| against | 0 |
+| votableSupply | 500e12 (shares) |
+| vetoThreshold | 20% |
+| snapshot (fork clock) | 2026-11-03 16:44:48 |
+| voteEnd (fork clock) | 2026-11-04 16:44:49 |
+| executeBy (fork clock) | 2026-11-06 16:44:49 |
+| executedAt (fork clock) | 2026-11-05 22:03:20 |
+| capital snapshot | $500.00 |
+| envelopeTier | 2 |
+| maxCapital | 500 USDG |
+| proposerBondWood | ~2250.37 WOOD |
 
 ## Tx log
-| Step | Hash | Block | Status |
-|------|------|-------|--------|
-| cloneAndInitDeterministic | `0xd255237db0d132cc95a0a3526b9223115bfd043b07ab5ddb896deb2d60f445dc` | 67081705 | success |
-| WOOD approve → ProposerBondEscrow (5k) | `0x7706419a3bbedaa8cb88d3ee944fff23852c7c06aa96e9a7662f3f3e7b131995` | 67081707 | success |
-| governor.propose (#1) | `0x5f8f61f9bdce4abe98bd51b6df6e886228766716dd71034ffafdf56783dabbf0` | 67081713 | success |
+| # | step | hash | block | status |
+|---|------|------|-------|--------|
+| 1 | cloneAndInit | `0xd255237db0d132cc95a0a3526b9223115bfd043b07ab5ddb896deb2d60f445dc` | 67081705 | 0x1 |
+| 2 | governor.propose | `0x5f8f61f9bdce4abe98bd51b6df6e886228766716dd71034ffafdf56783dabbf0` | 67081713 | 0x1 |
+| 3 | **governor.execute** | `0x95dabc15b22fc421cd297a2d984d0ebeef1834d22baf730bc6799e1d918bc1df` | 67082018 | **0x1** |
 
 Explorer: https://dashboard.tenderly.co/explorer/vnet/6ad5961e-fbca-452f-939f-ca9a8c020933
 
+## Transitions log
+| when (COT) | from → to | note |
+|------------|-----------|------|
+| 2026-09-20 13:25 | none → proposed | propose txs confirmed |
+| 2026-09-20 13:26:58 America/Bogota (UTC-5) | proposed → voting/Pending | Desk Lead watch armed; against=0 |
+| 2026-09-20 13:52:21 America/Bogota (UTC-5) | Pending → GuardianReview | vote ended; against=0 |
+| 2026-09-20 14:15:25 America/Bogota (UTC-5) | GuardianReview → Approved | guardian cleared; execute window open |
+| 2026-09-20 14:18:02 America/Bogota (UTC-5) | Approved → **Executed** | execute tx `0x95dabc15…bc1df` confirmed; strategy opened |
+
 ## Next
-Voting window (~1d fork time). Then guardian review → execute → settle. Do not open a second proposal (`VaultHasOpenProposal`).
+Strategy open for ~7d duration. Monitor positions. **Settle** after duration ends (do not settle early). No second proposal while strategy is live.
