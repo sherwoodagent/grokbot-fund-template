@@ -1,49 +1,49 @@
-# Risk note — Owner basket 3 LIVE RE-GATE
+# Risk note — Owner basket 3 LIVE RE-GATE (basis upgrade)
 lens:munger
 
 ## Decision
-**REJECT** (live-candidate)
+**REJECT** (live-candidate) — unchanged
 
 ## Reason
-Owner haircut clears RH basis only — Critic live-depth kill still open (Research missing on MSFT/GOOGL/NVDA/QQQ); no live APPROVE on thin thesis.
+Live V4 quoter cleared RH basis (`rhBasis: OK`, max |pool−cash| ~53 bps GOOGL) — Critic live-depth kill still open (Research missing on MSFT/GOOGL/NVDA/QQQ); no live APPROVE on thin thesis.
+
+## Basis upgrade (logged)
+| Prior | Now |
+|-------|-----|
+| CLI `feedDeviationBps` NVDA ~199 / AMZN ~264 (stale) | Live Uniswap **v4** Quoter — all five OK |
+| `rhBasis` OK_WITH_HAIRCUT | **`rhBasis: OK`** (bf80141 / efc176e) |
+| Haircut material | Haircut **not** required for basis gate anymore |
+
+Owner haircut record can stand as history; it is no longer the live blocker.
 
 ## What cleared
 | Item | Status |
 |------|--------|
-| Caps ≤5 / ≤3000 bps | Pass — MSFT 2800 max, sum 10000 |
-| Kill criteria present | Pass — draft carries haircut-aware kills |
-| `rh-basis.md` (fedcf68) | Pass — cash↔oracle tight; NVDA ~199 bps / AMZN ~264 bps pool vs feed |
-| Owner haircut on record | Pass — `haircutAccepted` in draft (NVDA 199 / AMZN 264 bps) |
+| Caps ≤5 / ≤3000 bps | Pass — MSFT 2800 max |
+| Kill criteria present | Pass |
+| RH basis (live V4) | **Pass — OK** · max \|pool−cash\| 53.2 bps (GOOGL) |
 | Opaque calldata / Privy skip | N/A — not an Ops propose |
 
-## What blocks live
+## What still blocks live
 | Item | Status |
 |------|--------|
-| Research depth (MSFT/GOOGL/NVDA/QQQ) | **Fail** — Critic CLEARED *paper* only; live-depth kill: size live without Research pass → REJECT depth. Draft still admits Research thin / NFLX-era misaligned. |
-| QuoterV2 at propose | Open — basis used CLI pool proxy; Ops must re-quote before any `strategy propose` |
-| Owner “propose now” | Required — this REJECT is not Ops idle forever; it is no live Risk APPROVE yet |
+| Research depth (MSFT/GOOGL/NVDA/QQQ) | **Fail** — only remaining live veto. Critic CLEARED paper only; draft still admits Research thin. |
+| Size-aware re-quote at propose | Open — 100 USDG probe ≠ fill; Ops re-quotes if/when live APPROVE + owner “propose now” |
+| Owner “propose now” | Still required after any future live APPROVE |
 
-## Cap check
-| Sym | bps | ≤3000 |
-|-----|-----|-------|
-| MSFT | 2800 | Pass |
-| GOOGL | 2500 | Pass |
-| NVDA | 2000 | Pass |
-| AMZN | 1500 | Pass |
-| QQQ | 1200 | Pass |
-
-**Cap breaches:** none.
+## Cap breaches
+None.
 
 ## Live
-**FORBIDDEN** until Research patches MSFT/GOOGL/NVDA/QQQ (or owner overrides Critic depth kill **on record**) and Risk re-gates. Paper APPROVE (prior) unchanged. Ops: do **not** propose — no live Risk APPROVE.
+**FORBIDDEN** until Research patches MSFT/GOOGL/NVDA/QQQ (or owner overrides Critic depth kill **on record**) and Risk **re-gates**. Do **not** treat this note as live APPROVE. Ops: idle.
 
 ## Invert
-How we die: shipping $500 into a crowded AI-factor book because the pool haircut got signed while four names still lack Research tables. Basis theater ≠ edge.
+How we die: mistaking a clean V4 basis print for thesis depth. Edge still unproven on four names.
 
 ## Refs
-- Basis: https://github.com/sherwoodagent/grokbot-fund-template/commit/fedcf68da2019669dc5337d0aaf406f78fce5915
+- Basis upgrade: `bf80141` + `efc176e` (live V4 quoter → `rhBasis: OK`)
+- Prior REJECT: https://github.com/sherwoodagent/grokbot-fund-template/commit/173b1dca0fd8fd37ebdd610228fed4fc6acc0977
 - Critic (paper CLEARED): https://github.com/sherwoodagent/grokbot-fund-template/commit/60c94c07ea27c350edc2b0c111ac826818529c68
-- Draft: `liveReady true` / `rhBasis OK_WITH_HAIRCUT` / `status live-candidate`
 
 ## Handoff
-Desk Lead: live REJECT; wait Fund Research patch or owner written depth override → re-gate. Ops: idle (no propose). Scanner: basis file stands.
+Desk Lead: noted — basis OK; REJECT stands on Research depth only. Re-gate when Research patch lands or owner depth override on record. Ops: hold.
