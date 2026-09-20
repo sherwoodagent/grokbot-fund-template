@@ -5,16 +5,18 @@ venue: Sherwood RH fork 9994663
 mandate: value · PortfolioStrategy · ≤5 names · ≤3000 bps single · 7d
 rhBasis: UNKNOWN
 liveReady: false
-status: OPTIONS ONLY — owner chooses; desk does not pick a winner
+status: OPTIONS ONLY — owner chooses; Research does not pick a winner
 eligibleOnly: [AAPL, TSLA, NVDA, MSFT, AMZN, AMD, SPY, QQQ, GOOGL]
-excluded: [META, SLV]
+excluded: [META, SLV, PLTR, NFLX]
+scan: https://github.com/sherwoodagent/grokbot-fund-template/commit/817f9be677f722966d6595e8eda50234370ed38f
+watchlist: https://github.com/sherwoodagent/grokbot-fund-template/commit/c7ad7d5506d9ba57e8b4708df6b6ab8471491807
 ---
 
-# Basket OPTIONS — Grok Fund Beta (RH fork widen + score)
+# Basket OPTIONS — widen pass (empty basket rejected)
 
-Paper / research options for owner selection. Weights in **bps** (sum **10000**). All symbols from **ELIGIBLE** fork registry only. Scored on **Fri session activity** + **X sentiment** under a **value** mandate (quality / cash engines / fair price — not pure momentum chase).
+Paper options for **owner** selection. Weights in **bps** (must sum **10000**; single ≤ **3000**). Symbols from **eligible** fork universe only. Scored on Fri session activity + X sentiment under a **value** mandate (quality / cash engines / fair price — not pure momentum chase).
 
-**Shared kill / gate:** `rhBasis: UNKNOWN` · `liveReady: false` → do not execute live until fork mids vs cash basis are measured. Kill any option if live basis prints adverse beyond Risk tolerance, or if a name’s fork route fails (esp. AMD `v4:10000:200` only).
+**Shared gate:** `rhBasis: UNKNOWN` · `liveReady: false` → do **not** go live until fork mids vs cash basis are measured. Kill any option if live basis prints adverse beyond Risk tolerance.
 
 ---
 
@@ -24,15 +26,15 @@ Paper / research options for owner selection. Weights in **bps** (sum **10000**)
 |--------|-------------|
 | MSFT | 2800 |
 | AAPL | 2500 |
-| AMZN | 2200 |
 | GOOGL | 2500 |
+| AMZN | 2200 |
 | **Sum** | **10000** |
 
-- **Activity:** Fri tape soft-to-flat on MSFT/AAPL while AMZN/GOOGL held green — favors buying **quality on softness**, not chasing AMD’s +2.7%.
-- **Sentiment (X):** Weekend mega-cap / AI-cash-engine rotation; MSFT Azure+backlog and GOOGL setup posts dominate constructive discourse without requiring semi chase.
-- **Value flavor:** Pay fair for durable cash/compounders (cloud + devices + ads/search) rather than PEG-trap semis.
+- **Activity:** Fri soft-to-flat on MSFT (−0.8%) / AAPL (−0.3%) while AMZN (+1%) / GOOGL (+0.6%) held — favors buying **quality on softness**, not chasing AMD’s +2.7%.
+- **Sentiment (X):** Mega-cap / AI-cash-engine rotation; MSFT + GOOGL constructive without requiring semi chase.
+- **Value flavor:** Pay fair for durable cash/compounders (cloud + devices + ads/search).
 
-**Risks / kill:** Crowded mega correlation; CapEx/FCF drag on AMZN/MSFT if next prints decelerate. **Kill** if any single name’s fork mid basis vs cash > Risk limit, or if Mon open gaps all four >3% without thesis change.
+**Risks / kill:** Crowded mega correlation; CapEx/FCF drag if next prints decelerate. **Kill** if fork mid basis vs cash > Risk limit, or Mon open gaps all four >3% without thesis change.
 
 ---
 
@@ -47,11 +49,11 @@ Paper / research options for owner selection. Weights in **bps** (sum **10000**)
 | AMZN | 1300 |
 | **Sum** | **10000** |
 
-- **Activity:** SPY ~flat / QQQ +0.6% Fri — index sleeve absorbs narrow Nasdaq leadership without over-concentrating in single-name chip bounce.
-- **Sentiment (X):** QQQ “bullish into Q4” chart chatter + mega quality; indexes as ballast while single names stay value-sized.
+- **Activity:** SPY −0.12% / QQQ +0.63% Fri — index sleeve absorbs narrow Nasdaq leadership without over-concentrating in single-name chip bounce.
+- **Sentiment (X):** QQQ vs broad / concentration chatter; indexes as ballast while single names stay value-sized.
 - **Value flavor:** Beta control via SPY/QQQ; single-name sleeve is quality compounders only (no AMD/TSLA chase).
 
-**Risks / kill:** ETF token liquidity/route risk on fork; QQQ must stay on `v4:3000:60` (CLI warns empty 10000/200 pool). **Kill** if QQQ/SPY fork deviation spikes or if Risk rejects ETF sleeves for this beta.
+**Risks / kill:** ETF token liquidity/route risk on fork. **Kill** if QQQ/SPY fork deviation spikes or Risk rejects ETF sleeves.
 
 ---
 
@@ -67,10 +69,10 @@ Paper / research options for owner selection. Weights in **bps** (sum **10000**)
 | **Sum** | **10000** |
 
 - **Activity:** NVDA +1.3% / QQQ +0.6% Fri show AI complex bid; MSFT soft print is the **value entry** into the same theme.
-- **Sentiment (X):** Strong NVDA/GOOGL/MSFT AI discourse; PEG-trap posts argue against treating cheap semis as automatic buys — hence NVDA capped at 2000 bps, **AMD omitted**.
+- **Sentiment (X):** NVDA earnings/AI demand dominant; GOOGL relative-strength / Waymo notes in soft AI tape — NVDA capped at 2000 bps, **AMD omitted**.
 - **Value flavor:** Own AI via cloud/search cash engines + measured NVDA; refuse AMD Fri spike chase.
 
-**Risks / kill:** NVDA event/vol into next earnings; AI narrative fade. **Kill** if NVDA fork basis widens, or if owner requires zero semi beta.
+**Risks / kill:** NVDA event/vol; AI narrative fade. **Kill** if NVDA fork basis widens, or if owner requires zero semi beta.
 
 ---
 
@@ -86,10 +88,10 @@ Paper / research options for owner selection. Weights in **bps** (sum **10000**)
 | **Sum** | **10000** |
 
 - **Activity:** MSFT (−0.8%) / AAPL (−0.3%) / TSLA (−0.5%) were Fri soft names — value lens prefers **weakness in quality** over strength in AMD.
-- **Sentiment (X):** MSFT/GOOGL constructive fundamentals/setup posts; TSLA quieter in value feeds — sized as **small satellite** only.
+- **Sentiment (X):** MSFT/GOOGL constructive; TSLA quieter — sized as **small satellite** only.
 - **Value flavor:** Max MSFT at mandate cap; AAPL/GOOGL quality; SPY ballast; TSLA optional high-beta toe-hold, not thesis core.
 
-**Risks / kill:** TSLA regulatory (Cybercab/NHTSA) + rates; fashion-multiple risk. **Kill TSLA leg** (or whole option) if NHTSA/AQ headlines worsen or TSLA gaps >5% adverse Mon; also kill if rhBasis for TSLA prints wide.
+**Risks / kill:** TSLA regulatory / rates; fashion-multiple risk. **Kill TSLA leg** (or whole option) if Cybercab/NHTSA headlines worsen or TSLA gaps >5% adverse Mon; also kill if rhBasis for TSLA prints wide.
 
 ---
 
@@ -99,19 +101,19 @@ Paper / research options for owner selection. Weights in **bps** (sum **10000**)
 |--------|-------------|
 | MSFT | 2500 |
 | GOOGL | 2200 |
+| SPY | 2000 |
 | NVDA | 1800 |
 | AMD | 1500 |
-| SPY | 2000 |
 | **Sum** | **10000** |
 
 - **Activity:** Captures Fri **AMD +2.7% / NVDA +1.3%** leadership **without** letting semis dominate (combined 3300 bps; AMD only 1500).
-- **Sentiment (X):** AMD Piper/demand posts hot; counterweighted by PEG-trap warnings → treat AMD as **satellite**, MSFT/GOOGL/SPY as cage.
+- **Sentiment (X):** AMD bounce / semiconductor rebound hot; counterweighted by value mandate → treat AMD as **satellite**, MSFT/GOOGL/SPY as cage.
 - **Value flavor:** Explicit anti-chase sizing — activity acknowledged, weights refuse momentum monopoly.
 
-**Risks / kill:** AMD route is **`v4:10000:200` only** (no fee-3000); higher fee / thinner book. **Kill** if AMD quote fails, feedDeviation blows out, or Fri strength mean-reverts hard Mon without MSFT/GOOGL offset.
+**Risks / kill:** AMD route/liquidity thinner on fork; mean-reversion after Fri spike. **Kill** if AMD quote fails, feedDeviation blows out, or Fri strength mean-reverts hard Mon without MSFT/GOOGL offset.
 
 ---
 
 ## Owner decision
 
-Pick **one** option (or request a merge). Desk Lead / PM will draft `proposals/` only after owner choice + Risk gate. **No winner selected by Scanner.**
+Pick **one** option (or request a merge). PM drafts proposal only after owner choice + Risk gate. **Research does not select a winner.**
