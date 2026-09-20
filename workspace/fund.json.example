@@ -1,8 +1,8 @@
 {
   "chainId": 9994663,
-  "rpc": "https://virtual.robinhood-chain.eu.rpc.tenderly.co/moonwell/wormhole-bridge/f509bc",
-  "vault": "0xYOUR_VAULT",
-  "agent": "0xYOUR_PRIVY_ETH",
-  "subdomain": "your-fund",
-  "_comment": "Fill vault ONLY after Sherwood QuickStart creates the fund. agent = Privy eth address. rpc from Sherwood skill beta section."
+  "rpc": "",
+  "vault": "",
+  "agent": "",
+  "subdomain": "",
+  "_comment": "Write vault ONLY after Sherwood vault create succeeds. agent from Privy list-wallets. rpc from Sherwood skill beta section. chainId 9994663 unless skill drifts."
 }
