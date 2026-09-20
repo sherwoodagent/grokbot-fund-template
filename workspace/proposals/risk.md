@@ -7,6 +7,10 @@ lens:munger
 ## Reason
 Caps clear (≤5 / ≤3000 bps) and Critic CLEARED paper — live still forbidden on `rhBasis` UNKNOWN + Research gap on 4/5 names.
 
+## Refs
+- Draft (FINAL PM lock): https://github.com/sherwoodagent/grokbot-fund-template/commit/ec3b09da2e44a66a3f8b443b0c9b2018cecc33b4
+- Critic (CLEARED paper): https://github.com/sherwoodagent/grokbot-fund-template/commit/60c94c07ea27c350edc2b0c111ac826818529c68
+
 ## Live
 **FORBIDDEN.** `rhBasis: UNKNOWN`, `liveReady: false`, status `paper`. Vault USDG is not an Ops unlock. No live submit until Scanner marks basis known (or owner-accepted haircut on record).
 
@@ -28,7 +32,7 @@ Caps clear (≤5 / ≤3000 bps) and Critic CLEARED paper — live still forbidde
 | Opaque / custom calldata | Pass — PortfolioStrategy |
 | Single name > 3000 bps (30%) | Pass — max MSFT 2800 |
 | > 5 names | Pass — exactly 5 |
-| Kill criteria from Critic | Pass — per-name + factor/RH/process kills in draft + critic |
+| Kill criteria from Critic | Pass — per-name + factor/RH/process/Research-gap kills in lock + critic |
 | Privy → raw Ops discipline | N/A — not an Ops request |
 | Shared-file artifacts | Pass — draft / critic / scan / mandate |
 | Live without measured RH basis | Fail → live blocked (not paper veto) |
@@ -43,4 +47,4 @@ Logged for next loop (REVISE→PM if they want deeper conviction; Risk does not 
 4. `rhBasis` UNKNOWN
 
 ## Handoff
-Desk Lead: paper gate formalized for basket 3. Ops: idle. Scanner: fork mids before any live ask. Research: new pass on MSFT/GOOGL/NVDA/QQQ if conviction rises.
+Desk Lead: paper gate formalized on FINAL lock `ec3b09da`. Ops: idle. Scanner: fork mids before any live ask. Research: new pass on MSFT/GOOGL/NVDA/QQQ if conviction rises.
