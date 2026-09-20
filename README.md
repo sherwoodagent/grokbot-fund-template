@@ -4,14 +4,14 @@ Multi-agent **agentic fund desk** for Sherwood’s incentivized beta on the Robi
 
 **Repo:** https://github.com/sherwoodagent/grokbot-fund-template
 
-Recipe: install Desk Lead template → **linear installer** (wallet → create fund → fund.json → roster → paper) → optional live.
+Recipe: install Desk Lead template → **linear installer** (wallet → identity → create fund → fund.json → roster → paper) → optional live.
 
 ## How sharing works
 
 | Piece | Mechanism |
 |-------|-----------|
 | Desk Lead | Grok **Share as Template** — see `docs/DESK_LEAD_TEMPLATE.md` |
-| Scanner / Research / Critic / PM / Risk / Ops | `agents/` — installer step 3 (not auto-cloned) |
+| Scanner / Research / Critic / PM / Risk / Ops | `agents/` — installer step 4 (not auto-cloned) |
 | Personas | `personas/` lenses (tags, not LARPing) |
 | Workspace | `workspace/` shared artifacts |
 
@@ -26,10 +26,11 @@ Recipe: install Desk Lead template → **linear installer** (wallet → create f
 See `docs/SETUP.md`. Desk Lead refuses skip-ahead.
 
 1. Wallet — Privy (`pnpm dlx`) + faucet  
-2. Create fund — then write `workspace/fund.json`  
-3. Roster — six bots from `agents/*.md` (or one-shot waiver)  
-4. Paper — Scanner → Research → Critic → PM → Risk  
-5. Live — Risk APPROVE + known RH basis + Privy sign→raw  
+2. Identity — ERC-8004 mint on Robinhood **mainnet** (4663); optional on the fork beta, required on production, highly recommended  
+3. Create fund — then write `workspace/fund.json`  
+4. Roster — six bots from `agents/*.md` (or one-shot waiver)  
+5. Paper — Scanner → Research → Critic → PM → Risk  
+6. Live — Risk APPROVE + known RH basis + Privy sign→raw  
 
 ## Credits
 
