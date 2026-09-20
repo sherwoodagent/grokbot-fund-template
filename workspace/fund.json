@@ -1,7 +1,13 @@
 {
   "chainId": 9994663,
-  "rpc": "",
-  "vault": "",
-  "agent": "",
-  "subdomain": ""
+  "rpc": "https://virtual.robinhood-chain.eu.rpc.tenderly.co/moonwell/wormhole-bridge/f509bc-4fdefe",
+  "vault": "0xE075cc9e3F55007B6D7e63439AA4c8094B84288F",
+  "agent": "0x3E11F357De42Ae396fCA812db5f8FA1C576DC225",
+  "subdomain": "grok-fund-beta",
+  "fundId": "9",
+  "name": "Grok Fund Beta",
+  "asset": "USDG",
+  "assetAddress": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+  "createTx": "0x0785342aaf1f57a3968db84fe83b2d0713abecc463f1de99e37777aeec6ff56f",
+  "depositTx": "0xe2d1f2f1cf95269b475f5fa75ce5dd98648d3ab2c64fd8f50dec093c5e7b8626"
 }
