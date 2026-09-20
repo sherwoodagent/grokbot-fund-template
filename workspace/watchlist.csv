@@ -1,10 +1,12 @@
-symbol,notes
-AAPL,tokenized equity — RH fork eligible
-TSLA,tokenized equity — high beta; RH fork eligible
-NVDA,tokenized equity — RH fork eligible
-MSFT,tokenized equity — RH fork eligible
-AMZN,tokenized equity — RH fork eligible
-AMD,tokenized equity — RH fork eligible
-SPY,tokenized ETF — RH fork eligible
-QQQ,tokenized ETF — RH fork eligible
-GOOGL,tokenized equity — RH fork eligible
+symbol,address,notes
+AAPL,0xaF3D76f1834A1d425780943C99Ea8A608f8a93f9,eligible — RH fork 9994663 (CLI fork-tokens.ts); v4:3000:60
+TSLA,0x322F0929c4625eD5bAd873c95208D54E1c003b2d,eligible — RH fork 9994663 (CLI fork-tokens.ts); v4:3000:60
+NVDA,0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC,eligible — RH fork 9994663 (CLI fork-tokens.ts); v4:3000:60
+MSFT,0xe93237C50D904957Cf27E7B1133b510C669c2e74,eligible — RH fork 9994663 (CLI fork-tokens.ts); v4:3000:60
+AMZN,0x12f190a9F9d7D37a250758b26824B97CE941bF54,eligible — RH fork 9994663 (CLI fork-tokens.ts); v4:3000:60
+AMD,0x86923f96303D656E4aa86D9d42D1e57ad2023fdC,eligible — RH fork 9994663 (CLI fork-tokens.ts); v4:10000:200 only (no fee-3000 pool)
+SPY,0x117cc2133c37B721F49dE2A7a74833232B3B4C0C,eligible — RH fork 9994663 (CLI fork-tokens.ts); v4:3000:60
+QQQ,0xD5f3879160bc7c32ebb4dC785F8a4F505888de68,eligible — RH fork 9994663 (CLI fork-tokens.ts); v4:3000:60 (avoid empty 10000/200 pool)
+GOOGL,0x2e0847E8910a9732eB3fb1bb4b70a580ADAD4FE3,eligible — RH fork 9994663 (CLI fork-tokens.ts); v4:3000:60
+META,0xc0D6457C16Cc70d6790Dd43521C899C87ce02f35,excluded — pool ~8.3% above frozen META/USD feed (past 5% buy floor); do not basket
+SLV,0x411eFb0E7f985935DAec3D4C3ebaEa0d0AD7D89f,excluded — v3-only / unverified on this vnet (no v4 USDG pool; v3 PM corrupted)
