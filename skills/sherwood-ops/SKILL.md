@@ -50,9 +50,38 @@ Get **explicit yes** on name/subdomain/description/flags before any gas.
 
 ## Strategy lifecycle
 
-propose → depositors vote (optimistic) → guardian review → execute → settle → cooldown  
+`Pending (voting, optimistic) → GuardianReview → Approved → Executed → Settled` (+ `Rejected` / `Cancelled`). PortfolioStrategy only. Pre-commit execute + settle. One live strategy at a time.
 
-PortfolioStrategy only. Pre-commit execute + settle. One live strategy at a time.
+## Propose — one-shot recipe (Privy, no local key)
+
+Verified 2026-09-20 on fork `9994663` (proposal #1: cloneAndInit → governor.propose, both `0x1`).
+
+1. **Re-quote basis** for the draft basket at propose size (v4 quoter, see `agents/scanner.md`). Any name `STALE` → stop, back to Risk.
+2. **Calldata:**
+   ```bash
+   sherwood --calldata-only strategy propose portfolio \
+     --vault <fund.json vault> --proposer <fund.json agent> \
+     --amount <USDG> --asset USDG \
+     --tokens MSFT,GOOGL,NVDA,AMZN,QQQ --weights 2500,2000,2000,2000,1500 \
+     --name "<draft name>" --description "<draft rationale>" --duration 7d
+   ```
+   Emits `txs` in order: `StrategyFactory.cloneAndInitDeterministic` (predicted `clone` + `salt`), then `governor.propose`. `propose` pulls the risk-scaled **proposer bond** in WOOD via `ProposerBondEscrow.lockBond` → `transferFrom` — if the CLI lists a WOOD `approve` tx first, it goes first. Quote the bond with `ExposureLedger.proposerBondWood` if you need the number for `ops/status.md`.
+3. **Per tx, in order:** Privy `eth_signTransaction` (`chain_id: 9994663`, nonce from `eth_getTransactionCount`, gas from `eth_estimateGas`) → `eth_sendRawTransaction` to fork RPC → wait for receipt status `0x1`. A revert stops the sequence; never send the next tx.
+4. **Record:** hashes + blocks, clone address, proposal id (`ProposalCreated` log), bond, `voteEnd` / `executeBy` (fork clock), in `workspace/ops/status.md`. Lifecycle → `proposed`.
+
+## Execute
+
+After `Approved` (vote ended, guardian cleared) and inside the execute window, on owner GO:
+`sherwood --calldata-only proposal execute --id <id>` → Privy sign → raw broadcast → receipt `0x1` → log `executedAt` (fork clock) → lifecycle `executed`.
+
+## Settle
+
+After duration elapsed (`executedAt + duration`, fork clock), on owner GO:
+`sherwood --calldata-only proposal settle --id <id>` → Privy sign → raw broadcast → log P&L / fees from the receipt → lifecycle `settled`. The proposer may settle early only after a hard **1h** floor from `executedAt`; earlier reverts `StrategyDurationNotElapsed()`. Do not settle early without owner GO.
+
+## Watch lifecycle — terminal event is Settled
+
+`proposed → voting → guardian → approved → executed → settle-ready → settling → settled → cooldown`. The 2026-09-20 run tore the watch down at Executed and had to re-arm it. Keep the `lifecycle-tick` / `settle-watch` routine polling `proposal show <id>` from Executed until **Settled** (or Rejected / Cancelled). Log each transition with fork-clock and wall-clock time.
 
 ## Live gates
 

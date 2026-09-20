@@ -52,6 +52,7 @@ Cost: a dust of **real** ETH on Robinhood mainnet (well under 0.0001 ETH). The f
 2. Prepare 10k WOOD owner stake → `sherwood --calldata-only vault create --agent-id <agentId> …` → Privy broadcast.
 3. Register agent wallet on vault (`vault add`).
 4. **Then** write `workspace/fund.json` (`vault`, `agent`, `agentId`, `subdomain`, `rpc`, `chainId`). Do not invent a vault address. See `workspace/fund.json.example`.
+6. **Blank `fund.json` after a template / soul refresh:** restore from chain (`GET https://api.sherwood.sh/funds?chain=9994663` → match `subdomain` → `/vaults/<vault>?chain=9994663`), never re-create, never placeholders. Verify vault `owner` == `agent`.
 5. Optional: deposit dust USDG so totalAssets &gt; 0.
 
 Chain id for incentivized beta: `9994663` (confirm against current Sherwood skill if it drifts).
@@ -70,19 +71,25 @@ Personas are **lenses** in `personas/` (tags), not LARPing as real people.
 
 Only after wallet + identity (or recorded skip) + fund (+ roster or waiver):
 
-1. Scanner → `briefs/scan.md`
+1. Scanner → `briefs/scan.md` + `briefs/rh-basis.md` (live fork **v4** mids per name; social via whichever connector is connected)
 2. Research → `briefs/research.md` (**Critic waits on this** — not true parallel)
-3. Critic → `briefs/critic.md`
+3. Critic → `briefs/critic.md` (`verdict: CLEARED` before PM starts)
 4. PM → `proposals/draft.json`
-5. Risk → `proposals/risk.md` (APPROVE | REJECT | REVISE)
+5. Risk → `proposals/risk.md` (APPROVE | APPROVE paper-only | REJECT | REVISE)
+
+**Explicit waits.** Each step starts only when the previous artifact exists; Lead posts its ref in the kick-off. Nothing runs in parallel today.
+
+**Owner basket lock.** When the owner names a basket, Lead restarts from Research with `research.md` / `critic.md` hard-reset to those symbols. Risk refuses live APPROVE unless `draft.basket == research.basket == critic.basket` with current refs.
+
+**Empty book.** `no-trade` is not final on beta: Research writes `briefs/basket-options.md` (3–5 scored options from the eligible universe) and the owner picks or accepts a pass on the record.
 
 No Ops / chain on paper. Risk REJECT → bounce to PM (or Research on quality kill). Never bully Ops.
 
-**RH basis:** If Scanner cannot get RH-fork token mids vs US cash, mark `rhBasis: UNKNOWN` early and keep `liveReady: false`. Do not burn two full loops discovering this at Risk.
+**RH basis:** Scanner quotes the fork **live** — v4 Quoter `0x8dc178efb8111bb0973dd9d722ebeff267c98f94` `quoteExactInputSingle` (100 USDG → stock, `3000/60/0x0`) + Chainlink `latestRoundData`, `|dev| < 100 bps` → `OK`. QuoterV2 reverts on these pairs; CLI `feedDeviationBps` snapshots are stale hints, not the gate. Cannot quote → `rhBasis: UNKNOWN`, `liveReady: false` early. Do not burn two full loops discovering this at Risk.
 
 ## 6 — Live Ops
 
-Ops only after Risk **APPROVE**, known RH basis (or accepted haircut), and Privy sign → raw broadcast discipline. One live PortfolioStrategy at a time. If `fund.json` still has `agentId: 0`, remind the owner once that production requires the step-2 mint.
+Ops only after Risk **APPROVE**, known RH basis (or accepted haircut), owner GO, and Privy sign → raw broadcast discipline. One live PortfolioStrategy at a time. Propose / execute / settle are one-shot recipes in `skills/sherwood-ops` — Ops does not reinvent sequencing. The Ops watch ends at **Settled** (or Rejected / Cancelled), not at Executed. If `fund.json` still has `agentId: 0`, remind the owner once that production requires the step-2 mint.
 
 ---
 

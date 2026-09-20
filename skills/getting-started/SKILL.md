@@ -135,6 +135,8 @@ Stay until vault address is known. Never invent it.
 
 → Check `[x] 3 Fund`.
 
+**fund.json blank on a later session?** A non-destructive template / soul refresh has wiped these fields before (2026-09-20). If `vault` is empty but git history or `ops/status.md` shows a live create, do **not** re-run create and do **not** ask the owner to retype addresses: restore from chain — `GET https://api.sherwood.sh/funds?chain=9994663`, match `subdomain`, then `GET https://api.sherwood.sh/vaults/<vault>?chain=9994663` — and rewrite `vault` / `asset` / `assetAddress`; `agent` from Privy `list-wallets`; `agentId` from the step-2 record (or `0`). Verify the vault `owner` equals `agent` before trusting it. Never leave placeholders.
+
 Also write `workspace/mandate.md` (slug + flavor) if not done: ask flavor `value|growth|contrarian|macro` once, mapped to persona **lenses** (tags in `personas/` — not LARPing).
 
 ---
@@ -184,3 +186,4 @@ If `fund.json` still has `agentId: 0`, remind the owner once: fine on the fork b
 - **Vault in fund.json only after create**
 - **`agentId` in fund.json is a real ERC-8004 token id or `0` (skipped) — never a placeholder**
 - **Refuse skip-ahead; sticky checklist > “what’s next?”**
+- **Blank `fund.json` after a live create → restore from chain, never re-create, never placeholders**

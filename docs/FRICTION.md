@@ -71,6 +71,21 @@ Scanner should use **whichever X (or social) connector is connected** on the bot
 | `agents/desk-lead.md` / SETUP | Enforce waits; restore fund.json from chain |
 | `skills/sherwood-ops` | One-shot propose + execute recipes |
 
+## Resolution (2026-09-20)
+
+| # | Friction | Fixed in |
+|---|----------|----------|
+| 1 | Strict personas on basket lock | `agents/research.md` (hard reset + `basket:` frontmatter), `agents/critic.md` (score locked basket only; `REJECT-QUALITY` on mismatch), `agents/pm.md` (`basket` + refs in draft), `agents/risk.md` (live needs aligned basket + refs), `agents/desk-lead.md` (lock → restart from Research) |
+| 2 | RH basis — Scanner must quote the fork | `agents/scanner.md` (v4 quoter method, fail closed, `rh-basis.md` output), `docs/SETUP.md` |
+| 3 | Cadence enforcement | `agents/desk-lead.md` (waits table), `docs/SETUP.md` |
+| 4 | Ops watch lifecycle | `agents/ops.md`, `skills/sherwood-ops`, `routines/README.md` (terminal = Settled) |
+| 5 | Empty-book attractor | `agents/research.md` (`basket-options.md` path), `agents/pm.md` (owner pass required), `agents/desk-lead.md` |
+| 6 | Privy propose recipe | `skills/sherwood-ops` (one-shot propose / execute / settle), `agents/ops.md` |
+| 7 | fund.json blank on soul refresh | `skills/getting-started`, `docs/SETUP.md`, `agents/desk-lead.md` (restore from chain via API) |
+| 8 | X / sentiment connector | `agents/scanner.md` (any connected connector; `socialSource: none` fallback) |
+
+Also added (separate finding): ERC-8004 identity mint as installer step 2 — the run created the fund with `agentId 0`.
+
 ## Context from this run
 
 - Fund: Grok Fund Beta · vault on chain `9994663` · proposal **#1** Executed (basket 3, 500 USDG, 7d)
