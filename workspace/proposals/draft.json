@@ -1,19 +1,16 @@
 {
   "strategy": "PortfolioStrategy",
   "status": "no-trade",
+  "liveReady": false,
   "durationDays": 7,
   "weights": [],
-  "rationale": "lens:druckenmiller — Regime-aware pass. Critic quality-REJECT’d Research this loop (no valuation math, no RH vs US-cash basis, thin primary KPIs, asymmetry to Wells $57 unaddressed). Druckenmiller-lite rule: fewer clearer bets, size only when edge + falsifiable kill are both hard. Soft-sell NFLX into an active Underweight and quiet-tape AMZN are not clear 7d value dislocations on RH fork until Research patches the gate. Mandate allows PortfolioStrategy only (value, ≤5 names, ≤30% single-name, 7d) — empty basket complies. Do not invent long weights to complete the loop. Bounce to Research; Desk Lead will not skip Critic.",
+  "rationale": "lens:druckenmiller — Quality gate CLEARED (Research patch closed valuation/KPI/asymmetry/RH-UNKNOWN note), but thesis still fails the 7d paper edge test. Critic remains high-confidence wrong on NFLX soft-sell folklore (Research’s own −20.6% Wells $57 vs +11.5% prior $80 skew) and med-confidence wrong on AMZN as a value print this week (fair compounder, quiet Fri tape, negative FCF / crowded AWS — not a dislocation). Druckenmiller-lite: conviction without concentration suicide; prefer fewer clearer bets — empty basket over forced longs into unresolved engagement fight + unmeasured RH basis. RH basis UNKNOWN → do not size for live (liveReady false); paper PnL would be US-proxy narrative only and unreliable. Mandate honored: PortfolioStrategy, value, ≤5 names, ≤30% single-name unused, 7d. Paper vs live: quality allows a monitored paper draft in process terms, but no clear falsifiable positive asymmetry this loop → no-trade again rather than invent weights that ignore Critic’s still-bearish stance.",
   "killCriteria": [
-    "NFLX: next engagement / paid-membership / viewing-hours print deteriorates vs prior period OR price through $65 without bull KPI rebuttal OR second major house cuts with engagement thesis intact",
-    "AMZN: AWS growth or operating income decelerates vs consensus on next print OR Prime-related liability expands beyond $2.5B settlement frame OR RH-token basis vs US cash widens so 7d paper PnL cannot map to cash thesis",
-    "Desk/quality: Research still ships without valuation table + RH basis note → quality kill; no long from this loop"
+    "NFLX: next engagement / paid-membership / viewing-hours print deteriorates vs H1’26 OR price trades through $65 without primary KPI rebuttal OR second major house cuts on engagement OR stock approaches Wells $57 path without thesis reset",
+    "AMZN: AWS sales or op. income decelerates vs Q2 run-rate on next print OR CapEx/FCF path worsens without backlog conversion OR liability expands beyond $2.5B settlement frame",
+    "Both/RH: live RH quoter mid shows material adverse basis vs US cash → thesis does not transfer; do not size",
+    "Desk/process: any draft that sizes RH tokens as if cash without measured basis → process kill"
   ],
   "lens": "druckenmiller",
-  "bounceTo": "Research",
-  "needs": [
-    "valuation table",
-    "RH fork basis vs US cash",
-    "primary KPI support"
-  ]
+  "rhBasis": "UNKNOWN"
 }
