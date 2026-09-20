@@ -1,49 +1,42 @@
 {
   "strategy": "PortfolioStrategy",
-  "status": "paper",
+  "status": "live-candidate",
   "durationDays": 7,
   "weights": [
-    {
-      "symbol": "MSFT",
-      "bps": 2800
-    },
-    {
-      "symbol": "GOOGL",
-      "bps": 2500
-    },
-    {
-      "symbol": "NVDA",
-      "bps": 2000
-    },
-    {
-      "symbol": "AMZN",
-      "bps": 1500
-    },
-    {
-      "symbol": "QQQ",
-      "bps": 1200
-    }
+    {"symbol": "MSFT", "bps": 2800},
+    {"symbol": "GOOGL", "bps": 2500},
+    {"symbol": "NVDA", "bps": 2000},
+    {"symbol": "AMZN", "bps": 1500},
+    {"symbol": "QQQ", "bps": 1200}
   ],
-  "rationale": "lens:druckenmiller — LOCKED paper draft after Critic CLEARED Option 3 (commit 60c94c07). Owner PICKED basket 3 AI Delivery (anchored) from workspace/briefs/basket-options.md; weights honored MSFT 2800 / GOOGL 2500 / NVDA 2000 / AMZN 1500 / QQQ 1200 (=10000). Critic stance = revise-down conviction (crowded AI-factor book, nested QQQ beta, NVDA fashion multiple in value mandate) — not empty basket; owner selected this option. Research depth gap noted: research.md still NFLX/AMZN-era and misaligned for MSFT/GOOGL/NVDA/QQQ; AMZN overlap only. Mandate caps held (≤5, max 2800≤3000). Regime: rhBasis UNKNOWN / liveReady false — paper US-proxy only; do not size live until basis prints. killCriteria copied from Critic basket-3 brief.",
+  "rationale": "lens:druckenmiller — Owner basket 3 AI Delivery (anchored). Paper CLEARED by Critic/Risk. Owner ACCEPTED NVDA/AMZN pool haircut (~2.0% / ~2.6% vs feed per workspace/briefs/rh-basis.md). Cash↔Chainlink tight. liveReady flipped conditional on Risk live re-gate + Ops re-quote at propose. Research depth on MSFT/GOOGL/NVDA/QQQ still thin (Fund Research patching).",
   "killCriteria": [
     "MSFT 2800: Azure/cloud growth or backlog narrative breaks on next print OR Fri softness extends >3% Mon without thesis change OR CapEx/FCF path worsens vs Street frame",
     "GOOGL 2500: ads/search/cloud print disappoints OR AI-capex ROI narrative cracks OR Mon gap >3% adverse without offset from other sleeves",
-    "NVDA 2000: semi complex mean-reverts hard Mon (e.g. >5% adverse) OR PEG/competition scare reprices OR fork basis widens beyond Risk limit OR owner later requires zero semi beta",
-    "AMZN 1500: AWS sales or op. income decelerates vs Q2 run-rate OR CapEx/FCF worsens without backlog conversion OR liability expands beyond $2.5B settlement frame",
-    "QQQ 1200: ETF fork route/deviation spikes (fee-tier/empty-pool warnings) OR Nasdaq leadership reverses >2% Mon while single names fail to offset",
-    "Basket factor unwind: MSFT+GOOGL+NVDA+AMZN move together >2.5% adverse Mon open (proves diversification false)",
-    "RH/process: live RH quoter mid shows material adverse basis vs US cash on any leg → do not size; draft that sizes tokens as if cash without measured basis → process kill",
-    "Value-mandate breach: book behaves as pure AI momentum (NVDA+QQQ driving PnL) with MSFT soft-entry thesis abandoned",
-    "Research gap: PM sizes live or large paper conviction without Research pass on MSFT/GOOGL/NVDA/QQQ → Risk should REJECT depth"
+    "NVDA 2000: semi complex mean-reverts hard Mon (e.g. >5% adverse) OR PEG/competition scare reprices OR fork pool vs feed widens beyond accepted ~2% haircut OR owner later requires zero semi beta",
+    "AMZN 1500: AWS sales or op. income decelerates vs Q2 run-rate OR CapEx/FCF worsens without backlog conversion OR liability expands beyond $2.5B settlement frame OR pool vs feed exceeds accepted ~2.6% haircut",
+    "QQQ 1200: ETF fork route/deviation spikes OR Nasdaq leadership reverses >2% Mon while single names fail to offset",
+    "Basket factor unwind: MSFT+GOOGL+NVDA+AMZN move together >2.5% adverse Mon open",
+    "RH/process: live Uniswap quote at propose shows material adverse basis vs rh-basis.md → abort propose",
+    "Value-mandate breach: book behaves as pure AI momentum (NVDA+QQQ driving PnL) with MSFT soft-entry thesis abandoned"
   ],
   "lens": "druckenmiller",
-  "liveReady": false,
-  "rhBasis": "UNKNOWN",
+  "liveReady": true,
+  "rhBasis": "OK_WITH_HAIRCUT",
+  "haircutAccepted": {
+    "by": "owner",
+    "date": "2026-09-20",
+    "NVDA_poolVsFeed_bps": 199,
+    "AMZN_poolVsFeed_bps": 264,
+    "source": "workspace/briefs/rh-basis.md"
+  },
   "ownerPick": {
     "basket": 3,
     "name": "AI Delivery (anchored)",
     "source": "workspace/briefs/basket-options.md"
   },
+  "amountHintUsdg": 500,
   "criticRef": "https://github.com/sherwoodagent/grokbot-fund-template/commit/60c94c07ea27c350edc2b0c111ac826818529c68",
-  "criticQuality": "CLEARED"
+  "criticQuality": "CLEARED",
+  "basisRef": "https://github.com/sherwoodagent/grokbot-fund-template/commit/fedcf68da2019669dc5337d0aaf406f78fce5915"
 }
