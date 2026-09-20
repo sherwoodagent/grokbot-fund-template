@@ -1,1 +1,19 @@
-{"status":"empty"}
+{
+  "strategy": "PortfolioStrategy",
+  "status": "no-trade",
+  "durationDays": 7,
+  "weights": [],
+  "rationale": "lens:druckenmiller — Regime-aware pass. Critic quality-REJECT’d Research this loop (no valuation math, no RH vs US-cash basis, thin primary KPIs, asymmetry to Wells $57 unaddressed). Druckenmiller-lite rule: fewer clearer bets, size only when edge + falsifiable kill are both hard. Soft-sell NFLX into an active Underweight and quiet-tape AMZN are not clear 7d value dislocations on RH fork until Research patches the gate. Mandate allows PortfolioStrategy only (value, ≤5 names, ≤30% single-name, 7d) — empty basket complies. Do not invent long weights to complete the loop. Bounce to Research; Desk Lead will not skip Critic.",
+  "killCriteria": [
+    "NFLX: next engagement / paid-membership / viewing-hours print deteriorates vs prior period OR price through $65 without bull KPI rebuttal OR second major house cuts with engagement thesis intact",
+    "AMZN: AWS growth or operating income decelerates vs consensus on next print OR Prime-related liability expands beyond $2.5B settlement frame OR RH-token basis vs US cash widens so 7d paper PnL cannot map to cash thesis",
+    "Desk/quality: Research still ships without valuation table + RH basis note → quality kill; no long from this loop"
+  ],
+  "lens": "druckenmiller",
+  "bounceTo": "Research",
+  "needs": [
+    "valuation table",
+    "RH fork basis vs US cash",
+    "primary KPI support"
+  ]
+}
