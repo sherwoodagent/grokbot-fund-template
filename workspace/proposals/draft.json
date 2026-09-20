@@ -1,16 +1,45 @@
 {
   "strategy": "PortfolioStrategy",
-  "status": "no-trade",
+  "status": "paper",
   "durationDays": 7,
-  "weights": [],
-  "rationale": "lens:druckenmiller — Paper pass. Critic quality CLEARED but thesis still bearish: NFLX high (Research’s own −20.6% to Wells $57 vs +11.5% to prior $80 — no positive 7d asymmetry); AMZN med (fair compounder, quiet Fri tape, negative FCF / crowded AWS — fails value soft-sell screen this week). Prefer fewer clearer bets over forced diversification theater: empty basket beats inventing longs into unresolved engagement fight + unmeasured RH basis. Scanner rhBasis UNKNOWN / liveReady false — size only when mid prints. Mandate: PortfolioStrategy, value, ≤5 / ≤30% unused, 7d. Vault funded (paper context only) does not unlock size without basis.",
+  "weights": [
+    {
+      "symbol": "MSFT",
+      "bps": 2800
+    },
+    {
+      "symbol": "GOOGL",
+      "bps": 2500
+    },
+    {
+      "symbol": "NVDA",
+      "bps": 2000
+    },
+    {
+      "symbol": "AMZN",
+      "bps": 1500
+    },
+    {
+      "symbol": "QQQ",
+      "bps": 1200
+    }
+  ],
+  "rationale": "lens:druckenmiller — Owner PICKED basket 3 (AI Delivery, anchored) from workspace/briefs/basket-options.md. Preferred weights honored: MSFT 2800 / GOOGL 2500 / NVDA 2000 / AMZN 1500 / QQQ 1200 (=10000). Sizing logic from option note: own AI via cloud/search cash engines + measured NVDA (capped 2000); AMD Fri spike chase refused; MSFT soft Fri print as value entry into the theme; QQQ sleeve as light beta ballast. Mandate: ≤5 names, max single 2800≤3000 bps, PortfolioStrategy, 7d. Regime: rhBasis UNKNOWN / liveReady false — paper US-proxy narrative only; vault funded does not unlock live. Critic basket-3 pass not yet on main (prior critic was NFLX/AMZN loop); will bounce/revise if Critic quality REJECT lands.",
   "killCriteria": [
-    "NFLX: next engagement / paid-membership / viewing-hours print deteriorates vs H1’26 OR price trades through $65 without primary KPI rebuttal OR second major house cuts on engagement OR stock approaches Wells $57 without thesis reset",
+    "Shared/RH: live RH quoter mid shows material adverse basis vs US cash → thesis does not transfer; do not size live",
+    "Desk/process: any live submit that sizes RH tokens as if cash without measured basis → process kill",
+    "NVDA: fork basis widens beyond Risk tolerance OR owner requires zero semi beta OR event/vol into next earnings breaks thesis",
+    "AI Delivery theme: AI narrative fade OR Mon open gaps basket core >3% without thesis change",
     "AMZN: AWS sales or op. income decelerates vs Q2 run-rate on next print OR CapEx/FCF path worsens without backlog conversion OR liability expands beyond $2.5B settlement frame",
-    "Both/RH: live RH quoter mid shows material adverse basis vs US cash → thesis does not transfer; do not size",
-    "Desk/process: any draft that sizes RH tokens as if cash without measured basis → process kill"
+    "QQQ: fork deviation spikes OR Risk rejects ETF sleeves for this beta (keep v4:3000:60; avoid empty 10000/200 pool)",
+    "MSFT/GOOGL: CapEx/FCF drag or cloud/search deceleration on next prints that falsifies quality-cash-engine thesis"
   ],
   "lens": "druckenmiller",
   "liveReady": false,
-  "rhBasis": "UNKNOWN"
+  "rhBasis": "UNKNOWN",
+  "ownerPick": {
+    "basket": 3,
+    "name": "AI Delivery (anchored)",
+    "source": "workspace/briefs/basket-options.md"
+  }
 }
