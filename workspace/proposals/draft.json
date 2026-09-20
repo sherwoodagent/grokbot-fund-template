@@ -1,16 +1,16 @@
 {
   "strategy": "PortfolioStrategy",
   "status": "no-trade",
-  "liveReady": false,
   "durationDays": 7,
   "weights": [],
-  "rationale": "lens:druckenmiller — Quality gate CLEARED (Research patch closed valuation/KPI/asymmetry/RH-UNKNOWN note), but thesis still fails the 7d paper edge test. Critic remains high-confidence wrong on NFLX soft-sell folklore (Research’s own −20.6% Wells $57 vs +11.5% prior $80 skew) and med-confidence wrong on AMZN as a value print this week (fair compounder, quiet Fri tape, negative FCF / crowded AWS — not a dislocation). Druckenmiller-lite: conviction without concentration suicide; prefer fewer clearer bets — empty basket over forced longs into unresolved engagement fight + unmeasured RH basis. RH basis UNKNOWN → do not size for live (liveReady false); paper PnL would be US-proxy narrative only and unreliable. Mandate honored: PortfolioStrategy, value, ≤5 names, ≤30% single-name unused, 7d. Paper vs live: quality allows a monitored paper draft in process terms, but no clear falsifiable positive asymmetry this loop → no-trade again rather than invent weights that ignore Critic’s still-bearish stance.",
+  "rationale": "lens:druckenmiller — Paper pass. Critic quality CLEARED but thesis still bearish: NFLX high (Research’s own −20.6% to Wells $57 vs +11.5% to prior $80 — no positive 7d asymmetry); AMZN med (fair compounder, quiet Fri tape, negative FCF / crowded AWS — fails value soft-sell screen this week). Prefer fewer clearer bets over forced diversification theater: empty basket beats inventing longs into unresolved engagement fight + unmeasured RH basis. Scanner rhBasis UNKNOWN / liveReady false — size only when mid prints. Mandate: PortfolioStrategy, value, ≤5 / ≤30% unused, 7d. Vault funded (paper context only) does not unlock size without basis.",
   "killCriteria": [
-    "NFLX: next engagement / paid-membership / viewing-hours print deteriorates vs H1’26 OR price trades through $65 without primary KPI rebuttal OR second major house cuts on engagement OR stock approaches Wells $57 path without thesis reset",
+    "NFLX: next engagement / paid-membership / viewing-hours print deteriorates vs H1’26 OR price trades through $65 without primary KPI rebuttal OR second major house cuts on engagement OR stock approaches Wells $57 without thesis reset",
     "AMZN: AWS sales or op. income decelerates vs Q2 run-rate on next print OR CapEx/FCF path worsens without backlog conversion OR liability expands beyond $2.5B settlement frame",
     "Both/RH: live RH quoter mid shows material adverse basis vs US cash → thesis does not transfer; do not size",
     "Desk/process: any draft that sizes RH tokens as if cash without measured basis → process kill"
   ],
   "lens": "druckenmiller",
+  "liveReady": false,
   "rhBasis": "UNKNOWN"
 }
