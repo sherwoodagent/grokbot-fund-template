@@ -1,50 +1,49 @@
-# Risk note — Owner basket 3 (AI Delivery)
+# Risk note — Owner basket 3 LIVE RE-GATE
 lens:munger
 
 ## Decision
-**APPROVE** (paper-only)
+**REJECT** (live-candidate)
 
 ## Reason
-Caps clear (≤5 / ≤3000 bps) and Critic CLEARED paper — live still forbidden on `rhBasis` UNKNOWN + Research gap on 4/5 names.
+Owner haircut clears RH basis only — Critic live-depth kill still open (Research missing on MSFT/GOOGL/NVDA/QQQ); no live APPROVE on thin thesis.
 
-## Refs
-- Draft (FINAL PM lock): https://github.com/sherwoodagent/grokbot-fund-template/commit/ec3b09da2e44a66a3f8b443b0c9b2018cecc33b4
-- Critic (CLEARED paper): https://github.com/sherwoodagent/grokbot-fund-template/commit/60c94c07ea27c350edc2b0c111ac826818529c68
+## What cleared
+| Item | Status |
+|------|--------|
+| Caps ≤5 / ≤3000 bps | Pass — MSFT 2800 max, sum 10000 |
+| Kill criteria present | Pass — draft carries haircut-aware kills |
+| `rh-basis.md` (fedcf68) | Pass — cash↔oracle tight; NVDA ~199 bps / AMZN ~264 bps pool vs feed |
+| Owner haircut on record | Pass — `haircutAccepted` in draft (NVDA 199 / AMZN 264 bps) |
+| Opaque calldata / Privy skip | N/A — not an Ops propose |
 
-## Live
-**FORBIDDEN.** `rhBasis: UNKNOWN`, `liveReady: false`, status `paper`. Vault USDG is not an Ops unlock. No live submit until Scanner marks basis known (or owner-accepted haircut on record).
+## What blocks live
+| Item | Status |
+|------|--------|
+| Research depth (MSFT/GOOGL/NVDA/QQQ) | **Fail** — Critic CLEARED *paper* only; live-depth kill: size live without Research pass → REJECT depth. Draft still admits Research thin / NFLX-era misaligned. |
+| QuoterV2 at propose | Open — basis used CLI pool proxy; Ops must re-quote before any `strategy propose` |
+| Owner “propose now” | Required — this REJECT is not Ops idle forever; it is no live Risk APPROVE yet |
 
 ## Cap check
-| Sym | bps | Cap ≤3000 | ≤5 names |
-|-----|-----|-----------|----------|
-| MSFT | 2800 | Pass | |
-| GOOGL | 2500 | Pass | |
-| NVDA | 2000 | Pass | |
-| AMZN | 1500 | Pass | |
-| QQQ | 1200 | Pass | |
-| **Sum** | **10000** | | **5 / 5 Pass** |
+| Sym | bps | ≤3000 |
+|-----|-----|-------|
+| MSFT | 2800 | Pass |
+| GOOGL | 2500 | Pass |
+| NVDA | 2000 | Pass |
+| AMZN | 1500 | Pass |
+| QQQ | 1200 | Pass |
 
 **Cap breaches:** none.
 
-## Checklist (hard vetoes)
-| Gate | Result |
-|------|--------|
-| Opaque / custom calldata | Pass — PortfolioStrategy |
-| Single name > 3000 bps (30%) | Pass — max MSFT 2800 |
-| > 5 names | Pass — exactly 5 |
-| Kill criteria from Critic | Pass — per-name + factor/RH/process/Research-gap kills in lock + critic |
-| Privy → raw Ops discipline | N/A — not an Ops request |
-| Shared-file artifacts | Pass — draft / critic / scan / mandate |
-| Live without measured RH basis | Fail → live blocked (not paper veto) |
+## Live
+**FORBIDDEN** until Research patches MSFT/GOOGL/NVDA/QQQ (or owner overrides Critic depth kill **on record**) and Risk re-gates. Paper APPROVE (prior) unchanged. Ops: do **not** propose — no live Risk APPROVE.
 
-## Invert / non-optional flags (not redesign)
-How we die: Mon AI-factor gap hits all five; nested QQQ reloads NVDA beta; MSFT soft-Fri “value entry” is folklore; Research still NFLX-era — no tables for MSFT/GOOGL/NVDA/QQQ.
+## Invert
+How we die: shipping $500 into a crowded AI-factor book because the pool haircut got signed while four names still lack Research tables. Basis theater ≠ edge.
 
-Logged for next loop (REVISE→PM if they want deeper conviction; Risk does not cut weights):
-1. Research gap on 4/5 names
-2. Nested QQQ beta inside AI cluster
-3. Value-mandate vs AI-factor book tension
-4. `rhBasis` UNKNOWN
+## Refs
+- Basis: https://github.com/sherwoodagent/grokbot-fund-template/commit/fedcf68da2019669dc5337d0aaf406f78fce5915
+- Critic (paper CLEARED): https://github.com/sherwoodagent/grokbot-fund-template/commit/60c94c07ea27c350edc2b0c111ac826818529c68
+- Draft: `liveReady true` / `rhBasis OK_WITH_HAIRCUT` / `status live-candidate`
 
 ## Handoff
-Desk Lead: paper gate formalized on FINAL lock `ec3b09da`. Ops: idle. Scanner: fork mids before any live ask. Research: new pass on MSFT/GOOGL/NVDA/QQQ if conviction rises.
+Desk Lead: live REJECT; wait Fund Research patch or owner written depth override → re-gate. Ops: idle (no propose). Scanner: basis file stands.
