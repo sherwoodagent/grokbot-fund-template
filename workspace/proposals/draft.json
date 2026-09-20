@@ -24,15 +24,17 @@
       "bps": 1200
     }
   ],
-  "rationale": "lens:druckenmiller — Owner PICKED basket 3 (AI Delivery, anchored) from workspace/briefs/basket-options.md. Preferred weights honored: MSFT 2800 / GOOGL 2500 / NVDA 2000 / AMZN 1500 / QQQ 1200 (=10000). Sizing logic from option note: own AI via cloud/search cash engines + measured NVDA (capped 2000); AMD Fri spike chase refused; MSFT soft Fri print as value entry into the theme; QQQ sleeve as light beta ballast. Mandate: ≤5 names, max single 2800≤3000 bps, PortfolioStrategy, 7d. Regime: rhBasis UNKNOWN / liveReady false — paper US-proxy narrative only; vault funded does not unlock live. Critic basket-3 pass not yet on main (prior critic was NFLX/AMZN loop); will bounce/revise if Critic quality REJECT lands.",
+  "rationale": "lens:druckenmiller — LOCKED paper draft after Critic CLEARED Option 3 (commit 60c94c07). Owner PICKED basket 3 AI Delivery (anchored) from workspace/briefs/basket-options.md; weights honored MSFT 2800 / GOOGL 2500 / NVDA 2000 / AMZN 1500 / QQQ 1200 (=10000). Critic stance = revise-down conviction (crowded AI-factor book, nested QQQ beta, NVDA fashion multiple in value mandate) — not empty basket; owner selected this option. Research depth gap noted: research.md still NFLX/AMZN-era and misaligned for MSFT/GOOGL/NVDA/QQQ; AMZN overlap only. Mandate caps held (≤5, max 2800≤3000). Regime: rhBasis UNKNOWN / liveReady false — paper US-proxy only; do not size live until basis prints. killCriteria copied from Critic basket-3 brief.",
   "killCriteria": [
-    "Shared/RH: live RH quoter mid shows material adverse basis vs US cash → thesis does not transfer; do not size live",
-    "Desk/process: any live submit that sizes RH tokens as if cash without measured basis → process kill",
-    "NVDA: fork basis widens beyond Risk tolerance OR owner requires zero semi beta OR event/vol into next earnings breaks thesis",
-    "AI Delivery theme: AI narrative fade OR Mon open gaps basket core >3% without thesis change",
-    "AMZN: AWS sales or op. income decelerates vs Q2 run-rate on next print OR CapEx/FCF path worsens without backlog conversion OR liability expands beyond $2.5B settlement frame",
-    "QQQ: fork deviation spikes OR Risk rejects ETF sleeves for this beta (keep v4:3000:60; avoid empty 10000/200 pool)",
-    "MSFT/GOOGL: CapEx/FCF drag or cloud/search deceleration on next prints that falsifies quality-cash-engine thesis"
+    "MSFT 2800: Azure/cloud growth or backlog narrative breaks on next print OR Fri softness extends >3% Mon without thesis change OR CapEx/FCF path worsens vs Street frame",
+    "GOOGL 2500: ads/search/cloud print disappoints OR AI-capex ROI narrative cracks OR Mon gap >3% adverse without offset from other sleeves",
+    "NVDA 2000: semi complex mean-reverts hard Mon (e.g. >5% adverse) OR PEG/competition scare reprices OR fork basis widens beyond Risk limit OR owner later requires zero semi beta",
+    "AMZN 1500: AWS sales or op. income decelerates vs Q2 run-rate OR CapEx/FCF worsens without backlog conversion OR liability expands beyond $2.5B settlement frame",
+    "QQQ 1200: ETF fork route/deviation spikes (fee-tier/empty-pool warnings) OR Nasdaq leadership reverses >2% Mon while single names fail to offset",
+    "Basket factor unwind: MSFT+GOOGL+NVDA+AMZN move together >2.5% adverse Mon open (proves diversification false)",
+    "RH/process: live RH quoter mid shows material adverse basis vs US cash on any leg → do not size; draft that sizes tokens as if cash without measured basis → process kill",
+    "Value-mandate breach: book behaves as pure AI momentum (NVDA+QQQ driving PnL) with MSFT soft-entry thesis abandoned",
+    "Research gap: PM sizes live or large paper conviction without Research pass on MSFT/GOOGL/NVDA/QQQ → Risk should REJECT depth"
   ],
   "lens": "druckenmiller",
   "liveReady": false,
@@ -41,5 +43,7 @@
     "basket": 3,
     "name": "AI Delivery (anchored)",
     "source": "workspace/briefs/basket-options.md"
-  }
+  },
+  "criticRef": "https://github.com/sherwoodagent/grokbot-fund-template/commit/60c94c07ea27c350edc2b0c111ac826818529c68",
+  "criticQuality": "CLEARED"
 }
