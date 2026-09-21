@@ -1,71 +1,66 @@
 ---
-rhBasis: OK
-liveReady: true
-asOf: 2026-09-20T13:13:00-05:00
+rhBasis: STALE
+liveReady: false
+asOf: 2026-09-21T09:22:10-05:00
 asOfLabel: America/Bogota (COT)
-sessionNote: US cash markets closed (Sunday); movers + cash refs = Fri 2026-09-18; basis = live fork feeds + live v4 pool quotes
-venue: Sherwood RH fork chainId 9994663
+session: US regular Mon 2026-09-21 open
+socialSource: X
 watchlistEligible: [AAPL, TSLA, NVDA, MSFT, AMZN, AMD, SPY, QQQ, GOOGL]
 watchlistExcluded: [META, SLV]
-notOnForkRegistry: [PLTR, NFLX]
 basket3: [MSFT, GOOGL, NVDA, AMZN, QQQ]
+basket3Status: Executed (proposal #1) — context only
 basisDetail: workspace/briefs/rh-basis.md
-basisCommit: bf80141d2128531cdb2a28bcd1ff5ae63af7ed2e
 ---
 
-# Scan brief — 2026-09-20 (Sunday, America/Bogota)
+# Scan brief — Mon 2026-09-21 US open (America/Bogota)
 
-## Status / data gaps
+## Status
 
-- **rhBasis: OK** — basket 3 live Chainlink feeds + live Uniswap **v4** pool mids on fork `9994663` (see [`rh-basis.md`](./rh-basis.md)). Max |pool vs Fri cash| **53.2 bps** (GOOGL).
-- **liveReady: true** — basis gate cleared for paper→live on basket 3. Prior CLI `feedDeviationBps` (NVDA +199 / AMZN +264) are **stale**; live v4 quotes show NVDA/AMZN within ~30 bps of cash.
-- **Universe source:** `@sherwoodagent/cli` `fork-tokens.ts` → `ROBINHOOD_FORK_STOCKS` on chain **9994663**.
-- Fork chain time ~2026-11-02 (virtual); wall clock Sep 20 — treat feed freshness vs fork tip.
+- **rhBasis: STALE** — live v4 Quoter mids for all 9 eligible. STALE: **AMD (+215 bps), QQQ (−138), GOOGL (−136)**. OK: AAPL/TSLA/NVDA/MSFT/AMZN/SPY.
+- **liveReady: false** — fail closed for **new** size until Risk accepts haircuts / drops STALE names.
+- **Basket 3 (Executed):** MSFT/NVDA/AMZN still OK; **GOOGL + QQQ now STALE** vs live cash — material for Risk, not a re-propose.
+- **socialSource: X** (connected). Detail: [`rh-basis.md`](./rh-basis.md).
 
-## Exclusions (do not basket)
+## Top movers (Yahoo live vs prior close)
 
-| Sym | Address | Why |
-|-----|---------|-----|
-| **META** | `0xc0D6457C16Cc70d6790Dd43521C899C87ce02f35` | Pool ~**8.3%** above frozen META/USD feed (v3 agrees ~+8.2%); past sim 5% buy floor / near 10% ceiling. |
-| **SLV** | `0x411eFb0E7f985935DAec3D4C3ebaEa0d0AD7D89f` | **v3-only** on this vnet; no v4 USDG pool; v3 position manager corrupted → swap leg unverified. |
-| **PLTR / NFLX** | — | Old testnet five — **not** in fork registry; do not use without proving fork addresses. |
+| Rank | Sym | Live | Session % | Note |
+|------|-----|------|-----------|------|
+| 1 | **AMD** | $607.76 | **+8.56%** | $1T mcap narrative; pool STALE |
+| 2 | **TSLA** | $375.70 | **+3.14%** | Strong open; basis OK |
+| 3 | **GOOGL** | $356.24 | **+1.92%** | Bid; pool STALE (−136 bps) |
+| 4 | **QQQ** | $733.59 | **+1.68%** | Nasdaq bid; pool STALE (−138) |
+| 5 | **AMZN** | $256.59 | **+1.14%** | Mega-cap; basis OK |
+| 6 | **SPY** | $768.30 | **+0.87%** | Broad green; OK |
+| 7 | **NVDA** | $223.15 | **+0.39%** | Quiet vs AMD; OK |
+| 8 | **AAPL** | $337.13 | **+0.30%** | Quiet; OK |
+| 9 | **MSFT** | $494.20 | **+0.09%** | Flat; OK |
 
-## Top movers — eligible 9 (US cash proxy, Fri 2026-09-18)
+## Narrative spikes
 
-Sources: Exa Markets / Yahoo Fri Sep 18 closes. Weekend — no fresh cash prints.
+- **AMD $1T / >$600:** Wide X heat at open — mcap milestone + ~+8–10% tape.  
+  https://x.com/NxtGen_Trader/status/2102040286830457096 · https://x.com/StockMKTNewz/status/2102030195897032959  
+  **Desk:** activity is real; **value mandate → do not chase**; pool already STALE (+215 bps).
+- **Semis / QQQ:** “Semiconductors are the market” tape with $SMH/$QQQ/$SPY.  
+  https://x.com/pnani456/status/2102040338500092224
+- **NVDA / CPU-AI:** Agent/CPU demand narrative alongside GPUs ($AMD/$ARM/$INTC framed).  
+  https://x.com/AuroraStecher/status/2102040303016587731
+- **TSLA / SpaceX:** Morgan Stanley “deepening alliance” chatter (secondary).  
+  https://x.com/TheSonOfWalkley/status/2102040149152641116
+- **GOOGL:** Technical/breakout posts near ~$350 zone — cash bid, pool lagging.  
+  https://x.com/Levi2v2y/status/2102040190629888155
 
-| Sym | Fri close | Session Δ % (proxy) | Activity read |
-|-----|-----------|---------------------|---------------|
-| **AMD** | $559.82 | **+2.70%** | Largest upside; AI/supply narrative |
-| **NVDA** | $222.27 | **+1.34%** | Chip leadership |
-| **AMZN** | $253.71 | **+1.00%** | Mega-cap support |
-| **QQQ** | $721.45 | **+0.63%** | Nasdaq proxy bid |
-| **GOOGL** | $349.54 | **+0.64%** | Modest green |
-| **SPY** | $761.69 | **−0.12%** | Flat broad tape |
-| **AAPL** | $336.13 | **−0.26%** | Quiet soft |
-| **TSLA** | $364.27 | **−0.53%** | Soft; Cybercab/rates overhang |
-| **MSFT** | $493.78 | **−0.80%** | Softest mega-cap Friday |
+## Names to ignore today
 
-## Basket 3 basis (live)
-
-| symbol | usCash | chainlinkUsd | poolMidIfAny | deviationBps | status |
-|--------|--------|--------------|--------------|--------------|--------|
-| MSFT | 493.78 | 495.8227 | 495.9211 | +43.4 | OK |
-| GOOGL | 349.54 | 350.4714 | 351.3984 | +53.2 | OK |
-| NVDA | 222.27 | 222.4473 | 221.6536 | −27.7 | OK |
-| AMZN | 253.71 | 253.8630 | 254.4271 | +28.3 | OK |
-| QQQ | 721.45 | 720.3651 | 722.5775 | +15.6 | OK |
-
-Full detail: [`rh-basis.md`](./rh-basis.md). Pool mids from V4Quoter (100 USDG); QuoterV2 reverts on these pairs.
+- **META / SLV** — excluded (feed/pool / v3-only).
+- **AMD for new value size** — momentum melt-up + STALE pool; satellite only if Risk haircuts.
+- **PLTR / NFLX** — not on fork registry.
 
 ## Mandate reminder
 
-- PortfolioStrategy only · **value** flavor · max 5 names · max **30%** single · 7d default.
-- Forbidden: opaque calldata, memecoins, unlisted venues, META/SLV, PLTR/NFLX unless fork addresses proven.
-- Venue = RH fork **9994663** only. **No weights** (PM).
+PortfolioStrategy · value · max 5 · 30% · 7d · RH fork 9994663. **No weights** (PM). Forbidden: opaque calldata, memecoins, unlisted venues.
 
 ## Blockers
 
-1. ~~Capture live fork quoter mids~~ — **done** (v4); `rhBasis: OK`, `liveReady: true`.
-2. Cash closed until Mon America/New_York open — Mon gap risk remains; re-quote at propose.
-3. Owner picks basket from `briefs/basket-options.md` — Scanner does **not** pick a winner.
+1. Risk: haircut or drop **AMD / QQQ / GOOGL** before any new propose.
+2. Basket 3 executed book: re-quote GOOGL+QQQ before add/rotate.
+3. Ops: re-run v4 quoter at propose size (100 USDG probe ≠ fill size).

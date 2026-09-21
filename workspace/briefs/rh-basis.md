@@ -1,69 +1,67 @@
----
-rhBasis: OK
-liveReady: true
-asOf: 2026-09-20T13:13:00-05:00
-asOfLabel: America/Bogota (COT)
-basket: [MSFT, GOOGL, NVDA, AMZN, QQQ]
-basketLabel: Grok Fund Beta basket 3 (AI Delivery)
-chainId: 9994663
-rpc: Tenderly RH fork (moonwell/wormhole-bridge/f509bc-4fdefe)
-usCashSource: Exa Markets / Yahoo Fri 2026-09-18 closes (markets closed Sunday)
-poolSource: live Uniswap v4 Quoter 0x8dc1…8f94 quoteExactInputSingle 100 USDG → stock (fee 3000 / ts 60 / hooks 0)
-feedSource: live eth_call latestRoundData (8 decimals)
----
+# RH basis — morning 2026-09-21T09:22:10-05:00
 
-# RH basis — basket 3 vs US cash
-
-**Overall: `rhBasis: OK`** · **`liveReady: true` can flip** (paper→live) for this basket.
-
-Live fork Chainlink feeds and Uniswap v4 pool quotes were measured on chain **9994663**. All five names are within **~55 bps** of Fri US cash closes. Prior CLI `feedDeviationBps` snapshots (NVDA +199 / AMZN +264) are **stale** — live pool mids do **not** show that premium.
+**Chain:** 9994663 · block `67082393` · fork tip `2026-11-09T04:19:51+00:00`  
+**Method:** Uniswap v4 Quoter `0x8dc178efb8111bb0973dd9d722ebeff267c98f94` `quoteExactInputSingle` — sell **100 USDG** → stock (`fee/tick` per watchlist; hooks `0x0`); `poolMid = 100 / stockOut`. Chainlink `latestRoundData` where feed known. US cash = Yahoo live (Mon session).  
+**Gate:** `deviationBps = (poolMid − usCash) / usCash × 10000`; `|dev| < 100` → OK else STALE. CLI snapshots **not** used.
 
 ## Gate
 
 | Field | Value |
 |-------|-------|
-| `rhBasis` | **OK** |
-| `liveReady` | **true** (basis gate cleared for basket 3) |
-| Max \|pool vs cash\| | **53.2 bps** (GOOGL) |
-| Max \|feed vs cash\| | **41.4 bps** (MSFT) |
+| **rhBasis** | **STALE** |
+| **liveReady** | **false** |
+| Eligible quoted | 9 / 9 |
+| STALE names | AMD, QQQ, GOOGL |
+| Basket 3 note | Proposal #1 already **Executed** — material STALE now: **GOOGL, QQQ** |
 
-## Table
+## Table (eligible)
 
-| symbol | usCash | chainlinkUsd | poolMidIfAny | deviationBps | status |
-|--------|--------|--------------|--------------|--------------|--------|
-| MSFT | 493.78 | 495.8227 | 495.9211 | +43.4 | OK |
-| GOOGL | 349.54 | 350.4714 | 351.3984 | +53.2 | OK |
-| NVDA | 222.27 | 222.4473 | 221.6536 | −27.7 | OK |
-| AMZN | 253.71 | 253.8630 | 254.4271 | +28.3 | OK |
-| QQQ | 721.45 | 720.3651 | 722.5775 | +15.6 | OK |
+| symbol | usCash | chainlinkUsd | poolMid | deviationBps | status |
+|--------|--------|--------------|---------|--------------|--------|
+| AAPL | 337.13 | — | 337.55 | 12.6 | **OK** |
+| TSLA | 375.70 | — | 376.60 | 24.0 | **OK** |
+| NVDA | 223.15 | 223.74 | 221.63 | -67.9 | **OK** |
+| MSFT | 494.20 | 494.81 | 495.94 | 35.1 | **OK** |
+| AMZN | 256.59 | 256.81 | 254.76 | -71.5 | **OK** |
+| AMD | 607.76 | — | 620.81 | 214.6 | **STALE** |
+| SPY | 768.30 | — | 769.56 | 16.4 | **OK** |
+| QQQ | 733.59 | 730.64 | 723.47 | -138.0 | **STALE** |
+| GOOGL | 356.24 | 354.89 | 351.41 | -135.5 | **STALE** |
 
-`deviationBps` = `(poolMid − usCash) / usCash × 10000` (execution mid vs Fri cash). Threshold used: \|dev\| < 100 → **OK**.
+## Pool keys
 
-## Method notes
+| symbol | token | fee | tickSpacing |
+|--------|-------|-----|-------------|
+| AAPL | `0xaF3D…93f9` | 3000 | 60 |
+| TSLA | `0x322F…b2d` | 3000 | 60 |
+| NVDA | `0xd060…9EEC` | 3000 | 60 |
+| MSFT | `0xe932…2e74` | 3000 | 60 |
+| AMZN | `0x12f1…1F54` | 3000 | 60 |
+| AMD | `0x8692…fdC` | 10000 | 200 |
+| SPY | `0x117c…4C0C` | 3000 | 60 |
+| QQQ | `0xD5f3…de68` | 3000 | 60 |
+| GOOGL | `0x2e08…4FE3` | 3000 | 60 |
 
-1. **US cash** — Fri 2026-09-18 regular-session closes (Sunday wall clock; no Mon print yet).
-2. **Chainlink** — `latestRoundData` on fork feeds; decimals=8; answers decode cleanly. Feed `updatedAt` ≈ fork tip time **2026-11-02 17:46 COT** (vnet virtual clock ≠ wall Sep 20). Treat freshness vs **fork tip**, not wall clock.
-3. **Pool mid** — V4Quoter `0x8dc178efb8111bb0973dd9d722ebeff267c98f94`, `quoteExactInputSingle` selling **100 USDG** into each stock pool (`v4:3000:60`, hooks `0x0`). `poolMid ≈ 100 / stockOut`. QuoterV2 (`0x33e8…`) **reverts** (pools are v4-only for these pairs). SwapAdapter `0x54E6A7af53143556973493fDeC9d7837A77c67eF`; StateView cross-check `0xf333…` slot0 mids agree within ~1–2 USD of quote mid.
-4. **CLI hints** — `@sherwoodagent/cli` `fork-tokens.ts` `quotedOut` / `feedDeviationBps` left as historical hints only; **not** used for this gate after live re-quote.
+## Feeds (known)
 
-## Addresses
+| symbol | feed |
+|--------|------|
+| MSFT | `0x45C3C877C15E6BA2EBB19eA114Ea508d14C1Af2E` |
+| GOOGL | `0xF6f373a037c30F0e5010d854385cA89185AE638b` |
+| NVDA | `0x379EC4f7C378F34a1B47E4F3cbeBCbAC3E8E9F15` |
+| AMZN | `0xD5a1508ceD74c084eBf3cBe853e2C968fB2a651C` |
+| QQQ | `0x80901d846d5D7B030F26B480776EE3b29374C2ae` |
+| AAPL / TSLA / AMD / SPY | — not resolved this pass (pool gate still applied) |
 
-| symbol | token | feed |
-|--------|-------|------|
-| MSFT | `0xe93237C50D904957Cf27E7B1133b510C669c2e74` | `0x45C3C877C15E6BA2EBB19eA114Ea508d14C1Af2E` |
-| GOOGL | `0x2e0847E8910a9732eB3fb1bb4b70a580ADAD4FE3` | `0xF6f373a037c30F0e5010d854385cA89185AE638b` |
-| NVDA | `0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC` | `0x379EC4f7C378F34a1B47E4F3cbeBCbAC3E8E9F15` |
-| AMZN | `0x12f190a9F9d7D37a250758b26824B97CE941bF54` | `0xD5a1508ceD74c084eBf3cBe853e2C968fB2a651C` |
-| QQQ | `0xD5f3879160bc7c32ebb4dC785F8a4F505888de68` | `0x80901d846d5D7B030F26B480776EE3b29374C2ae` |
-| USDG | `0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168` (6 dec) | — |
+## Notes
 
-## Residual caveats (do not block OK)
-
-- Cash ref is **Fri close**; Mon open can gap. Re-check basis at propose if tape moves.
-- Fork virtual time (Nov 2 tip) ≠ wall Sep 20 — oracle “age vs wall” is not meaningful; feeds are live relative to fork tip.
-- Re-quote at `strategy propose` time (size-aware impact may differ from 100 USDG probe).
+1. Fork tip clock ≈ **2026-11-09** (virtual); wall ≈ Mon 2026-09-21 America/Bogota. Pool quotes are live eth_call vs tip.
+2. Chainlink feed age vs fork tip is large (~48d) for known feeds — **pool vs cash is the gate**, feeds are cross-check only.
+3. **AMD +215 bps** pool premium into a +8.5% cash melt-up / $1T narrative — STALE, do not chase for new size.
+4. **QQQ −138 / GOOGL −136** pool below cash — STALE; Basket 3 holds these — Risk/Ops should re-quote before any add.
+5. Excluded META/SLV unchanged (not quoted).
 
 ## Handoff
 
-- **Scanner / PM:** set `rhBasis: OK`, `liveReady: true` for basket 3 paper→live.
-- **Ops:** still re-quote at propose; do not rely on frozen CLI `feedDeviationBps`.
+- New baskets: `liveReady: false` until Risk haircuts STALE names or drops them.
+- Basket 3 (executed): flag GOOGL+QQQ STALE to Risk; no Scanner re-propose.
