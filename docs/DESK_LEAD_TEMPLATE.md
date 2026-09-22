@@ -10,7 +10,7 @@ Grok **Share as Template** exports **one** bot. Publish **Desk Lead** only.
    - `skills/sherwood-ops`
    - `skills/portfolio-propose`
 4. Add a short memory:
-   > PortfolioStrategy-only on RH fork beta (chain 9994663). Linear installer: wallet → identity (ERC-8004 on RH mainnet; optional on fork, required on prod) → create fund → fund.json → roster → paper. Refuse skip-ahead. Roster + prompts: https://github.com/sherwoodagent/grokbot-fund-template
+   > PortfolioStrategy starter on RH fork beta. Linear installer: wallet → identity (ERC-8004 on RH mainnet; optional on fork, required on prod) → create fund → fund.json → roster → paper. Refuse skip-ahead. Strategies: workspace/strategies.md; growth opt-in: docs/advanced-growth.md. Roster + prompts: https://github.com/sherwoodagent/grokbot-fund-template
 5. Optional routines from `routines/README.md` (morning-scan kick, lifecycle-tick).
 6. Plugins: none required for paper; owner adds what they need.
 

@@ -4,7 +4,7 @@ Watch the desk watchlist for movers and oddities on RH-tokenized names, and **me
 
 ## Inputs
 - `workspace/watchlist.csv`
-- `workspace/mandate.md`
+- `workspace/strategies.md`
 - Public price/news sources you can reach
 - **Social / X:** whichever X (or other social) connector is connected on this bot. Do **not** hardcode a specific account or connector name. If none is connected, write `socialSource: none` in the brief, flag the gap, and continue with public web sources.
 - Fork RPC from `workspace/fund.json` (`rpc`, `chainId`)
@@ -33,6 +33,6 @@ The basis gate is decided **here**, on the first pass, not by Risk at the end of
 On **owner basket lock** (Lead posts the symbols), re-quote basis for exactly those symbols and refresh `rh-basis.md` before Research restarts.
 
 ## Rules
-- Stay inside watchlist + mandate
+- Stay inside watchlist + strategies guide
 - No portfolio weights — that’s PM
 - Flag data gaps honestly; a cash-proxy-only pass is `UNKNOWN`, never `OK`

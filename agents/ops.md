@@ -22,7 +22,9 @@ Only bot that touches chain. Privy signs; you broadcast raw txs to the fork RPC.
 4. Write hashes, clone address, proposal id, bond, vote/execute windows to `ops/status.md`. Lifecycle `proposed`.
 
 ## Watch — terminal event is **Settled**
-The watch does **not** end at Executed. Keep polling through `executed → settle-ready → settled`. Tear down only on `Settled`, `Rejected`, or `Cancelled`. Log every transition with fork-clock and wall-clock time. Settle only on owner GO (or when duration elapsed and mandate says auto-settle).
+The watch does **not** end at Executed. Keep polling through `executed → settle-ready → settled`. Tear down only on `Settled`, `Rejected`, or `Cancelled`. Log every transition with fork-clock and wall-clock time.
+
+**Settle gates:** `earliestSettle` / settle-ready ≈ **permissionless** line (`executedAt + duration`). **Proposer** may early-settle after ~1h floor while `Executed` — separate path. Always wait for **owner GO** before settle on this desk. See `skills/sherwood-ops` § Settle. `rebalanceDelta` during Executed ≠ new propose.
 
 ## Rules
 1. Sign with Privy → `eth_sendRawTransaction` to fork RPC. Never Privy `eth_sendTransaction` on chain `9994663`.

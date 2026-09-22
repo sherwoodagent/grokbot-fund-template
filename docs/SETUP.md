@@ -69,7 +69,7 @@ Personas are **lenses** in `personas/` (tags), not LARPing as real people.
 
 ## 5 — Paper loop
 
-Only after wallet + identity (or recorded skip) + fund (+ roster or waiver):
+Only after wallet + identity (or recorded skip) + fund (+ roster or waiver). Read `workspace/strategies.md` (**starter default:** PortfolioStrategy only; advanced Morpho/CL + Track A/B: `docs/advanced-growth.md`).
 
 1. Scanner → `briefs/scan.md` + `briefs/rh-basis.md` (live fork **v4** mids per name; social via whichever connector is connected)
 2. Research → `briefs/research.md` (**Critic waits on this** — not true parallel)
@@ -100,3 +100,17 @@ What worked: explicit create confirm before gas; Privy `list-wallets` → agent 
 What hurt: scrambled order (paper before vault); Privy stake path not one-click; roster never bootstrapped; cadence text implied Research∥Critic; RH basis hole; too many “what’s next?” widgets; identity mint never offered (fund created with `agentId 0`).
 
 **Product rule:** linear installer — (1) Privy + faucet, (2) ERC-8004 identity on RH mainnet (optional on fork, required on prod), (3) create fund + deposit dust, (4) spawn six bots, (5) morning paper loop — refuse skip-ahead.
+
+---
+
+## Roster bots cannot push GitHub
+
+Scanner / Research / Critic / PM / Risk (and often Ops) usually **lack Contents: write** on the `cursor-github` MCP, and `gh` is often **not** authenticated on the shared box. Artifacts therefore stay **local** under the desk workspace on the shared filesystem.
+
+**Pick one publish path (document which in `workspace/ops/status.md`):**
+
+1. **Lead commits from the box** — preferred for beta. Lead (or COO) has GitHub write as the human owner (`imthatcarlos` / org admin). Copy reviewed PROCESS files into a clone of `sherwoodagent/grokbot-fund-template`, branch, PR to `main`.
+2. **`gh` auth on Ops or Lead only** — `gh auth login` once on the bot that is allowed to push; never paste PATs into `fund.json` or briefs. Roster bots still write local artifacts; Ops/Lead alone `git push`.
+3. **Lead-owned push path outside the roster** — human reviews box diffs and opens the PR from a laptop.
+
+Do **not** expect Research/Critic/Scanner to land template fixes. Live vault addresses, Privy sessions, and agent keys never go in the template — keep `workspace/fund.json` paper-first (`fund.json.example`).

@@ -137,7 +137,7 @@ Stay until vault address is known. Never invent it.
 
 **fund.json blank on a later session?** A non-destructive template / soul refresh has wiped these fields before (2026-09-20). If `vault` is empty but git history or `ops/status.md` shows a live create, do **not** re-run create and do **not** ask the owner to retype addresses: restore from chain — `GET https://api.sherwood.sh/funds?chain=9994663`, match `subdomain`, then `GET https://api.sherwood.sh/vaults/<vault>?chain=9994663` — and rewrite `vault` / `asset` / `assetAddress`; `agent` from Privy `list-wallets`; `agentId` from the step-2 record (or `0`). Verify the vault `owner` equals `agent` before trusting it. Never leave placeholders.
 
-Also write `workspace/mandate.md` (slug + flavor) if not done: ask flavor `value|growth|contrarian|macro` once, mapped to persona **lenses** (tags in `personas/` — not LARPing).
+Also write `workspace/strategies.md` (slug + flavor) if not done: point at `workspace/strategies.md` (starter PortfolioStrategy). Advanced Morpho/CL / Track B only if they opt in — see `docs/advanced-growth.md`. Personas are **lenses** in `personas/` (tags), not LARPing.
 
 ---
 

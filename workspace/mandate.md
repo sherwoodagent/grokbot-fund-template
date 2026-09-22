@@ -1,10 +1,5 @@
-# Fund mandate (beta)
+# Moved
 
-- Venue: Sherwood on RH fork (chain 9994663)
-- Strategy class: PortfolioStrategy only
-- Flavor: value
-- Max names in basket: 5
-- Max single-name weight: 30%
-- Default duration: 7d
-- Forbidden: opaque custom calldata, memecoins, unlisted venues
-- Personas active: research=lynch_buffett, critic=burry, pm=druckenmiller, risk=munger
+Desk strategy guidance now lives in **`strategies.md`** (starter PortfolioStrategy path).
+
+Growth / Morpho / CL / Track A–B is opt-in: see `docs/advanced-growth.md`.

@@ -1,10 +1,10 @@
-# Session friction — Grok Fund Beta live loop (2026-09-20)
+# Ops pitfalls appendix — Grok Fund Beta (2026-09-20 → 2026-09-22)
 
-Notes from a full desk run: installer → widen universe → basket pick → paper/live gates → propose → execute → settle watch. Use this to harden template skills (`getting-started`, `sherwood-ops`, `agents/*`, `docs/SETUP.md`).
+Notes from full desk runs: setup → widen universe → basket pick → paper/live gates → propose → execute → settle watch. Use this to harden skills (`getting-started`, `sherwood-ops`, `agents/*`, `docs/SETUP.md`). **Not** an installer product — keep the tripwires, drop the dogma.
 
 ## What worked
 
-- Linear SETUP gates (wallet → fund → roster → paper → live)
+- Sensible setup order (wallet → fund → roster → paper → live) as guidance
 - Explicit owner GOs for propose and execute
 - Artifact trail in `workspace/` (briefs, draft, risk, ops/status)
 - Risk hard veto on thin Research depth
@@ -84,9 +84,39 @@ Scanner should use **whichever X (or social) connector is connected** on the bot
 | 7 | fund.json blank on soul refresh | `skills/getting-started`, `docs/SETUP.md`, `agents/desk-lead.md` (restore from chain via API) |
 | 8 | X / sentiment connector | `agents/scanner.md` (any connected connector; `socialSource: none` fallback) |
 
-Also added (separate finding): ERC-8004 identity mint as installer step 2 — the run created the fund with `agentId 0`.
+Also added (separate finding): ERC-8004 identity mint as setup step 2 — the run created the fund with `agentId 0`.
 
 ## Context from this run
 
 - Fund: Grok Fund Beta · vault on chain `9994663` · proposal **#1** Executed (basket 3, 500 USDG, 7d)
 - Settle watch active; settle gated on owner GO
+
+## Session friction — strategies + settle/rebalance (2026-09-22)
+
+Filed to COO for template push 2026-09-22.
+
+| # | Friction | Fix direction |
+|---|----------|---------------|
+| 9 | PortfolioStrategy-only felt like a hard mandate | Reframe as strategies guide; Morpho + CL + Track A/B → advanced opt-in |
+| 10 | Crypto research prompt not in template | Skill `crypto-asymmetric-research` + Research/Critic wiring (advanced) |
+| 11 | Ops watch used +7d as only settle gate | Proposer early-settle (≥~1h); permissionless after duration; owner GO still required |
+| 12 | Desk confused rebalance vs re-propose | Document `rebalanceDelta` = drift to frozen init weights only |
+| 13 | Settle `StalePrice` misread as pool basis | Feed-age gate; eth_call before retry; snapshot tip vs updatedAt |
+| 14 | Roster bots cannot push GitHub | Lead/Ops commit path or gh auth; document in SETUP |
+| 15 | Morpho/CL allowed but no market/pool cookbook | Ops discovery recipe or mark design-only until IDs published |
+| 16 | Standing: Lead notifies COO on template friction | Desk Lead profile memory — ping COO to PR template |
+| 17 | Linear installer / mandate framing | Kill sticky checklist + refuse-skip dogma; strategies.md + starter default + advanced-growth.md |
+
+## Resolution (2026-09-22) — template PR
+
+| # | Friction | Fixed in |
+|---|----------|----------|
+| 9 | Mandate → strategies | `workspace/strategies.md`, `README.md`, `agents/desk-lead.md`, `agents/research.md` |
+| 10 | crypto-asymmetric-research | `skills/crypto-asymmetric-research/SKILL.md`, `docs/advanced-growth.md`, `agents/research.md`, `agents/critic.md` |
+| 11 | Settle gates | `skills/sherwood-ops`, `routines/README.md` |
+| 12 | rebalanceDelta | `skills/sherwood-ops`, `agents/desk-lead.md` |
+| 13 | StalePrice on settle | `skills/sherwood-ops` troubleshooting |
+| 14 | Roster GitHub push | `docs/SETUP.md`, `docs/HOSTING.md` |
+| 15 | Morpho/CL cookbook | `workspace/ops/morpho-cl-cookbook.md` + `skills/sherwood-ops` (S1 IDs found / manual factory; S3 still blocked — not v4 equity LP) |
+| 16 | Lead → COO template ping | `agents/desk-lead.md` |
+| 17 | Installer / mandate framing | `skills/getting-started`, `docs/SETUP.md`, `docs/FRICTION.md`, `docs/DESK_LEAD_TEMPLATE.md`, `docs/advanced-growth.md` |

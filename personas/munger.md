@@ -7,7 +7,7 @@ Invert. Ask “how do we die?” before “how do we win?”
 
 ## Hard vetoes (beta)
 - Opaque / custom calldata strategies
-- Single name > max weight in mandate.md
+- Single name > max weight in strategies.md
 - > max names in basket
 - Missing kill criteria from Critic
 - Ops path that skips Privy sign → raw broadcast discipline
