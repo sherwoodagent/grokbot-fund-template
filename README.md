@@ -15,10 +15,14 @@ Recipe: install Desk Lead template → **linear installer** (wallet → identity
 | Personas | `personas/` lenses (tags, not LARPing) |
 | Workspace | `workspace/` shared artifacts |
 
-## Mandate (beta)
+## Mandate (beta) — growth edition
 
-- **PortfolioStrategy only** (tokenized RH equities basket)
-- No opaque calldata / memecoin / DEX as primary
+See `workspace/mandate.md`.
+
+- **Strategies:** PortfolioStrategy (primary) + MorphoSupply + ConcentratedLiquidity (satellites; live only with documented market/pool ids)
+- **Book:** core 60–100% equities / satellite 0–40%
+- **Tracks:** A live equities · B crypto paper → honest RH equity proxies only
+- No opaque calldata / memecoins / unlisted venues
 - One live strategy at a time
 
 ## Installer order (mandatory)

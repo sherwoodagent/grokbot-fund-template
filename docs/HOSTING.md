@@ -9,3 +9,7 @@ GitHub: https://github.com/sherwoodagent/grokbot-fund-template
 3. Installer clones teammates from `agents/*.md` via Lead’s getting-started skill
 
 Secrets never ship: Privy session, keys, faucet abuse, personal wallets.
+
+## Roster push (GitHub)
+
+Most roster bots cannot push to this repo (no Contents write on MCP; `gh` often logged out). Publish recipe: **Lead commits from the shared box** or **`gh` auth on Ops/Lead only** — details in `docs/SETUP.md` § Roster bots cannot push GitHub. PROCESS/skills/mandate land via branch + PR unless COO is doing a known direct-main ops brief.
