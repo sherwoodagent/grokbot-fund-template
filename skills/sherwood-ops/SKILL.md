@@ -114,38 +114,34 @@ Ops only if: Risk APPROVE, `fund.json` has real vault, RH basis known or haircut
 
 ## Cookbook — Morpho / CL satellite discovery (fork `9994663`)
 
-Growth mandate allows Morpho + CL satellites, but Critic correctly **BLOCKED** live Morpho/CL without a Morpho Blue **market id** and listed **CL pool keys**. Do **not** invent either.
+**Canonical Ops write-up:** `workspace/ops/morpho-cl-cookbook.md` (from live desk discovery 2026-09-22). Summarized here; do not invent market/pool ids beyond that file.
 
-### Status (as of template push 2026-09-22)
+Growth mandate allows Morpho + CL satellites. Critic stays honest about gaps.
 
-| Piece | On fork? | CLI propose? | Desk rule |
-|-------|----------|--------------|-----------|
-| `PortfolioStrategy` | yes — `0xAA5872009c527cCb80343E41C52840CEdb095eb0` | yes (`portfolio`) | Live path |
-| `MorphoSupplyStrategy` | yes — `0x5B55E1Da361573CB0788e750038567D2569BE41d` | **no** builder key | Design / paper until CLI or hand-built calldata + Critic IDs |
-| `ConcentratedLiquidityStrategy` | yes — `0xcba9C84F2d382729D1519c5F7f4a9AAaC075f8B5` | **no** builder key | Design / paper until pool keys documented + CLI |
+### Status (Ops discovery 2026-09-22)
 
-Source: [Sherwood deployments](https://docs.sherwood.sh/) / `STRATEGY_TEMPLATES()` — confirm with `sherwood strategy list` (only lists CLI-buildable templates) and `contracts/chains/9994663.json`.
+| Sleeve | On fork? | Concrete IDs? | CLI propose? | Ops posture |
+|--------|----------|---------------|--------------|-------------|
+| `PortfolioStrategy` | yes | n/a | **yes** (`portfolio`) | Live path |
+| **S1 `MorphoSupplyStrategy`** | **yes** — Morpho Blue + USDG loan markets (same addrs as RH mainnet) | **yes** — flagship USDG/AAPL + others in cookbook | **no** `morpho-supply` key | **Conditional** — IDs verified; **manual `StrategyFactory` clone** only; dry-run init vs TierRegistry **unproven** |
+| **S3 `ConcentratedLiquidityStrategy`** | partial — V3 WETH/USDG pools live | pool addrs + candidate Morpho market | **no** `concentrated-liquidity` key | **BLOCKED** — template is **V3 + Morpho leverage**, **not** v4 equity LP; do **not** assume stock/USDG v4 LP unblocks S3 |
 
-### Discover Morpho Blue markets (no invented ids)
+Template addresses (confirm on fork): MorphoSupply `0x5B55E1Da361573CB0788e750038567D2569BE41d`; ConcentratedLiquidity `0xcba9C84F2d382729D1519c5F7f4a9AAaC075f8B5`.
 
-Pattern (Morpho docs + RH-chain tooling): market id = `keccak256(abi.encode(MarketParams))` where params are `(loanToken, collateralToken, oracle, irm, lltv)` in that order.
+### S1 Morpho — what unblocked / what remains
 
-1. Resolve **Morpho Blue** address for the fork from `chains/9994663.json` / protocol ADDRESSES / env — never hardcode a guessed address in `fund.json`.
-2. Scan `CreateMarket(bytes32 id, MarketParams)` logs from Morpho deploy block → tip (wide chunks OK; event is sparse).
-3. Recompute each id from params; mismatch ⇒ wrong encoding — stop.
-4. Filter `loanToken == USDG` (`0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168` on `9994663`) for vault-asset supply markets.
-5. Read `market(id)` / `idToMarketParams(id)`; record utilization, oracle, IRM, LLTV. Write candidates to `workspace/briefs/satellite-options.md` — **ids from chain only**.
-6. Critic needs the chosen **bytes32 market id** before any live Morpho propose. Until CLI `strategy propose morpho-supply` (or equivalent) ships, mark the sleeve **design-only** even with a discovered id.
+- Blue + flagship **USDG/AAPL** market **FOUND** on `9994663` (see cookbook `marketId` rows).
+- Gap: no CLI `morpho-supply` propose key → Ops must build via **StrategyFactory** manually.
+- Still required before live: **init dry-run** vs TierRegistry / adapter standing; do not assume allowlist is clear.
+- Until CLI ships, Critic may CLEAR research IDs but Risk/Ops treat live Morpho as **manual-only** with owner GO.
 
-### Discover CL pool keys (no invented keys)
+### S3 CL — document honestly
 
-ConcentratedLiquidity on Sherwood binds a Uniswap-compatible position (v3-style key / hooks depending on template version). Until the template docs list the exact init fields for `9994663`:
-
-1. Enumerate pools via the fork’s Uniswap v3 `Factory` / v4 `StateView` + Quoter for **USDG↔listed stock** pairs already used by Portfolio (same universe as Scanner).
-2. Record fee tier, tick spacing, hooks (if v4), and pool id / PoolKey as returned by the chain — never fabricate.
-3. Critic BLOCKED without listed pool keys in the brief. Prefer Portfolio equity proxies for Track B until CL init is documented.
+Equity Uniswap **v4** stock/USDG pools do **not** unblock S3. The ConcentratedLiquidity template binds **Uniswap V3** + funds LP via **Morpho borrow**. Desks must not assume stock/USDG v4 LP. Full blockers (allowlist, borrow depth, no CLI): cookbook.
 
 ### Critic gate
 
-Morpho/CL in `research.md` / draft without on-chain market id / pool keys → verdict **BLOCKED** (not REJECT-QUALITY). Paper Track B + honest equity proxies remain the live growth path.
+- Morpho without cookbook market id → **BLOCKED**.
+- CL framed as v4 equity LP or without V3 pool + Morpho collateral path → **BLOCKED**.
+- Paper Track B + honest equity proxies remain the default growth path until CLI builders ship.
 
