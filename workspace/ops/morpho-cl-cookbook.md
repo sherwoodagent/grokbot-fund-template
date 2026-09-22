@@ -254,4 +254,15 @@ Even after listing WETH + vUSDG, SwapAdapter strong-axis standing and Morpho bor
 - Basis / v4 keys: `briefs/rh-basis.md`  
 - RH Morpho record: [nirholas/robinhood-toolkit DEPLOYMENTS](https://github.com/nirholas/robinhood-toolkit/blob/main/examples/08-morpho-lending/lend/DEPLOYMENTS.md)  
 - RH Uniswap record: [dex/DEPLOYMENTS.md](https://github.com/nirholas/robinhood-toolkit/blob/main/dex/DEPLOYMENTS.md)  
-- Sherwood skill: https://sherwood.sh/skill.md  
+- Sherwood skill: https://sherwood.sh/skill.md
+
+---
+
+## Init dry-run status (2026-09-22 add-on)
+
+**MorphoSupply `cloneAndInit` / `initialize` dry-run: PASS** on fork `9994663` (eth_call / sim / trace only; TierRegistry Morpho allowed; dust 1 USDG). Full write-up: `workspace/ops/morpho-init-dryrun.md`.
+
+Implications for template desks:
+- **Init gate cleared** for the **manual StrategyFactory** path.
+- Live propose still blocked until: CLI `morpho-supply` ships **or** a documented manual recipe is used, and only **after proposal #2** is clear (post-#2 only).
+- Do not treat dry-run PASS as CLEARED-for-propose.

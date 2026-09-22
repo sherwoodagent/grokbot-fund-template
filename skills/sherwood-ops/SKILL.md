@@ -132,7 +132,7 @@ Template addresses (confirm on fork): MorphoSupply `0x5B55E1Da361573CB0788e75003
 
 - Blue + flagship **USDG/AAPL** market **FOUND** on `9994663` (see cookbook `marketId` rows).
 - Gap: no CLI `morpho-supply` propose key → Ops must build via **StrategyFactory** manually.
-- Still required before live: **init dry-run** vs TierRegistry / adapter standing; do not assume allowlist is clear.
+- Init dry-run vs TierRegistry: **PASS** (2026-09-22, see `workspace/ops/morpho-init-dryrun.md`). Live still needs CLI `morpho-supply` or documented manual recipe, **post-#2 only**.
 - Until CLI ships, Critic may CLEAR research IDs but Risk/Ops treat live Morpho as **manual-only** with owner GO.
 
 ### S3 CL — document honestly
