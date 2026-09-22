@@ -1,13 +1,13 @@
 # Critic
 
 Write the bear case using the Burry lens (`personas/burry.md`).
-When Track B or growth/satellite books appear, also enforce the crypto skill’s **bear_case** and end with **WHAT COULD I BE WRONG ABOUT?**
+When Track B or advanced satellite books appear (owner opt-in; `docs/advanced-growth.md`), also enforce the crypto skill’s **bear_case** and end with **WHAT COULD I BE WRONG ABOUT?**
 
 ## Inputs
 - `workspace/briefs/research.md` (**required** — do not start without it)
 - `workspace/briefs/crypto-asymmetric.md` (when Track B ran)
 - `workspace/briefs/scan.md`
-- `workspace/mandate.md`
+- `workspace/strategies.md`
 - Owner basket lock (if any) from Lead
 
 ## Outputs

@@ -1,14 +1,14 @@
-# Setup (beta installer)
+# Setup (beta)
 
-**Order is mandatory.** Desk Lead must refuse to skip ahead. Prefer a sticky checklist over re-prompting “what’s next?”
+**Recommended order** below. Treat it as guidance so desks don’t scramble (paper before vault hurts). Desk Lead should steer toward the next incomplete step and explain why — **not** run a sticky “installer” product or refuse skip-ahead as dogma. If the owner insists on skipping, note the risk on the record and continue.
 
-| Step | Gate |
-|------|------|
+| Step | Done when |
+|------|-----------|
 | 1. Wallet | Privy logged in + faucet/ETH check |
 | 2. Identity | ERC-8004 token id in `fund.json`, or explicit skip on record (fork only) |
 | 3. Fund | On-chain vault exists; `fund.json` written |
 | 4. Roster | Six bots from `agents/*.md` (or explicit role-route waiver) |
-| 5. Paper | Morning loop only after 1–4 |
+| 5. Paper | Morning loop after wallet + fund (+ roster or waiver) |
 | 6. Live | Risk APPROVE + known RH basis |
 
 ---
@@ -29,7 +29,7 @@
 
 ## 2 — Identity (ERC-8004, Robinhood mainnet)
 
-The Sherwood skill mints an ERC-8004 agent identity **before** creating or joining a fund. It lives on the **coordination chain, Robinhood mainnet (chain 4663)**, regardless of where the fund runs — the one installer step that touches mainnet.
+The Sherwood skill mints an ERC-8004 agent identity **before** creating or joining a fund. It lives on the **coordination chain, Robinhood mainnet (chain 4663)**, regardless of where the fund runs — the one setup step that touches mainnet.
 
 | Deployment | Status |
 |------------|--------|
@@ -52,8 +52,8 @@ Cost: a dust of **real** ETH on Robinhood mainnet (well under 0.0001 ETH). The f
 2. Prepare 10k WOOD owner stake → `sherwood --calldata-only vault create --agent-id <agentId> …` → Privy broadcast.
 3. Register agent wallet on vault (`vault add`).
 4. **Then** write `workspace/fund.json` (`vault`, `agent`, `agentId`, `subdomain`, `rpc`, `chainId`). Do not invent a vault address. See `workspace/fund.json.example`.
-6. **Blank `fund.json` after a template / soul refresh:** restore from chain (`GET https://api.sherwood.sh/funds?chain=9994663` → match `subdomain` → `/vaults/<vault>?chain=9994663`), never re-create, never placeholders. Verify vault `owner` == `agent`.
 5. Optional: deposit dust USDG so totalAssets &gt; 0.
+6. **Blank `fund.json` after a template / soul refresh:** restore from chain (`GET https://api.sherwood.sh/funds?chain=9994663` → match `subdomain` → `/vaults/<vault>?chain=9994663`), never re-create, never placeholders. Verify vault `owner` == `agent`.
 
 Chain id for incentivized beta: `9994663` (confirm against current Sherwood skill if it drifts).
 
@@ -69,7 +69,9 @@ Personas are **lenses** in `personas/` (tags), not LARPing as real people.
 
 ## 5 — Paper loop
 
-Only after wallet + identity (or recorded skip) + fund (+ roster or waiver). Read `workspace/mandate.md` (**growth edition**: Portfolio + Morpho + CL; Track A/B).
+Read `workspace/strategies.md` (**starter default:** PortfolioStrategy only). Advanced Morpho/CL + Track A/B: `docs/advanced-growth.md` (opt-in).
+
+Recommended after wallet + fund (+ roster or waiver):
 
 1. Scanner → `briefs/scan.md` + `briefs/rh-basis.md` (live fork **v4** mids per name; social via whichever connector is connected)
 2. Research → `briefs/research.md` (**Critic waits on this** — not true parallel)
@@ -89,7 +91,7 @@ No Ops / chain on paper. Risk REJECT → bounce to PM (or Research on quality ki
 
 ## 6 — Live Ops
 
-Ops only after Risk **APPROVE**, known RH basis (or accepted haircut), owner GO, and Privy sign → raw broadcast discipline. One live PortfolioStrategy at a time. Propose / execute / settle are one-shot recipes in `skills/sherwood-ops` — Ops does not reinvent sequencing. The Ops watch ends at **Settled** (or Rejected / Cancelled), not at Executed. If `fund.json` still has `agentId: 0`, remind the owner once that production requires the step-2 mint.
+Ops only after Risk **APPROVE**, known RH basis (or accepted haircut), owner GO, and Privy sign → raw broadcast discipline. One live PortfolioStrategy at a time (starter). Propose / execute / settle are one-shot recipes in `skills/sherwood-ops` — Ops does not reinvent sequencing. The Ops watch ends at **Settled** (or Rejected / Cancelled), not at Executed. If `fund.json` still has `agentId: 0`, remind the owner once that production requires the step-2 mint.
 
 ---
 
@@ -99,7 +101,7 @@ What worked: explicit create confirm before gas; Privy `list-wallets` → agent 
 
 What hurt: scrambled order (paper before vault); Privy stake path not one-click; roster never bootstrapped; cadence text implied Research∥Critic; RH basis hole; too many “what’s next?” widgets; identity mint never offered (fund created with `agentId 0`).
 
-**Product rule:** linear installer — (1) Privy + faucet, (2) ERC-8004 identity on RH mainnet (optional on fork, required on prod), (3) create fund + deposit dust, (4) spawn six bots, (5) morning paper loop — refuse skip-ahead.
+**Guidance:** recommend wallet → identity → fund → roster → paper → live, and keep useful Ops tripwires — without selling a hard linear installer that blocks progress.
 
 ---
 

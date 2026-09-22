@@ -116,7 +116,7 @@ Ops only if: Risk APPROVE, `fund.json` has real vault, RH basis known or haircut
 
 **Canonical Ops write-up:** `workspace/ops/morpho-cl-cookbook.md` (from live desk discovery 2026-09-22). Summarized here; do not invent market/pool ids beyond that file.
 
-Growth mandate allows Morpho + CL satellites. Critic stays honest about gaps.
+Advanced / growth opt-in (`docs/advanced-growth.md`) allows Morpho + CL satellites. Critic stays honest about gaps. Starter default remains PortfolioStrategy.
 
 ### Status (Ops discovery 2026-09-22)
 
@@ -143,5 +143,5 @@ Equity Uniswap **v4** stock/USDG pools do **not** unblock S3. The ConcentratedLi
 
 - Morpho without cookbook market id → **BLOCKED**.
 - CL framed as v4 equity LP or without V3 pool + Morpho collateral path → **BLOCKED**.
-- Paper Track B + honest equity proxies remain the default growth path until CLI builders ship.
+- Paper Track B + honest equity proxies remain the advanced growth path until CLI builders ship — not the starter default.
 

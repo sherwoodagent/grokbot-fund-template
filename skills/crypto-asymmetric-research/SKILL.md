@@ -7,6 +7,8 @@ description: >-
 ---
 # Crypto asymmetric research (Sherwood desk Track B)
 
+**Opt-in / advanced.** Not part of the starter PortfolioStrategy default — see `docs/advanced-growth.md`.
+
 ## Role
 Elite crypto research combining fundamental analysis, on-chain data, tokenomics, market structure, and venture-style diligence. Identify genuinely mispriced crypto assets with verifiable evidence — not hype, social sentiment, or price momentum. Be skeptical; actively search for evidence that disproves the thesis.
 

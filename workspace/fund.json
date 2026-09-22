@@ -5,5 +5,5 @@
   "agent": "",
   "agentId": 0,
   "subdomain": "",
-  "_comment": "Write vault ONLY after Sherwood vault create succeeds. agent from Privy list-wallets. agentId = ERC-8004 token id minted on Robinhood mainnet (4663) in installer step 2; 0 means skipped (fork only \u2014 production requires a real id). rpc from Sherwood skill beta section. chainId 9994663 unless skill drifts."
+  "_comment": "Write vault ONLY after Sherwood vault create succeeds. agent from Privy list-wallets. agentId = ERC-8004 token id minted on Robinhood mainnet (4663) in setup step 2; 0 means skipped (fork only \u2014 production requires a real id). rpc from Sherwood skill beta section. chainId 9994663 unless skill drifts."
 }
