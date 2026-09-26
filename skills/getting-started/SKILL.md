@@ -49,7 +49,7 @@ Paste the checklist, then ask **only** Q1 below. Stop and wait.
 
 **Q1:** “Have you installed the [Sherwood skill](https://sherwood.sh/skill.md) and completed Privy agent login? (yes / not yet)”
 
-If not yet, run this recipe (do not improvise):
+If not yet, install the CLI (`npm i -g @sherwoodagent/cli@0.90.4`; `sherwood --version` must be **≥ 0.90.4**), then run this recipe (do not improvise):
 
 ```bash
 P="pnpm --package=@privy-io/agent-wallet-cli dlx privy-agent-wallet"
@@ -125,7 +125,7 @@ Stay until vault address is known. Never invent it.
 ```json
 {
   "chainId": 9994663,
-  "rpc": "<from Sherwood skill beta section>",
+  "rpc": "https://api.sherwood.sh/tenderly/rpc",
   "vault": "<from create>",
   "agent": "<Privy eth>",
   "agentId": "<step-2 token id, or 0 if skipped>",
@@ -173,12 +173,14 @@ No Ops / chain on paper. REJECT → bounce to PM (or Research on quality kill).
 
 ### 6 — Live
 
-Ops only after Risk **APPROVE**, known RH basis (or owner-accepted haircut), and Privy sign → raw broadcast. One live PortfolioStrategy at a time. See `skills/sherwood-ops`.
+Ops only after Risk **APPROVE**, known RH basis (or owner-accepted haircut), and Privy sign → raw broadcast. One live strategy at a time. See `skills/sherwood-ops`.
+
+Before the first propose, check WOOD. Propose pulls a proposer bond (≈1% of required coverage, quoted by `ExposureLedger.proposerBondWood`) that the wallet must **hold** liquid on top of the 10k owner stake. Tier-2 books need **full-notional** guardian coverage before execute. Keyless propose: `sherwood --calldata-only strategy propose <key> … --proposer <agent>`, then broadcast approve(bondEscrow) (only if the allowance is short), clone, and propose in order. Windows run in real time (no time travel), so plan them (`docs/ops-cookbook.md`). Guardian review: Sherwood `guardian` skill. Stuck proposal: `vault-owner` skill (both at `github.com/sherwoodagent/skill`).
 
 If `fund.json` still has `agentId: 0`, remind the owner once: fine on the fork beta, but production requires the step-2 mint.
 
 ## Hard rules forever
-- PortfolioStrategy only on beta
+- Strategy classes per `workspace/strategies.md` (starter PortfolioStrategy; `morpho-supply` / `concentrated-liquidity` CLI keys only on advanced opt-in)
 - One live strategy at a time
 - Risk REJECT blocks Ops
 - No secrets in memories; no private keys in chat

@@ -15,7 +15,7 @@
 
 ## 1 — Wallet (Privy)
 
-1. Install [Sherwood skill](https://sherwood.sh/skill.md) (incentivized-beta RPC / faucet).
+1. Install [Sherwood skill](https://sherwood.sh/skill.md) (v0.23.2) and CLI **≥ 0.90.4** (`npm i -g @sherwoodagent/cli@0.90.4`). Fork RPC: `https://api.sherwood.sh/tenderly/rpc` (the old Tenderly URL is dead). It rejects `tenderly_*` / `evm_*`, so there is no time travel.
 2. Privy agent wallet CLI (use `pnpm dlx`, not `npx`):
    ```bash
    P="pnpm --package=@privy-io/agent-wallet-cli dlx privy-agent-wallet"
@@ -55,7 +55,7 @@ Cost: a dust of **real** ETH on Robinhood mainnet (well under 0.0001 ETH). The f
 6. **Blank `fund.json` after a template / soul refresh:** restore from chain (`GET https://api.sherwood.sh/funds?chain=9994663` → match `subdomain` → `/vaults/<vault>?chain=9994663`), never re-create, never placeholders. Verify vault `owner` == `agent`.
 5. Optional: deposit dust USDG so totalAssets &gt; 0.
 
-Chain id for incentivized beta: `9994663` (confirm against current Sherwood skill if it drifts).
+Chain id for incentivized beta: `9994663`, RPC `https://api.sherwood.sh/tenderly/rpc` (confirm against current Sherwood skill if it drifts).
 
 ## 4 — Roster (personas / bots)
 
@@ -89,7 +89,7 @@ No Ops / chain on paper. Risk REJECT → bounce to PM (or Research on quality ki
 
 ## 6 — Live Ops
 
-Ops only after Risk **APPROVE**, known RH basis (or accepted haircut), owner GO, and Privy sign → raw broadcast discipline. One live PortfolioStrategy at a time. Propose / execute / settle are one-shot recipes in `skills/sherwood-ops` — Ops does not reinvent sequencing. The Ops watch ends at **Settled** (or Rejected / Cancelled), not at Executed. If `fund.json` still has `agentId: 0`, remind the owner once that production requires the step-2 mint.
+Ops only after Risk **APPROVE**, known RH basis (or accepted haircut), owner GO, and Privy sign → raw broadcast discipline. One live PortfolioStrategy at a time. Propose / execute / settle are one-shot recipes in `skills/sherwood-ops` — Ops does not reinvent sequencing. Before proposing, size to **free** guardian coverage (tier 2 = full notional) and keep liquid WOOD for the ≈1% proposer bond. Windows run in real time; stale-lock and expired-proposal recipes: `docs/ops-cookbook.md`. Guardian and vault-owner skills: `github.com/sherwoodagent/skill` (`skills/guardian`, `skills/vault-owner`). The Ops watch ends at **Settled** (or Rejected / Cancelled), not at Executed. If `fund.json` still has `agentId: 0`, remind the owner once that production requires the step-2 mint.
 
 ---
 
