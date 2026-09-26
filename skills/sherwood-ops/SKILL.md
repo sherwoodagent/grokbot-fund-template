@@ -9,7 +9,7 @@ Canonical detail: `docs/SETUP.md`. Tracks Sherwood skill v0.23.2 (`https://sherw
 
 - CLI: `@sherwoodagent/cli` **≥ 0.90.4** (`sherwood --version`; else `npm i -g @sherwoodagent/cli@0.90.4`).
 - Chain `9994663`, RPC `https://api.sherwood.sh/tenderly/rpc`. The old Tenderly vnet URL is dead.
-- The RPC serves reads + `eth_sendRawTransaction` only. It rejects `eth_sendTransaction` and **all `tenderly_*` / `evm_*` methods**: no time travel, so proposal windows run in **real time** (plan them, see `docs/ops-cookbook.md` §2).
+- The RPC serves reads + `eth_sendRawTransaction` only. It rejects `eth_sendTransaction` and **all `tenderly_*` / `evm_*` methods**, so there is no time travel. The fork clock is **erratic**: it has run about 6× fast, stalled, and jumped +7,081 s in one block. Deadlines are `block.timestamp`, so read the latest block timestamp against `voteEnd` / `reviewEnd` / `executeBy` and put a monitor on each step. Never schedule from the wall clock. See `docs/ops-cookbook.md` §3.
 
 ## Privy CLI
 
@@ -54,7 +54,7 @@ Get **explicit yes** on name/subdomain/description/flags before any gas.
 
 ## Strategy lifecycle
 
-`Pending (voting, optimistic) → GuardianReview → Approved → Executed → Settled` (+ `Rejected` / `Cancelled`). CLI keys that resolve on the fork: `portfolio`, `morpho-supply`, `concentrated-liquidity`, `launchpad`. `sherwood strategy list` is the source of truth; `workspace/strategies.md` decides which ones the desk may use (starter = `portfolio`). Pre-commit execute + settle. One live strategy at a time.
+`Pending (voting, optimistic) → GuardianReview → Approved → Executed → Settled` (+ `Rejected` / `Cancelled`). CLI keys that resolve on the fork: `portfolio`, `morpho-supply`, `concentrated-liquidity`, `launchpad`. `sherwood strategy list` is the source of truth; `workspace/strategies.md` decides which ones the desk may use (starter = `portfolio`). Pre-commit execute + settle. One live strategy at a time. **Redemptions lock from Pending** (`governor.openProposalCount() != 0`) and stay locked after Expired / decided until `resolveProposalState(id)`. Warn depositors at propose time, and flush at every terminal state, then `proposal reclaim-bond` (`docs/ops-cookbook.md` §3).
 
 ## Coverage + proposer bond (size before you propose)
 
@@ -146,6 +146,6 @@ Advanced / growth opt-in only (`docs/advanced-growth.md`). Starter default remai
 
 Source: `github.com/sherwoodagent/skill` (the `sherwood.sh/skills/...` paths 404).
 
-- **Guardian** (stake, `openReview`, Approve/Block, `lockWood` sizing, `ApproveLockBelowFloor`): `skills/guardian/SKILL.md`, long form `skills/network-guardian/SKILL.md`. `openReview` is permissionless and must land before the Approve vote (`ReviewNotOpen` otherwise). With Privy: `cast calldata` → sign → raw broadcast.
+- **Guardian** (stake, `openReview`, Approve/Block, `lockWood` sizing, `ApproveLockBelowFloor`): `skills/guardian/SKILL.md`, long form `skills/network-guardian/SKILL.md`. `openReview` is permissionless and must land before the Approve vote (`ReviewNotOpen` otherwise). CLI 0.90.4 `proposal open-reviews` / `resolve-reviews` always need `PRIVATE_KEY`, so don't use them. Encode `openReview`, `voteOnProposal`, `resolveReview` and `resolveProposalState` with viem, then Privy sign → raw broadcast (`docs/ops-cookbook.md` §2).
 - **Vault owner** (stuck Executed proposal: `unstick`, or bonded `emergencySettleWithCalls` → `finalizeEmergencySettle`): `skills/vault-owner/SKILL.md`. Owner-only.
-- Desk recipes (stale cancel locks, `InsufficientApproveCoverage`, real-time timeline, expired proposals): `docs/ops-cookbook.md`.
+- Desk recipes (stale cancel locks, `InsufficientApproveCoverage`, keyless keeper calls, fork-clock monitoring, expired proposals, bond reclaim): `docs/ops-cookbook.md`.

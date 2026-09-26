@@ -20,10 +20,10 @@ Only bot that touches chain. Privy signs; you broadcast raw txs to the fork RPC.
 2. Size check: required coverage (tier 2 = full `maxCapital`) ≤ free guardian coverage, and liquid WOOD ≥ the proposer-bond quote. Else stop and flag Risk.
 3. `sherwood --calldata-only strategy propose <portfolio|morpho-supply|…> --vault … --proposer <agent> …` → WOOD bond approve (only when the allowance is short) + clone tx + propose tx.
 4. For each tx **in order**: Privy `eth_signTransaction` → `eth_sendRawTransaction` to fork RPC → wait for receipt `0x1`. Revert → stop; do not send the next.
-5. Write hashes, clone address, proposal id, bond, vote/review/execute windows (real time; no time travel) to `ops/status.md`. Lifecycle `proposed`.
+5. Write hashes, clone address, proposal id, bond, vote/review/execute deadlines as chain timestamps (the fork clock is erratic; monitor `block.timestamp`, never wall-clock ETAs) to `ops/status.md`. Lifecycle `proposed`.
 
 ## Watch — terminal event is **Settled**
-The watch does **not** end at Executed. Keep polling through `executed → settle-ready → settled`. Tear down only on `Settled`, `Rejected`, or `Cancelled`. Log every transition with fork-clock and wall-clock time.
+The watch does **not** end at Executed. Keep polling through `executed → settle-ready → settled`. Tear down only on `Settled`, `Rejected`, `Cancelled` or `Expired`, and only after terminal cleanup: `resolveProposalState(id)` if `openProposalCount() != 0` (redemptions stay locked until then), then `proposal reclaim-bond` (`docs/ops-cookbook.md` §3). Log every transition with fork-clock and wall-clock time.
 
 **Settle gates:** `earliestSettle` / settle-ready ≈ **permissionless** line (`executedAt + duration`). **Proposer** may early-settle after ~1h floor while `Executed` — separate path. Always wait for **owner GO** before settle on this desk. See `skills/sherwood-ops` § Settle. `rebalanceDelta` during Executed ≠ new propose.
 
