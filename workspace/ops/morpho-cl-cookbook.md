@@ -1,8 +1,10 @@
 # Morpho + ConcentratedLiquidity cookbook — RH fork 9994663
 
+> **Update (Sherwood CLI 0.90.4 / skill v0.23.2):** `morpho-supply` and `concentrated-liquidity` are real CLI keys now (`sherwood --calldata-only strategy propose <key> … --proposer <agent>`). The CLI runs the init checks. The manual `StrategyFactory` clone path and the "no CLI builder" notes below are **obsolete**. Fork RPC is `https://api.sherwood.sh/tenderly/rpc`. The skill documents USDG/spUSDG market `0x0309c02dabf0be02682af1a2bde9a457f4df0f0b6bc889cde3f948e5315e4114` as a MorphoSupply example and lists spUSDG + WETH as allowlisted for CL, so re-verify the S3 allowlist rows below. Keep this file for market/pool **evidence**; flags and sizing: `skills/sherwood-ops`.
+
 **As of:** 2026-09-22 ~12:33 America/Bogota (COT)  
 **Scope:** Discovery only. Proposal #2 untouched. No broadcast / no propose.  
-**RPC:** `Tenderly RH-fork RPC (see SETUP — do not commit private fork URLs)`  
+**RPC:** `https://api.sherwood.sh/tenderly/rpc`  
 **Vault asset USDG:** `0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168` (6 decimals)  
 **WETH:** `0x0Bd7D308f8E1639FAb988df18A8011f41EAcAD73`
 
@@ -12,8 +14,8 @@
 
 | Sleeve | On-fork venue? | Concrete IDs? | CLI propose? | Ops posture |
 |--------|----------------|---------------|--------------|-------------|
-| **S1 MorphoSupply** | **YES** — Morpho Blue + many USDG loan markets | **YES** — marketIds below | **NO** — no `morpho-supply` CLI key | **Conditional CLEARED for Ops** (IDs verified; manual clone path only; dry-run init still required) |
-| **S3 ConcentratedLiquidity** | Partial — V3 WETH/USDG pools live; CL template is **V3+Morpho leverage**, not v4 equity LP | Pool addrs + one candidate Morpho market id | **NO** — no `concentrated-liquidity` CLI key | **Still BLOCKED** — allowlist + borrow liquidity + no CLI |
+| **S1 MorphoSupply** | **YES** — Morpho Blue + many USDG loan markets | **YES** — marketIds below | **YES** — `morpho-supply` | **Conditional CLEARED for Ops** (IDs verified; CLI runs init checks) |
+| **S3 ConcentratedLiquidity** | Partial — V3 WETH/USDG pools live; CL template is **V3+Morpho leverage**, not v4 equity LP | Pool addrs + one candidate Morpho market id | **YES** — `concentrated-liquidity` | Opt-in; counterparty preflight + borrow liquidity decide |
 
 Equity Uniswap **v4** stock/USDG pools (AAPL/MSFT/AMZN/SPY …) do **not** unblock S3: the ConcentratedLiquidity template binds **Uniswap V3** `IUniswapV3Pool` + `NonfungiblePositionManager`, funds the LP via **Morpho borrow**, and Critic’s caveat stands.
 
@@ -112,33 +114,10 @@ WETH-loan markets exist (3) but vault asset is USDG → MorphoSupply would rever
 ### CLI
 
 ```bash
-sherwood strategy list          # only Portfolio on robinhood-fork
-sherwood strategy propose --help  # no morpho / concentrated-liquidity keys
+sherwood strategy list   # portfolio, morpho-supply, concentrated-liquidity, launchpad resolve on the fork
+sherwood --calldata-only strategy propose morpho-supply \
+  --vault <vault> --proposer <agent> --market-id <bytes32> --amount <n>
 ```
-
-skill.md: *“MorphoSupply and ConcentratedLiquidity templates are deployed but have no CLI key … cannot be cloned through the CLI.”*
-
-### Manual propose sketch (NOT executed — HOLD)
-
-Requires agent wallet as `msg.sender` for `StrategyFactory.cloneAndInit` / deterministic variant, then `governor.propose` with execute/settle batches. Sketch only:
-
-```text
-1) Encode initData = abi.encode(
-     morpho = 0x9D53d5E3bd5E8d4Cbfa6DB1ca238AEA02E651010,
-     MarketParams{USDG, AAPL, oracle, IRM, 625000000000000000},
-     supplyAmount  // raw USDG units, 6 decimals
-   )
-2) StrategyFactory.cloneAndInitDeterministic(
-     template = 0x5B55E1Da…BE41d,
-     vault, proposer, initData, salt
-   )   # template approvedTemplate == true on fork
-3) Build calls:
-     execute: [USDG.approve(clone, amount), clone.execute()]
-     settle:  [clone.settle()]
-4) proposal create — DO NOT broadcast until OWNER unlocks post-#2
-```
-
-There is **no** `sherwood strategy propose morpho-supply …` today.
 
 ### Allowlist / init risk (honest)
 
@@ -146,12 +125,12 @@ There is **no** `sherwood strategy propose morpho-supply …` today.
 - Fork `TierRegistry` bytecode **contains** `isCounterpartyAllowed` but **does not** contain `isAdapterAllowed` / `setAdapterAllowed` selectors.
 - Morpho **is** `isCounterpartyAllowed=true` on fork.
 - Deployed MorphoSupply bytecode embeds `MorphoNotAllowed` but **not** the `isAdapterAllowed` selector → exact init gate on this build is uncertain.
-- **Ops must dry-run** `cloneAndInit` + `initialize` simulation (calldata-only / Tenderly sim) before any live propose. Do not assume allowlist is clear.
+- The CLI now runs these init checks (`MorphoNotAllowed` / `LoanAssetMismatch` / `MarketNotCreated`) before emitting any tx.
 
 ### S1 blockers remaining
 
-1. No CLI builder / propose subcommand.  
-2. Dry-run init vs TierRegistry Morpho standing not proven.  
+1. ~~No CLI builder~~ — resolved (`morpho-supply`).  
+2. ~~Init vs TierRegistry not proven~~ — dry-run PASS; CLI preflights it.  
 3. Near-idle AAPL market → floating sleeve, not meaningful APY.  
 4. Proposal #2 still Pending HOLD — no sequential propose until Settled.
 
@@ -226,7 +205,7 @@ Even after listing WETH + vUSDG, SwapAdapter strong-axis standing and Morpho bor
 
 ### S3 blockers list
 
-1. No CLI `concentrated-liquidity` builder.  
+1. ~~No CLI builder~~ — resolved (`concentrated-liquidity`).  
 2. Template ≠ equity v4 LP; v4 stock/USDG pools do not qualify.  
 3. WETH not counterparty-allowed (blocks WETH/USDG V3 otherToken).  
 4. vUSDG not counterparty-allowed (blocks only verified USDG-wrapper Morpho market).  
@@ -236,13 +215,13 @@ Even after listing WETH + vUSDG, SwapAdapter strong-axis standing and Morpho bor
 
 ### CLI propose sketch
 
-**None.** Manual `cloneAndInit` + hand-built `InitParams` only after allowlist + liquidity gates clear — out of scope until then.
+Use `sherwood --calldata-only strategy propose concentrated-liquidity …` (flags in the Sherwood skill). The CLI preflight names any counterparty that is not allowlisted.
 
 ---
 
 ## Cross-cutting blockers
 
-- `sherwood strategy list` → Portfolio only; Morpho/CL under peer “Not available” / omitted keys.  
+- `sherwood strategy list` is the source of truth for which keys resolve.  
 - Proposal **#2** Pending / execute **HOLD** — no satellite propose.  
 - Do not invent pool keys or market IDs beyond eth_call-verified rows above.
 
@@ -263,6 +242,5 @@ Even after listing WETH + vUSDG, SwapAdapter strong-axis standing and Morpho bor
 **MorphoSupply `cloneAndInit` / `initialize` dry-run: PASS** on fork `9994663` (eth_call / sim / trace only; TierRegistry Morpho allowed; dust 1 USDG). Full write-up: `workspace/ops/morpho-init-dryrun.md`.
 
 Implications for template desks:
-- **Init gate cleared** for the **manual StrategyFactory** path.
-- Live propose still blocked until: CLI `morpho-supply` ships **or** a documented manual recipe is used, and only **after proposal #2** is clear (post-#2 only).
+- **Init gate cleared.** Live propose goes through the `morpho-supply` CLI key (manual path retired), with owner GO.
 - Do not treat dry-run PASS as CLEARED-for-propose.

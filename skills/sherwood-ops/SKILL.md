@@ -1,11 +1,15 @@
 ---
 name: sherwood-ops
-description: Use when minting an ERC-8004 identity, staking WOOD, creating a Sherwood vault, or proposing/executing/settling a PortfolioStrategy on the RH fork with Privy (sign then raw broadcast).
+description: Use when minting an ERC-8004 identity, staking WOOD, creating a Sherwood vault, or proposing/executing/settling a PortfolioStrategy, MorphoSupply or ConcentratedLiquidity strategy on the RH fork with Privy (sign then raw broadcast), including proposer bond + guardian coverage sizing.
 ---
 
 # Sherwood Ops (beta)
 
-Canonical detail: `docs/SETUP.md`. Chain id incentivized beta: `9994663` (confirm vs current Sherwood skill).
+Canonical detail: `docs/SETUP.md`. Tracks Sherwood skill v0.23.2 (`https://sherwood.sh/skill.md`).
+
+- CLI: `@sherwoodagent/cli` **≥ 0.90.4** (`sherwood --version`; else `npm i -g @sherwoodagent/cli@0.90.4`).
+- Chain `9994663`, RPC `https://api.sherwood.sh/tenderly/rpc`. The old Tenderly vnet URL is dead.
+- The RPC serves reads + `eth_sendRawTransaction` only. It rejects `eth_sendTransaction` and **all `tenderly_*` / `evm_*` methods**: no time travel, so proposal windows run in **real time** (plan them, see `docs/ops-cookbook.md` §2).
 
 ## Privy CLI
 
@@ -24,7 +28,7 @@ Never rely on Privy `eth_sendTransaction` for chain `9994663`.
 ## Faucet
 
 `POST https://app.sherwood.sh/api/v1/faucet` body `{"address":"0x…"}`  
-→ 1 ETH + 15k WOOD + 1k USDG; 1 / address / IP / 24h.
+→ 1 ETH + 15k WOOD + 1k USDG; 1 / address / IP / 24h. The 15k covers the 10k owner stake plus only a **small-book** proposer bond.
 
 ## Identity mint (ERC-8004, Robinhood mainnet — no local private key)
 
@@ -50,7 +54,14 @@ Get **explicit yes** on name/subdomain/description/flags before any gas.
 
 ## Strategy lifecycle
 
-`Pending (voting, optimistic) → GuardianReview → Approved → Executed → Settled` (+ `Rejected` / `Cancelled`). Live CLI path today: **PortfolioStrategy** (`sherwood strategy propose portfolio`). MorphoSupply + ConcentratedLiquidity templates are **deployed** on `9994663` but have **no CLI builder** yet — treat live Morpho/CL as design-only until `strategy list` / propose keys exist (see cookbook below). Pre-commit execute + settle. One live strategy at a time.
+`Pending (voting, optimistic) → GuardianReview → Approved → Executed → Settled` (+ `Rejected` / `Cancelled`). CLI keys that resolve on the fork: `portfolio`, `morpho-supply`, `concentrated-liquidity`, `launchpad`. `sherwood strategy list` is the source of truth; `workspace/strategies.md` decides which ones the desk may use (starter = `portfolio`). Pre-commit execute + settle. One live strategy at a time.
+
+## Coverage + proposer bond (size before you propose)
+
+- **Tier 2 is the default** for uncertified calls and costs **full-notional** coverage: `requiredCoverage = Σ(cap_i × boundBps_i) / 10_000` with `boundBps = 10_000`, i.e. `requiredCoverage = maxCapital`. Only certified tier 0/1 adapters are cheaper. Tier 2 is permissionless: a price, not a prohibition.
+- **Size cap = free guardian stake × WOOD price, not vault size.** Guardians must book Approve coverage ≥ `requiredCoverage` before execute. Guardian free budget = `kNumerator × guardianStake − openExposure` (ExposureLedger). Stale locks from cancelled proposals keep counting (`docs/ops-cookbook.md` §1).
+- **Proposer bond ≈ 1% of coverage, in WOOD.** `propose` pulls it into `ProposerBondEscrow`, separately from the 10k owner stake and any guardian stake. Quote `ExposureLedger.proposerBondWood(asset, requiredCoverage)` and log it; never hard-code a WOOD number.
+- The proposer wallet must **hold** the bond liquid. Allowance alone fails `InsufficientProposerBondWood`. **Don't stake everything into sWOOD**: keep a bond reserve ≥ the next quote.
 
 ## Propose — one-shot recipe (Privy, no local key)
 
@@ -63,9 +74,15 @@ Verified 2026-09-20 on fork `9994663` (proposal #1: cloneAndInit → governor.pr
      --vault <fund.json vault> --proposer <fund.json agent> \
      --amount <USDG> --asset USDG \
      --tokens MSFT,GOOGL,NVDA,AMZN,QQQ --weights 2500,2000,2000,2000,1500 \
+     --swap-routes v4:3000:60,v4:3000:60,v4:3000:60,v4:3000:60,v4:3000:60 \
      --name "<draft name>" --description "<draft rationale>" --duration 7d
    ```
-   Emits `txs` in order: `StrategyFactory.cloneAndInitDeterministic` (predicted `clone` + `salt`), then `governor.propose`. `propose` pulls the risk-scaled **proposer bond** in WOOD via `ProposerBondEscrow.lockBond` → `transferFrom` — if the CLI lists a WOOD `approve` tx first, it goes first. Quote the bond with `ExposureLedger.proposerBondWood` if you need the number for `ops/status.md`.
+   Same keyless shape for `morpho-supply` / `concentrated-liquidity` (their flags below). `--proposer` is required. Emits `txs` in order:
+   1. `WOOD.approve(bondEscrow)`, **only when the existing allowance does not already cover the bond**.
+   2. `StrategyFactory.cloneAndInitDeterministic` (predicted `clone` + `salt`).
+   3. `governor.propose`, which pulls the proposer bond (`ProposerBondEscrow.lockBond` → `transferFrom`).
+
+   The CLI preflights first: the proposer is a registered agent, the vault is not paused, the vault balance ≥ `--amount`, and the wallet holds the quoted bond. If the clone reverts, do **not** send propose.
 3. **Per tx, in order:** Privy `eth_signTransaction` (`chain_id: 9994663`, nonce from `eth_getTransactionCount`, gas from `eth_estimateGas`) → `eth_sendRawTransaction` to fork RPC → wait for receipt status `0x1`. A revert stops the sequence; never send the next tx.
 4. **Record:** hashes + blocks, clone address, proposal id (`ProposalCreated` log), bond, `voteEnd` / `executeBy` (fork clock), in `workspace/ops/status.md`. Lifecycle → `proposed`.
 
@@ -96,7 +113,7 @@ Recipe on owner GO:
 First settle attempt (2026-09-22) failed `estimateGas` with selector **`0x19abf40e`** = `StalePrice()`. That is **push-feed age** (`MAX_PUSH_PRICE_AGE`, ~26h), **not** the pool-vs-cash RH basis band.
 
 1. `eth_call` the settle calldata first. Retry broadcast **only** when the call is green.
-2. On fail, dump tip block time vs each basket feed `latestRoundData().updatedAt` (and round id). Refresh / wait for feeds; do not “fix” basis by widening pool quotes.
+2. On fail, dump tip block time vs each basket feed `latestRoundData().updatedAt` (and round id). Wait for feeds or escalate to Sherwood. You cannot refresh them through the RPC (no `tenderly_*` / `evm_*`). Do not “fix” basis by widening pool quotes.
 3. Same selector can also block `rebalanceDelta()` — same feed-age gate.
 
 ## rebalanceDelta ≠ new propose
@@ -112,36 +129,23 @@ While PortfolioStrategy is **`Executed`**, the proposer may call **`rebalanceDel
 Ops only if: Risk APPROVE, `fund.json` has real vault, RH basis known or haircut accepted, Privy sign→raw discipline.
 
 
-## Cookbook — Morpho / CL satellite discovery (fork `9994663`)
+## MorphoSupply / ConcentratedLiquidity (CLI keys, fork `9994663`)
 
-**Canonical Ops write-up:** `workspace/ops/morpho-cl-cookbook.md` (from live desk discovery 2026-09-22). Summarized here; do not invent market/pool ids beyond that file.
+Advanced / growth opt-in only (`docs/advanced-growth.md`). Starter default remains PortfolioStrategy. Market/pool evidence: `workspace/ops/morpho-cl-cookbook.md`.
 
-Advanced / growth opt-in (`docs/advanced-growth.md`) allows Morpho + CL satellites. Critic stays honest about gaps. Starter default remains PortfolioStrategy.
-
-### Status (Ops discovery 2026-09-22)
-
-| Sleeve | On fork? | Concrete IDs? | CLI propose? | Ops posture |
-|--------|----------|---------------|--------------|-------------|
-| `PortfolioStrategy` | yes | n/a | **yes** (`portfolio`) | Live path |
-| **S1 `MorphoSupplyStrategy`** | **yes** — Morpho Blue + USDG loan markets (same addrs as RH mainnet) | **yes** — flagship USDG/AAPL + others in cookbook | **no** `morpho-supply` key | **Conditional** — IDs verified; **manual `StrategyFactory` clone** only; dry-run init vs TierRegistry **unproven** |
-| **S3 `ConcentratedLiquidityStrategy`** | partial — V3 WETH/USDG pools live | pool addrs + candidate Morpho market | **no** `concentrated-liquidity` key | **BLOCKED** — template is **V3 + Morpho leverage**, **not** v4 equity LP; do **not** assume stock/USDG v4 LP unblocks S3 |
-
-Template addresses (confirm on fork): MorphoSupply `0x5B55E1Da361573CB0788e750038567D2569BE41d`; ConcentratedLiquidity `0xcba9C84F2d382729D1519c5F7f4a9AAaC075f8B5`.
-
-### S1 Morpho — what unblocked / what remains
-
-- Blue + flagship **USDG/AAPL** market **FOUND** on `9994663` (see cookbook `marketId` rows).
-- Gap: no CLI `morpho-supply` propose key → Ops must build via **StrategyFactory** manually.
-- Init dry-run vs TierRegistry: **PASS** (2026-09-22, see `workspace/ops/morpho-init-dryrun.md`). Live still needs CLI `morpho-supply` or documented manual recipe, **post-#2 only**.
-- Until CLI ships, Critic may CLEAR research IDs but Risk/Ops treat live Morpho as **manual-only** with owner GO.
-
-### S3 CL — document honestly
-
-Equity Uniswap **v4** stock/USDG pools do **not** unblock S3. The ConcentratedLiquidity template binds **Uniswap V3** + funds LP via **Morpho borrow**. Desks must not assume stock/USDG v4 LP. Full blockers (allowlist, borrow depth, no CLI): cookbook.
+- **MorphoSupply:** `sherwood --calldata-only strategy propose morpho-supply --vault … --proposer … --market-id <bytes32> --amount <n> [--morpho <addr>]`. The CLI runs the init checks before any tx: `MorphoNotAllowed` (Morpho on the vault's TierRegistry), `LoanAssetMismatch` (loan token ≠ vault asset), `MarketNotCreated`. `updateParams` reverts `NoTunableParams`. Settle is all-or-revert: a high-utilization market can block settlement until liquidity returns.
+- **ConcentratedLiquidity:** `strategy propose concentrated-liquidity` is a Uniswap **V3** range funded by a Morpho borrow against vault-asset collateral. It is **not** v4 equity LP. Init checks every counterparty; anything not allowlisted fails `CounterpartyNotAllowed` (a registry-owner action; tell the owner, don't retry). Flags and the documented USDG/WETH + spUSDG example: Sherwood skill § ConcentratedLiquidityStrategy.
+- Both are tier 2: full-notional coverage + bond, same as above.
 
 ### Critic gate
 
-- Morpho without cookbook market id → **BLOCKED**.
-- CL framed as v4 equity LP or without V3 pool + Morpho collateral path → **BLOCKED**.
-- Paper Track B + honest equity proxies remain the advanced growth path until CLI builders ship — not the starter default.
+- Morpho without a verified market id (cookbook or skill example) → **BLOCKED**.
+- CL framed as v4 equity LP, or failing the counterparty preflight → **BLOCKED**.
 
+## Guardian review + stuck proposals (upstream skills)
+
+Source: `github.com/sherwoodagent/skill` (the `sherwood.sh/skills/...` paths 404).
+
+- **Guardian** (stake, `openReview`, Approve/Block, `lockWood` sizing, `ApproveLockBelowFloor`): `skills/guardian/SKILL.md`, long form `skills/network-guardian/SKILL.md`. `openReview` is permissionless and must land before the Approve vote (`ReviewNotOpen` otherwise). With Privy: `cast calldata` → sign → raw broadcast.
+- **Vault owner** (stuck Executed proposal: `unstick`, or bonded `emergencySettleWithCalls` → `finalizeEmergencySettle`): `skills/vault-owner/SKILL.md`. Owner-only.
+- Desk recipes (stale cancel locks, `InsufficientApproveCoverage`, real-time timeline, expired proposals): `docs/ops-cookbook.md`.
