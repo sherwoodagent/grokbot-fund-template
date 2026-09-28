@@ -1,5 +1,7 @@
 # MorphoSupply init dry-run — RH fork 9994663
 
+> **Update (Sherwood CLI 0.90.4):** `morpho-supply` is a CLI key and the CLI runs these init checks itself. The "no CLI / manual path" notes below are historical; propose via `sherwood --calldata-only strategy propose morpho-supply` (`skills/sherwood-ops`).
+
 **As of:** 2026-09-22 ~12:39 America/Bogota (COT)  
 **Authority:** OWNER GO via Desk Lead — dry-run only.  
 **Hard constraints honored:** NO propose · NO broadcast · proposal #2 untouched · eth_call / Tenderly sim / `debug_traceCall` only (agent nonce unchanged = 14).

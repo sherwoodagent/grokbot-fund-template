@@ -1,6 +1,6 @@
 {
   "chainId": 9994663,
-  "rpc": "",
+  "rpc": "https://api.sherwood.sh/tenderly/rpc",
   "vault": "",
   "agent": "",
   "agentId": 0,

@@ -117,6 +117,6 @@ Filed to COO for template push 2026-09-22.
 | 12 | rebalanceDelta | `skills/sherwood-ops`, `agents/desk-lead.md` |
 | 13 | StalePrice on settle | `skills/sherwood-ops` troubleshooting |
 | 14 | Roster GitHub push | `docs/SETUP.md`, `docs/HOSTING.md` |
-| 15 | Morpho/CL cookbook | `workspace/ops/morpho-cl-cookbook.md` + `skills/sherwood-ops` (S1 IDs found / manual factory; S3 still blocked — not v4 equity LP) |
+| 15 | Morpho/CL cookbook | `workspace/ops/morpho-cl-cookbook.md` (market evidence) + `skills/sherwood-ops` (`morpho-supply` / `concentrated-liquidity` CLI keys since CLI 0.90.4; CL is V3 + Morpho, not v4 equity LP) |
 | 16 | Lead → COO template ping | `agents/desk-lead.md` |
 | 17 | Installer / mandate framing | `skills/getting-started`, `docs/SETUP.md`, `docs/FRICTION.md`, `docs/DESK_LEAD_TEMPLATE.md`, `docs/advanced-growth.md` |

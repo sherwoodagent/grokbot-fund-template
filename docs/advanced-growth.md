@@ -29,12 +29,12 @@ Canonical Ops write-up: `workspace/ops/morpho-cl-cookbook.md`. Summary:
 | Sleeve | On fork? | Concrete IDs? | CLI propose? | Ops posture |
 |--------|----------|---------------|--------------|-------------|
 | `PortfolioStrategy` | yes | n/a | **yes** | Live path (starter default) |
-| **MorphoSupply** | yes — Morpho Blue + USDG loan markets | yes — cookbook | **no** `morpho-supply` key | Conditional — manual StrategyFactory; init dry-run PASS; live post-#2 only with owner GO |
-| **ConcentratedLiquidity** | partial — V3 WETH/USDG | pool + Morpho path | **no** | **BLOCKED** as v4 equity LP — template is V3 + Morpho leverage |
+| **MorphoSupply** | yes — Morpho Blue + USDG loan markets | yes — cookbook / skill example | **yes** `morpho-supply` (CLI runs init checks) | Opt-in; Critic/Risk pick the market; owner GO |
+| **ConcentratedLiquidity** | yes — V3 WETH/USDG + Morpho borrow | skill example (USDG/WETH, spUSDG market) | **yes** `concentrated-liquidity` | Opt-in; **not** v4 equity LP (template is V3 + Morpho leverage); counterparty preflight must pass |
 
 - Morpho without cookbook market id → Critic **BLOCKED**
 - CL framed as v4 equity LP or without V3 pool + Morpho collateral path → **BLOCKED**
-- Paper Track B + honest equity proxies remain the default growth research path until CLI builders ship
+- Both are tier 2: full-notional guardian coverage + ≈1% WOOD proposer bond. Size to free coverage (`skills/sherwood-ops`)
 
 ## Dual research tracks (opt-in)
 
