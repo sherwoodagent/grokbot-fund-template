@@ -9,8 +9,8 @@ For: the first Sherwood cohort (approved waitlist wallets) and agents that skip 
 ## Source of truth
 | What | Where | Pinned |
 |---|---|---|
-| CLI | `npm i -g @sherwoodagent/cli@latest` | ≥ 0.91.2 (`sherwood sources` + `--market-id recommended` land with sherwood PR #647, pending) |
-| Skill | https://github.com/sherwoodagent/skill (`SKILL.md`) | ≥ 0.24.2 (`sources` section in skill PR #81, pending) |
+| CLI | `npm i -g @sherwoodagent/cli@latest` | ≥ 0.93.0 |
+| Skill | https://github.com/sherwoodagent/skill (`SKILL.md`) | ≥ 0.25.0 |
 | Docs | https://docs.sherwood.sh | optional |
 
 This repo only adds **desk policy and flow**. Commands, flags, addresses and errors live in the skill and CLI. If they disagree with this repo, the skill wins.
@@ -26,14 +26,19 @@ routines.md                  desk-pulse + proposal-watch
 workspace/                   empty schemas the bot fills in
 ```
 
-## Seven steps to a first proposal
-1. Add the template → the bot asks: waitlist or WOOD fee? Privy or your own signer?
-2. Install the CLI and create the agent wallet; fund it with gas, USDG and WOOD.
-3. Mint the ERC-8004 identity on 4663.
-4. `vault create` (owner bond + agent id + waitlist sponsorship **or** WOOD creation fee) → `fund.json` → seed caps.
-5. `sherwood sources login`.
-6. Starter proposal: a Portfolio stock basket (best pool per leg) or MorphoSupply (`--market-id recommended`), 30 days, shown to you before signing.
-7. Turn on the proposal-watch routine.
+## Steps to a first proposal
+The agent wallet is sign-only (MetaMask Agent Wallet first, Privy second): every write is built with `sherwood --calldata-only …`, shown to you, then signed and broadcast in order after your yes.
+1. Add the template → the bot asks: waitlist or WOOD fee? MetaMask or Privy?
+2. Install the CLI (≥ 0.93.0) and set up the agent wallet on Robinhood Chain (4663); fund it with ETH for gas, USDG and WOOD.
+3. Mint the ERC-8004 identity.
+4. Prepare the owner stake (`guardian prepare-owner-stake`), before the vault.
+5. `vault create` (agent id + waitlist sponsorship **or** WOOD creation fee) → `vault info` → `fund.json`.
+6. Register the creator wallet as the vault's agent (`vault add`).
+7. Seed caps: tier-2 call cap, max capital, min buffer.
+8. `sherwood sources login` (two-step; re-login hourly). See [sources commands](https://docs.sherwood.sh/cli/sources-commands).
+9. Optional: join the cohort chat (`chat --join-cohort`). See [XMTP](https://docs.sherwood.sh/reference/integrations/xmtp).
+10. Starter proposal: a Portfolio stock basket (best pool per leg) or MorphoSupply (`--market-id recommended`), 30 days, shown to you before signing.
+11. Turn on the proposal-watch routine.
 
 ## Add it as a Grok template
 Templates carry instructions, skills, routines and memories. They do **not** carry repo files or scripts, so build the bot from this repo, then share it.
@@ -47,9 +52,8 @@ Templates carry instructions, skills, routines and memories. They do **not** car
 After you change the bot, use **Update template**.
 
 ## Blocked on mainnet
-- 4663 factory, vault and strategy addresses, and whether MorphoSupply and Portfolio are deployed there (`sherwood strategy list`).
-- CLI verbs for the per-syndicate caps (`{{CAPS_CLI_COMMAND}}`).
-- `sherwood sources` live (PR #647 deploy + waitlist DB URL) and the WOOD-fee access flag (indexer, not built).
-- Provenance output (#646) command.
+- Robinhood Chain (4663) contract addresses from the second deploy run. Take them from the skill and CLI, never from this repo.
+- WOOD-fee access: access after paying the creation fee is granted once the indexer ships; until then use an approved waitlist wallet.
+- Provenance output command (#646).
 
 MIT. Not investment advice.
