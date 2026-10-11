@@ -4,32 +4,51 @@ description: Use on first run, or whenever workspace/fund.json has no vault. Tak
 ---
 # Fund setup
 
-Defer to the Sherwood skill (Setup and Create phases) for every command. This skill only fixes order and desk choices. Do one step per turn, record it in `workspace/fund.json`, and resume at the first unfinished step.
+Defer to the Sherwood skill (`Phase 1: Setup`, `Phase 2: Create or Join Vault`) for every flag, address and error. This skill only fixes order and desk choices. Do one step per turn, record it in `workspace/fund.json`, and resume at the first unfinished step.
+
+**Every write is two-step.** Run it with the root flag `sherwood --calldata-only …`. The CLI prints `{ txs: [{to,data,value,chainId}], preconditions, description, note }`. Show that to the owner, get a yes, then sign and broadcast each tx **in order** with the agent wallet (skill → `Phase 1: Setup` has the MetaMask and Privy recipes), waiting for each receipt before the next. Never skip or reorder a tx.
 
 ## 1. Ask (one message)
 - **Access path:** approved cohort waitlist wallet, or paying the factory's WOOD creation fee?
-- **Signer:** Privy (recommended) or your own wallet?
+- **Signer:** MetaMask Agent Wallet (`mm`, recommended) or Privy agent wallet. Both are sign-only: the CLI builds calldata, the wallet signs and broadcasts.
 - Fund name, subdomain, and whether deposits are open.
 
 ## 2. Install + wallet
-`npm i -g @sherwoodagent/cli@latest`, then `sherwood --version` must be ≥ 0.91.2. Make sure no custom RPC env var points at the old fork. Create or attach the wallet per the skill. Tell the owner what to fund it with: gas, USDG, WOOD for the owner bond (plus the creation fee if on that path) and for proposer bonds.
+`npm i -g @sherwoodagent/cli@latest`, then `sherwood --version` must be ≥ 0.93.0. Set up the wallet per the skill (`Phase 1: Setup`) and confirm it lists Robinhood Chain (4663). Tell the owner what to fund it with: ETH for gas on 4663, USDG, and WOOD for the owner stake (plus the creation fee if on that path) and for proposer bonds. USDC on Base only if the owner turns on `research-byok`.
 
-## 3. Identity
-Mint the ERC-8004 agent identity on 4663 per the skill. Record `agentId`. Never invent one.
+## 3. Identity (needs a yes)
+`sherwood --calldata-only identity mint --name <fund name>` → sign/broadcast. Record `agentId` from the CLI output (`sherwood identity load --id <id>` if needed). Never invent one.
 
-## 4. Vault (needs a yes)
-`vault create` needs three things, and the CLI checks them before sending:
-1. owner bond prepared,
-2. `--agent-id` owned by this wallet,
-3. **either** waitlist sponsorship **or** the factory creation fee in WOOD (amount and token read from the factory; don't quote a number from memory).
-Show the full command plus the simulation → yes → broadcast. Write `vault`, `asset`, `owner`, `agent`, `agentId`, `chainId` into `fund.json` from the CLI output, then verify through `sherwood vault info`.
+## 4. Owner stake (needs a yes; spends WOOD)
+`sherwood --calldata-only guardian prepare-owner-stake 10000` → sign/broadcast both txs (WOOD approve, then prepare). Do this **before** `vault create`; without it create reverts with `PreparedStakeNotFound`.
 
-**Seed caps right after (needs a yes):** `setTier2CallCapBps 200`, `setMaxCapitalBps 8000`, `setMinBufferBps 500`, via `{{CAPS_CLI_COMMAND}}`. If the skill doesn't publish a command yet, tell the owner it's pending and continue.
+## 5. Vault (needs a yes)
+`sherwood --calldata-only vault create -y --name <name> --subdomain <sub> --agent-id <agentId> --asset USDG [--open-deposits] --creator <wallet>` → sign/broadcast. The CLI checks three things first: owner stake prepared, `--agent-id` owned by this wallet, and **either** waitlist sponsorship **or** the factory creation fee in WOOD (amount read from the factory; don't quote a number from memory).
+Then `sherwood vault info <subdomain>` and write `vault`, `asset`, `owner`, `agent`, `agentId`, `chainId` into `fund.json` from that output.
 
-## 5. Data access
-`sherwood sources login` (Privy and other external signers: the two-step `--address` → sign → `--signature` flow in the skill).
+## 6. Register the creator as agent (needs a yes)
+`sherwood --calldata-only vault add --vault <vault> --wallet <creator wallet> --agent-id <agentId>` → sign/broadcast. Without it, keyless `strategy propose` fails with `not a registered agent`.
+
+## 7. Caps (needs a yes)
+Owner-only, no open proposal needed. Three calls, each two-step:
+```
+sherwood --calldata-only governor set-tier2-call-cap 200 --vault <vault>
+sherwood --calldata-only governor set-max-capital 8000 --vault <vault>
+sherwood --calldata-only vault set-min-buffer 500 --vault <vault>
+```
+Record the caps in `fund.json`.
+
+## 8. Data access
+Two-step login (skill → `Phase 1: Setup`): `sherwood sources login --address <wallet>` prints a message → sign it with personal_sign (MetaMask: `{{MM_SIGN_MESSAGE}}`; Privy: `personal_sign` via its rpc) → `sherwood sources login --signature 0x…`. The token lasts 1 hour; routines re-login each run.
+- **403**: this wallet is not approved. Tell the owner. Don't swap wallets and don't retry in a loop.
+- **401**: token expired or missing. Re-login with the two-step above.
 - Waitlist path: works once the owner's wallet is approved.
-- WOOD-fee path: access is granted automatically after the fee or creation event is indexed (the flag can lag). If login says "not allowed", wait and retry later. Don't loop.
+- WOOD-fee path: Access after paying the creation fee is granted once the indexer ships; until then use an approved waitlist wallet.
 
-## 6. Done
+## 9. Cohort chat (optional; ask the owner)
+1. `sherwood chat --join-cohort --address <wallet> --json > /tmp/join.log 2>&1 &` (step 1 waits in the background and writes the XMTP text to sign).
+2. Sign that text with the wallet, then `sherwood chat --join-cohort --signature 0x…`.
+3. The cohort bot processes joins about every 2 minutes. Check once later with `sherwood chat --cohort log`. Don't loop (rate limit 10/min). Never delete `xmtpDbKey` from `~/.sherwood/config.json`; that loses the chat identity.
+
+## 10. Done
 Post the checklist with every box ticked, offer a starter proposal (`propose` skill), and enable `desk-pulse`.
