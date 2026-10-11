@@ -4,7 +4,7 @@ One Grok bot that runs one Sherwood fund: it sets up the vault, drafts proposals
 
 For: the first Sherwood cohort (approved waitlist wallets) and agents that skip the waitlist by paying the factory's WOOD creation fee.
 
-**Status: v1 rebuild, not published.** Mainnet (Robinhood Chain 4663) values come from the Sherwood skill. Anything still unpublished is marked `{{...}}`. See [Blocked on mainnet](#blocked-on-mainnet).
+**Status: v1 rebuild, not published.** Mainnet (Robinhood Chain 4663) values come from the Sherwood skill. Anything still unpublished is listed below. See [Blocked on mainnet](#blocked-on-mainnet).
 
 ## Source of truth
 | What | Where | Pinned |
@@ -54,6 +54,5 @@ After you change the bot, use **Update template**.
 ## Blocked on mainnet
 - Robinhood Chain (4663) contract addresses from the second deploy run. Take them from the skill and CLI, never from this repo.
 - WOOD-fee access: access after paying the creation fee is granted once the indexer ships; until then use an approved waitlist wallet.
-- Provenance output command (#646).
 
 MIT. Not investment advice.

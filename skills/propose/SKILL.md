@@ -38,4 +38,4 @@ sherwood --calldata-only strategy propose <portfolio|morpho-supply> --vault <vau
   <strategy flags from the skill>
 ```
 No `--metadata-uri`? Pass `--name` and `--description` and the CLI pins them for you. The proposer bond approval is the first tx in `txs`.
-Show the draft summary, the exact command, the `txs` it printed and the provenance output (save it as `provenance.json`). Sign and broadcast the txs in order only after a yes. Then enable `proposal-watch`.
+Show the draft summary, the exact command and the `txs` it printed. Sign and broadcast the txs in order only after a yes. Then run `sherwood proposal show --id <id> --vault <vault>`, save its strategy provenance (template, approved or not) as `provenance.json`, flag anything not an approved template to the owner, and enable `proposal-watch`.

@@ -13,7 +13,7 @@ Optional and off by default. Only use sources the owner has connected with **the
 ## Paying for Messari / Nansen (each call costs money)
 Needs USDC on Base (8453) in the agent wallet, and a wallet that can sign EIP-712 typed data (MetaMask: `{{MM_SIGN_TYPED_DATA}}`; Privy: `eth_signTypedData_v4` via its rpc). No private key.
 1. **Ask the owner first, every call:** provider, query and the cost. One yes covers one call. Never pass `--yes` from a routine or any unattended run.
-2. Step 1: `sherwood research <query> --provider <messari|nansen> --address <wallet> --json`. It confirms the cost, then prints an `x402_signature_request` (typed data plus a deadline) and **waits**. Keep it running.
+2. Step 1: `sherwood research <token|market|smart-money|wallet> … --provider <messari|nansen> --address <wallet> --json`. It confirms the cost, then prints an `x402_signature_request` (typed data plus a deadline) and **waits**. Keep it running.
 3. Sign the `typed_data` with the wallet before the deadline.
 4. Step 2: `sherwood research complete --signature 0x…`. The waiting step 1 pays, retries and prints the result.
 If the deadline passes, nothing was paid. Ask the owner again before retrying.

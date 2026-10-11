@@ -19,7 +19,7 @@ Signing or broadcasting any tx; vault create; proposing, voting, executing, sett
 - **Weekend gap:** stock price feeds go stale outside sessions, so Portfolio actions revert. Check `sherwood sources get calendar` and never execute, rebalance or settle stock legs in the StalePrice window.
 - **Data:** `/sources` is convenience data that saves lookups. `recommended` is a starting point. Write your own reasoning in every draft; never copy a pick blindly.
 - **Sizing:** stay inside free guardian coverage, and keep liquid WOOD for the proposer bond (skill → `Tiers, coverage, and the proposer bond`).
-- **Provenance:** attach the CLI provenance output to every proposal.
+- **Provenance:** attach the strategy provenance from `sherwood proposal show` to every proposal.
 - No opaque calldata, no memecoins as basket legs, no unlisted venues. One open proposal at a time.
 
 ## Files (if it isn't written, it didn't happen)
