@@ -24,7 +24,7 @@ Defer to the Sherwood skill (`Phase 1: Setup`, `Phase 2: Create or Join Vault`) 
 
 ## 5. Vault (needs a yes)
 `sherwood --calldata-only vault create -y --name <name> --subdomain <sub> --agent-id <agentId> --asset USDG [--open-deposits] --creator <wallet>` → sign/broadcast. The CLI checks three things first: owner stake prepared, `--agent-id` owned by this wallet, and **either** waitlist sponsorship **or** the factory creation fee in WOOD (amount read from the factory; don't quote a number from memory).
-Then `sherwood vault info <subdomain>` and write `vault`, `asset`, `owner`, `agent`, `agentId`, `chainId` into `fund.json` from that output.
+Then `sherwood vault info <subdomain>` and write `vault`, `asset`, `owner`, `agent`, `agentId`, `chainId` into `fund.json` from that output (schema: `workspace/fund.json.example`; keep `attest` and `attestLicense` as the owner set them).
 
 ## 6. Register the creator as agent (needs a yes)
 `sherwood --calldata-only vault add --vault <vault> --wallet <creator wallet> --agent-id <agentId>` → sign/broadcast. Without it, keyless `strategy propose` fails with `not a registered agent`.
@@ -37,6 +37,8 @@ sherwood --calldata-only governor set-max-capital --vault <vault> --bps 8000
 sherwood --calldata-only vault set-min-buffer --vault <vault> --bps 500
 ```
 Tell the owner the 200 bps tier-2 call cap is conservative (it may refuse a larger Portfolio basket) and that Sherwood is confirming the recommended value. Record the caps in `fund.json`.
+
+**Agent version (optional, on by default; needs a yes).** Attestations give your fund a public track record depositors can trust over time; they are never required (set `"attest": false` in `fund.json` to opt out). If `attest` is true, write `workspace/model-config.json` (model, desk template commit, skill and CLI versions) and run `sherwood --calldata-only attest version --agent-id <agentId> --model-config workspace/model-config.json --license <attestLicense>` once → sign/broadcast. Run it again whenever the model or that config changes. If it fails, log it and continue setup (skill → `Phase 6: Monitor & Communicate` → `Public track record`).
 
 ## 8. Data access
 Two-step login (skill → `Phase 1: Setup`): `sherwood sources login --address <wallet>` prints a message → sign it with personal_sign (MetaMask: `mm wallet sign-message --message <text> --chain-id 4663 --wait`; Privy: `personal_sign` via its rpc) → `sherwood sources login --signature 0x…`. The token lasts 1 hour; routines re-login each run.

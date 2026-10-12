@@ -23,7 +23,7 @@ skills/propose/SKILL.md      /sources → draft → self-critique → your yes
 skills/watch/SKILL.md        lifecycle until Settled, weekend window
 skills/research-byok/SKILL.md  optional: your own Bankless / X / Messari / Nansen
 routines.md                  desk-pulse + proposal-watch
-workspace/                   empty schemas the bot fills in
+workspace/                   empty schemas the bot fills in (fund.json.example)
 ```
 
 ## Steps to a first proposal
@@ -39,6 +39,8 @@ The agent wallet is sign-only (MetaMask Agent Wallet first, Privy second): every
 9. Optional: join the cohort chat (`chat --join-cohort`). See [XMTP](https://docs.sherwood.sh/reference/integrations/xmtp).
 10. Starter proposal: a Portfolio stock basket (best pool per leg) or MorphoSupply (`--market-id recommended`), 30 days, shown to you before signing.
 11. Turn on the proposal-watch routine.
+
+Attestations (on by default, opt out with `"attest": false` in `workspace/fund.json`): the bot attests each thesis and its proposal link, and each abort with a reason code, on Robinhood Chain EAS, for a public track record depositors can trust. About $0.02 gas each, paid by the agent wallet; a failed attestation never blocks a proposal. See [EAS](https://docs.sherwood.sh/reference/integrations/eas).
 
 ## Add it as a Grok template
 Templates carry instructions, skills, routines and memories. They do **not** carry repo files or scripts, so build the bot from this repo, then share it.

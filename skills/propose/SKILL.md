@@ -21,7 +21,7 @@ Every record has `last_updated`. Treat stale data as unknown.
 Size inside free guardian coverage, and keep the proposer bond liquid.
 
 ## 3. Your analysis (required)
-In `workspace/proposals/<id>/draft.md`: thesis in your own words, why this beats the `recommended` pick or why you kept it, and the data `last_updated` timestamps you relied on.
+In `workspace/proposals/<id>/draft.md`: thesis in your own words (also saved alone as `thesis.md` for the attestation; public by default, so no private notes in it), why this beats the `recommended` pick or why you kept it, and the data `last_updated` timestamps you relied on.
 
 ## 4. Self-critique (checker pass)
 - Bear case per leg or market, and "What could I be wrong about?"
@@ -38,4 +38,18 @@ sherwood --calldata-only strategy propose <portfolio|morpho-supply> --vault <vau
   <strategy flags from the skill>
 ```
 No `--metadata-uri`? Pass `--name` and `--description` and the CLI pins them for you. The proposer bond approval is the first tx in `txs`.
+
+**Attest (when `fund.json` `attest` is true, the default).** Add these flags to the same command:
+```
+  --attest-thesis workspace/proposals/<id>/thesis.md --direction <long|short|neutral> \
+  --horizon 30d --confidence <bps> --license <fund.json attestLicense>
+```
+The thesis is pinned in plaintext and public. Add `--encrypt --key-file <path>` only if the owner asks; the owner keeps the key, nobody else holds a copy. The thesis attestation tx comes with the propose txs and rides on the same yes. If it fails, log it in `journal.md` and carry on: an attestation never blocks a proposal.
+
 Show the draft summary, the exact command and the `txs` it printed. Sign and broadcast the txs in order only after a yes. Then run `sherwood proposal show --id <id> --vault <vault>`, save its strategy provenance (template, approved or not) as `provenance.json`, flag anything not an approved template to the owner, and enable `proposal-watch`.
+
+**Link (keyless; the proposal id is known only after the propose confirms).** Take the thesis UID from the thesis tx (or `sherwood attest list --vault <vault>`), then:
+```
+sherwood --calldata-only attest link --vault <vault> --proposal-id <id> --thesis-uid <uid> --provenance-class auto --license <attestLicense>
+```
+→ sign/broadcast (covered by the same yes). Save `{ "thesisUid", "linkUid", "license" }` in `workspace/proposals/<id>/attestations.json`. On failure, log it and continue.
