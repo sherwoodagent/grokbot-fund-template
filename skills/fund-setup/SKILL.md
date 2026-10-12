@@ -14,7 +14,7 @@ Defer to the Sherwood skill (`Phase 1: Setup`, `Phase 2: Create or Join Vault`) 
 - Fund name, subdomain, and whether deposits are open.
 
 ## 2. Install + wallet
-`npm i -g @sherwoodagent/cli@latest`, then `sherwood --version` must be ≥ 0.93.0. Set up the wallet per the skill (`Phase 1: Setup`) and confirm it lists Robinhood Chain (4663). Tell the owner what to fund it with: ETH for gas on 4663, USDG, and WOOD for the owner stake (plus the creation fee if on that path) and for proposer bonds. USDC on Base only if the owner turns on `research-byok`.
+`npm i -g @sherwoodagent/cli@0.93.0` (or `@latest` once newer), then `sherwood --version` must be ≥ 0.93.0. Set up the wallet per the skill (`Phase 1: Setup`). MetaMask: `npm i -g @metamask/agent-wallet@latest`, `mm login` (you approve a device code), then check that `mm chains list` shows 4663 after login; if it does not, use Privy. Tell the owner what to fund it with: ETH for gas on 4663, USDG, and WOOD for the owner stake (plus the creation fee if on that path) and for proposer bonds. USDC on Base only if the owner turns on `research-byok`.
 
 ## 3. Identity (needs a yes)
 `sherwood --calldata-only identity mint --name <fund name>` → sign/broadcast. Record `agentId` from the CLI output (`sherwood identity load --id <id>` if needed). Never invent one.
@@ -32,14 +32,14 @@ Then `sherwood vault info <subdomain>` and write `vault`, `asset`, `owner`, `age
 ## 7. Caps (needs a yes)
 Owner-only, no open proposal needed. Three calls, each two-step:
 ```
-sherwood --calldata-only governor set-tier2-call-cap 200 --vault <vault>
-sherwood --calldata-only governor set-max-capital 8000 --vault <vault>
-sherwood --calldata-only vault set-min-buffer 500 --vault <vault>
+sherwood --calldata-only governor set-tier2-call-cap --vault <vault> --bps 200
+sherwood --calldata-only governor set-max-capital --vault <vault> --bps 8000
+sherwood --calldata-only vault set-min-buffer --vault <vault> --bps 500
 ```
-Record the caps in `fund.json`.
+Tell the owner the 200 bps tier-2 call cap is conservative (it may refuse a larger Portfolio basket) and that Sherwood is confirming the recommended value. Record the caps in `fund.json`.
 
 ## 8. Data access
-Two-step login (skill → `Phase 1: Setup`): `sherwood sources login --address <wallet>` prints a message → sign it with personal_sign (MetaMask: `{{MM_SIGN_MESSAGE}}`; Privy: `personal_sign` via its rpc) → `sherwood sources login --signature 0x…`. The token lasts 1 hour; routines re-login each run.
+Two-step login (skill → `Phase 1: Setup`): `sherwood sources login --address <wallet>` prints a message → sign it with personal_sign (MetaMask: `mm wallet sign-message --message <text> --chain-id 4663 --wait`; Privy: `personal_sign` via its rpc) → `sherwood sources login --signature 0x…`. The token lasts 1 hour; routines re-login each run.
 - **403**: this wallet is not approved. Tell the owner. Don't swap wallets and don't retry in a loop.
 - **401**: token expired or missing. Re-login with the two-step above.
 - Waitlist path: works once the owner's wallet is approved.
@@ -47,7 +47,7 @@ Two-step login (skill → `Phase 1: Setup`): `sherwood sources login --address <
 
 ## 9. Cohort chat (optional; ask the owner)
 1. `sherwood chat --join-cohort --address <wallet> --json > /tmp/join.log 2>&1 &` (step 1 waits in the background and writes the XMTP text to sign).
-2. Sign that text with the wallet, then `sherwood chat --join-cohort --signature 0x…`.
+2. Sign that text with the wallet (MetaMask: `mm wallet sign-message --message <text> --chain-id 4663 --wait`), then `sherwood chat --join-cohort --signature 0x…`.
 3. The cohort bot processes joins about every 2 minutes. Check once later with `sherwood chat --cohort log`. Don't loop (rate limit 10/min). Never delete `xmtpDbKey` from `~/.sherwood/config.json`; that loses the chat identity.
 
 ## 10. Done

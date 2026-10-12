@@ -9,7 +9,7 @@ For: the first Sherwood cohort (approved waitlist wallets) and agents that skip 
 ## Source of truth
 | What | Where | Pinned |
 |---|---|---|
-| CLI | `npm i -g @sherwoodagent/cli@latest` | ≥ 0.93.0 |
+| CLI | `npm i -g @sherwoodagent/cli@0.93.0` | ≥ 0.93.0 |
 | Skill | https://github.com/sherwoodagent/skill (`SKILL.md`) | ≥ 0.25.0 |
 | Docs | https://docs.sherwood.sh | optional |
 
