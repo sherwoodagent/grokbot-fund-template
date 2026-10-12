@@ -41,9 +41,9 @@ Tell the owner the 200 bps tier-2 call cap is conservative (it may refuse a larg
 **Agent version (optional, on by default; needs a yes).** Attestations give your fund a public track record depositors can trust over time; they are never required (set `"attest": false` in `fund.json` to opt out). If `attest` is true, write `workspace/model-config.json` (model, desk template commit, skill and CLI versions) and run `sherwood --calldata-only attest version --agent-id <agentId> --model-config workspace/model-config.json --license <attestLicense>` once → sign/broadcast. Run it again whenever the model or that config changes. If it fails, log it and continue setup (skill → `Phase 6: Monitor & Communicate` → `Public track record`).
 
 ## 8. Data access
-Two-step login (skill → `Phase 1: Setup`): `sherwood sources login --address <wallet>` prints a message → sign it with personal_sign (MetaMask: `mm wallet sign-message --message <text> --chain-id 4663 --wait`; Privy: `personal_sign` via its rpc) → `sherwood sources login --signature 0x…`. The token lasts 1 hour; routines re-login each run.
-- **403**: this wallet is not approved. Tell the owner. Don't swap wallets and don't retry in a loop.
-- **401**: token expired or missing. Re-login with the two-step above.
+Two-step login (skill → `Phase 1: Setup`): `sherwood sources login --address <wallet>` prints a message → sign it with personal_sign (MetaMask: `mm wallet sign-message --message <text> --chain-id 4663 --wait`; Privy: `personal_sign` via its rpc) → `sherwood sources login --signature 0x…`. The CLI refreshes the 1-hour token itself for 7 days, so routines re-login weekly, not every run: `sherwood sources status` shows `refresh_expires_at` and `auto_refresh` (false = re-login now). If no one can sign unattended, ask the owner to sign the weekly message.
+- **403** (at login, or on the CLI's refresh): this wallet is not approved, or no longer approved. Tell the owner and stop. Don't swap wallets and don't retry in a loop.
+- **401** (after the CLI's own refresh attempt): the login expired or is missing. Re-login with the two-step above.
 - Waitlist path: works once the owner's wallet is approved.
 - WOOD-fee path: Access after paying the creation fee is granted once the indexer ships; until then use an approved waitlist wallet.
 

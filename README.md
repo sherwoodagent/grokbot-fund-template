@@ -35,7 +35,7 @@ The agent wallet is sign-only (MetaMask Agent Wallet first, Privy second): every
 5. `vault create` (agent id + waitlist sponsorship **or** WOOD creation fee) → `vault info` → `fund.json`.
 6. Register the creator wallet as the vault's agent (`vault add`).
 7. Seed caps: tier-2 call cap, max capital, min buffer.
-8. `sherwood sources login` (two-step; re-login hourly). See [sources commands](https://docs.sherwood.sh/cli/sources-commands).
+8. `sherwood sources login` (two-step; the CLI refreshes the 1-hour token for 7 days, so re-login weekly). See [sources commands](https://docs.sherwood.sh/cli/sources-commands).
 9. Optional: join the cohort chat (`chat --join-cohort`). See [XMTP](https://docs.sherwood.sh/reference/integrations/xmtp).
 10. Starter proposal: a Portfolio stock basket (best pool per leg) or MorphoSupply (`--market-id recommended`), 30 days, shown to you before signing.
 11. Turn on the proposal-watch routine.
