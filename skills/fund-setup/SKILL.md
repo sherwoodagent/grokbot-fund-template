@@ -14,13 +14,13 @@ Defer to the Sherwood skill (`Phase 1: Setup`, `Phase 2: Create or Join Vault`) 
 - Fund name, subdomain, and whether deposits are open.
 
 ## 2. Install + wallet
-`npm i -g @sherwoodagent/cli@0.93.0` (or `@latest` once newer), then `sherwood --version` must be ≥ 0.93.0. Set up the wallet per the skill (`Phase 1: Setup`). MetaMask: `npm i -g @metamask/agent-wallet@latest`, `mm login` (you approve a device code), then check that `mm chains list` shows 4663 after login; if it does not, use Privy. Tell the owner what to fund it with: ETH for gas on 4663, USDG, and WOOD for the owner stake (plus the creation fee if on that path) and for proposer bonds. USDC on Base only if the owner turns on `research-byok`.
+`npm i -g @sherwoodagent/cli@latest`, then check `sherwood --version` against the minimum the skill states. Set up the wallet per the skill (`Phase 1: Setup`). MetaMask: `npm i -g @metamask/agent-wallet@latest`, `mm login` (you approve a device code), then check that `mm chains list` shows 4663 after login; if it does not, use Privy. Tell the owner what to fund it with: ETH for gas on 4663, USDG, and WOOD for the owner stake (plus the creation fee if on that path) and for proposer bonds. Plus a little USDC on Base for Messari research calls (x402).
 
 ## 3. Identity (needs a yes)
 `sherwood --calldata-only identity mint --name <fund name>` → sign/broadcast. Record `agentId` from the CLI output (`sherwood identity load --id <id>` if needed). Never invent one.
 
 ## 4. Owner stake (needs a yes; spends WOOD)
-`sherwood --calldata-only guardian prepare-owner-stake 10000` → sign/broadcast both txs (WOOD approve, then prepare). Do this **before** `vault create`; without it create reverts with `PreparedStakeNotFound`.
+`sherwood --calldata-only guardian prepare-owner-stake <amount from the skill>` → sign/broadcast both txs (WOOD approve, then prepare). Do this **before** `vault create`; without it create reverts with `PreparedStakeNotFound`.
 
 ## 5. Vault (needs a yes)
 `sherwood --calldata-only vault create -y --name <name> --subdomain <sub> --agent-id <agentId> --asset USDG [--open-deposits] --creator <wallet>` → sign/broadcast. The CLI checks three things first: owner stake prepared, `--agent-id` owned by this wallet, and **either** waitlist sponsorship **or** the factory creation fee in WOOD (amount read from the factory; don't quote a number from memory).
@@ -29,16 +29,10 @@ Then `sherwood vault info <subdomain>` and write `vault`, `asset`, `owner`, `age
 ## 6. Register the creator as agent (needs a yes)
 `sherwood --calldata-only vault add --vault <vault> --wallet <creator wallet> --agent-id <agentId>` → sign/broadcast. Without it, keyless `strategy propose` fails with `not a registered agent`.
 
-## 7. Caps (needs a yes)
-Owner-only, no open proposal needed. Three calls, each two-step:
-```
-sherwood --calldata-only governor set-tier2-call-cap --vault <vault> --bps 200
-sherwood --calldata-only governor set-max-capital --vault <vault> --bps 8000
-sherwood --calldata-only vault set-min-buffer --vault <vault> --bps 500
-```
-Tell the owner the 200 bps tier-2 call cap is conservative (it may refuse a larger Portfolio basket) and that Sherwood is confirming the recommended value. Record the caps in `fund.json`.
+## 7. Caps
+This desk sets no caps of its own. Protocol and vault caps (enforced by the CLI and guardian) apply. If the owner wants tighter vault caps, use the governor/vault cap commands from the skill (each two-step, needs a yes) and record what they set in `fund.json` `caps`.
 
-**Agent version (optional, on by default; needs a yes).** Attestations give your fund a public track record depositors can trust over time; they are never required (set `"attest": false` in `fund.json` to opt out). If `attest` is true, write `workspace/model-config.json` (model, desk template commit, skill and CLI versions) and run `sherwood --calldata-only attest version --agent-id <agentId> --agent <agent wallet> --model-config workspace/model-config.json --license <attestLicense>` once → sign/broadcast. Run it again whenever the model or that config changes. If it fails, log it and continue setup (skill → `Phase 6: Monitor & Communicate` → `Public track record`).
+**Agent version attestation (on by default, opt out with `"attest": false`; needs a yes).** Attestations give your fund a public track record depositors can trust over time; they are never required (set `"attest": false` in `fund.json` to opt out). If `attest` is true, write `workspace/model-config.json` (model, desk template commit, and the skill and CLI versions read from `sherwood --version` and the skill at run time) and run `sherwood --calldata-only attest version --agent-id <agentId> --agent <agent wallet> --model-config workspace/model-config.json --license <attestLicense>` once → sign/broadcast. Run it again whenever the model or that config changes. If it fails, log it and continue setup (skill → `Phase 6: Monitor & Communicate` → `Public track record`).
 
 ## 8. Data access
 Two-step login (skill → `Phase 1: Setup`): `sherwood sources login --address <wallet>` prints a message → sign it with personal_sign (MetaMask: `mm wallet sign-message --message <text> --chain-id 4663 --wait`; Privy: `personal_sign` via its rpc) → `sherwood sources login --signature 0x…`. The CLI refreshes the 1-hour token itself for 7 days, so routines re-login weekly, not every run: `sherwood sources status` shows `refresh_expires_at` and `auto_refresh` (false = re-login now). If no one can sign unattended, ask the owner to sign the weekly message.

@@ -5,11 +5,7 @@
   "agent": "",
   "agentId": "",
   "chainId": 4663,
-  "caps": {
-    "tier2CallCapBps": 200,
-    "maxCapitalBps": 8000,
-    "minBufferBps": 500
-  },
+  "caps": {},
   "attest": true,
   "attestLicense": "aggregate",
   "modelConfig": "workspace/model-config.json"

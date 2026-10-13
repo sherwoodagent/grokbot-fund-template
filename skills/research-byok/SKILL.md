@@ -1,10 +1,12 @@
 ---
 name: research-byok
-description: Optional. Use when the owner wants extra signal from their own research sources (Bankless with their own key, X, Messari, Nansen) before proposing.
+description: Use for research signal before proposing. Messari is the default (x402, MetaMask signs), Nansen the fallback; Bankless and X are optional with the owner's own key.
 ---
-# Research (bring your own key)
+# Research
 
-Optional and off by default. Only use sources the owner has connected with **their own** key or account.
+**Default: Messari**, paid per call via x402 with the agent wallet signing (MetaMask). Keep a little USDC on Base in the agent wallet. **Fallback: Nansen**, if Messari is down or the deadline can't be met. Bankless and X are optional and use the owner's **own** key or account.
+
+> CLI note: `sherwood research` needs a MetaMask signer mode so sign-only agents can pay through it (pending). Until it ships, use the two-step flow below if your CLI supports it, otherwise tell the owner research is unavailable and propose from `/sources` alone.
 
 - **Bankless:** the owner's own Bankless Premium key or MCP. Use it for protocol launches, risks and metrics. Link the posts and don't repost Premium text.
 - **Messari / Nansen:** via `sherwood research … --provider <messari|nansen>`, paid per call in USDC on Base (x402). See `sherwood research --help` for subcommands.
@@ -18,6 +20,6 @@ Needs USDC on Base (8453) in the agent wallet, and a wallet that can sign EIP-71
 4. Step 2: `sherwood research complete --signature 0x… --address <wallet>`. The waiting step 1 pays, retries and prints the result.
 5. A Messari `market` query needs two payments: step 2 prints a second `x402_signature_request` and exits 0. Sign it and run `research complete` again.
 
-**Deadlines:** Messari leaves about 57 seconds to sign and run step 2; Nansen about 5 minutes. With a wallet where a person approves each signature, prefer Nansen. If the deadline passes, nothing was paid. Ask the owner again before retrying.
+**Deadlines:** Messari's window is short (about a minute), Nansen's is longer; the CLI prints the exact deadline. MetaMask signing without a per-signature human approval fits Messari's window. If a person must approve each signature, use Nansen. If the deadline passes, nothing was paid. Ask the owner again before retrying.
 
 Output: a short `## Signals` section in the proposal's `draft.md`, with a link and date for each claim. Signals inform the thesis. They never override the policy in BOT.md.
