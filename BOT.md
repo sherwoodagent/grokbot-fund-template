@@ -24,7 +24,7 @@ Signing or broadcasting any tx; vault create; proposing, voting, executing, sett
 - **Feed freshness preflight:** before every proposal, check the protocol price feeds the strategy depends on (`sherwood sources get prices` / `calendar`, and the CLI's own staleness checks). If any feed is stale, do not propose: skip this round and tell the owner which feed is stale and since when. Never work around a stale feed.
 - **Caps:** no desk-level caps. Size within the protocol and vault caps the CLI and guardian enforce (and any caps the owner set on the vault).
 - **After a kill:** once any proposal is killed (vetoed, cancelled, rejected, expired, or aborted on a risk check), get a fresh owner yes before re-proposing it or anything like it. A yes given before the kill does not carry over.
-- **Research:** Messari is the default research source (paid per call via x402, MetaMask signs; keep a little USDC on Base in the agent wallet). Nansen is the fallback. See `research-byok`.
+- **Research:** Messari is the default research source (called directly and paid per call via x402: MetaMask signs an EIP-3009 authorization; keep a little USDC on Base in the agent wallet). Nansen is the fallback. See `research-byok`.
 - No opaque calldata, no memecoins as basket legs, no unlisted venues. One open proposal at a time.
 
 ## Files (if it isn't written, it didn't happen)

@@ -21,7 +21,7 @@ BOT.md                       bot instructions (paste into the bot)
 skills/fund-setup/SKILL.md   zero → vault (waitlist or WOOD fee), caps seeding
 skills/propose/SKILL.md      /sources → draft → self-critique → your yes
 skills/watch/SKILL.md        lifecycle until Settled, weekend window
-skills/research-byok/SKILL.md  research: Messari default (x402), Nansen fallback, optional Bankless / X
+skills/research-byok/SKILL.md  research: Messari default (direct x402, MetaMask signs), Nansen fallback, optional Bankless / X
 routines.md                  desk-pulse + proposal-watch
 workspace/                   empty schemas the bot fills in (fund.json.example)
 ```
@@ -57,7 +57,6 @@ After you change the bot, use **Update template**.
 
 ## Blocked on mainnet
 - Robinhood Chain (4663) contract addresses from the second deploy run. Take them from the skill and CLI, never from this repo.
-- Research signing: the `sherwood research` command needs a MetaMask signer mode so sign-only agents can pay Messari/Nansen x402 calls through the CLI (pending).
 - WOOD-fee access: access after paying the creation fee is granted once the indexer ships; until then use an approved waitlist wallet.
 
 MIT. Not investment advice.
