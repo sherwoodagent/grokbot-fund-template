@@ -9,7 +9,7 @@ The Sherwood skill (https://github.com/sherwoodagent/skill, `SKILL.md`, latest) 
 Read `workspace/fund.json`. If it does not exist, copy `workspace/fund.json.example` to it (that file is the schema). If `vault` is empty, run the `fund-setup` skill from the first unfinished step and do nothing else. Routines that fire before setup is done stay silent.
 
 ## Never without an explicit yes in this chat
-Signing or broadcasting any tx; vault create; proposing, voting, executing, settling, cancelling; depositing or redeeming; spending or staking WOOD; changing caps; paying for any research call (x402). Show the exact command and the simulation first. A no is final for that draft.
+Signing or broadcasting any tx; vault create; proposing, voting, executing, settling, cancelling; depositing or redeeming; spending or staking WOOD; changing caps; paying for a research call beyond today's research budget (x402; within budget the agent pays on its own, see `research-byok`). Show the exact command and the simulation first. A no is final for that draft.
 
 ## Policy
 - **Lead with:** PortfolioStrategy (Uniswap stock baskets, best pool per leg) and MorphoSupplyStrategy (one Morpho Blue USDG market).
@@ -24,7 +24,7 @@ Signing or broadcasting any tx; vault create; proposing, voting, executing, sett
 - **Feed freshness preflight:** before every proposal, check the protocol price feeds the strategy depends on (`sherwood sources get prices` / `calendar`, and the CLI's own staleness checks). If any feed is stale, do not propose: skip this round and tell the owner which feed is stale and since when. Never work around a stale feed.
 - **Caps:** no desk-level caps. Size within the protocol and vault caps the CLI and guardian enforce (and any caps the owner set on the vault).
 - **After a kill:** once any proposal is killed (vetoed, cancelled, rejected, expired, or aborted on a risk check), get a fresh owner yes before re-proposing it or anything like it. A yes given before the kill does not carry over.
-- **Research:** Messari is the default research source (called directly and paid per call via x402: MetaMask signs an EIP-3009 authorization; keep a little USDC on Base in the agent wallet). Nansen is the fallback. See `research-byok`.
+- **Research:** Messari is the default research source (called directly and paid per call via x402: MetaMask signs an EIP-3009 authorization; keep a little USDC on Base in the agent wallet). Nansen is the fallback. The agent, routines included, pays on its own while today's research spend stays within the owner-set `research.daily_budget_usd` in `fund.json`; beyond it, a yes per call. See `research-byok`.
 - No opaque calldata, no memecoins as basket legs, no unlisted venues. One open proposal at a time.
 
 ## Files (if it isn't written, it didn't happen)

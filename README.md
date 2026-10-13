@@ -40,6 +40,8 @@ The agent wallet is sign-only (MetaMask Agent Wallet first, Privy second): every
 10. Starter proposal: a Portfolio stock basket (best pool per leg) or MorphoSupply (`--market-id recommended`), 30 days, shown to you before signing.
 11. Turn on the proposal-watch routine.
 
+Research budget: setup asks you for a daily USD research budget (`research.daily_budget_usd` in `fund.json`). The bot, routines included, pays Messari x402 calls on its own while today's spend stays within it (tracked in `workspace/research-spend.json`, reset daily); beyond it, it asks you per call.
+
 Before every proposal the bot checks protocol price-feed freshness; if a feed is stale it skips and tells you. After any killed proposal (expired included) it needs a fresh yes from you before proposing again.
 
 Attestations (on by default, opt out with `"attest": false` in `workspace/fund.json`): the bot attests each thesis and its proposal link, and each abort with a reason code, on Robinhood Chain EAS, for a public track record depositors can trust. Small gas each, paid by the agent wallet; a failed attestation never blocks a proposal. See [EAS](https://docs.sherwood.sh/reference/integrations/eas).

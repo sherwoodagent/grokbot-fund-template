@@ -8,5 +8,8 @@
   "caps": {},
   "attest": true,
   "attestLicense": "aggregate",
+  "research": {
+    "daily_budget_usd": "<owner sets, e.g. 1.00>"
+  },
   "modelConfig": "workspace/model-config.json"
 }

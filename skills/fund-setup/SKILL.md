@@ -14,7 +14,7 @@ Defer to the Sherwood skill (`Phase 1: Setup`, `Phase 2: Create or Join Vault`) 
 - Fund name, subdomain, and whether deposits are open.
 
 ## 2. Install + wallet
-`npm i -g @sherwoodagent/cli@latest`, then check `sherwood --version` against the minimum the skill states. Set up the wallet per the skill (`Phase 1: Setup`). MetaMask: `npm i -g @metamask/agent-wallet@latest`, `mm login` (you approve a device code), then check that `mm chains list` shows 4663 after login; if it does not, use Privy. Tell the owner what to fund it with: ETH for gas on 4663, USDG, and WOOD for the owner stake (plus the creation fee if on that path) and for proposer bonds. Plus a little USDC on Base for Messari research calls (x402).
+`npm i -g @sherwoodagent/cli@latest`, then check `sherwood --version` against the minimum the skill states. Set up the wallet per the skill (`Phase 1: Setup`). MetaMask: `npm i -g @metamask/agent-wallet@latest`, `mm login` (you approve a device code), then check that `mm chains list` shows 4663 after login; if it does not, use Privy. Tell the owner what to fund it with: ETH for gas on 4663, USDG, and WOOD for the owner stake (plus the creation fee if on that path) and for proposer bonds. Plus a little USDC on Base for Messari research calls (x402). Ask the owner for a **daily research budget in USD** and save it as `research.daily_budget_usd` in `fund.json`. The agent (routines included) pays research calls on its own within it; beyond it, it asks per call. 0 or unset means ask every call.
 
 ## 3. Identity (needs a yes)
 `sherwood --calldata-only identity mint --name <fund name>` → sign/broadcast. Record `agentId` from the CLI output (`sherwood identity load --id <id>` if needed). Never invent one.
