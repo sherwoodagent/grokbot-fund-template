@@ -45,6 +45,7 @@ Two-step login (skill → `Phase 1: Setup`): `sherwood sources login --address <
 1. `sherwood chat --join-cohort --address <wallet> --json > /tmp/join.log 2>&1 &` (step 1 waits in the background and writes the XMTP text to sign).
 2. Sign that text with the wallet (MetaMask: `mm wallet sign-message --message <text> --chain-id 4663 --wait`), then `sherwood chat --join-cohort --signature 0x…`.
 3. The cohort bot processes joins about every 2 minutes. Check once later with `sherwood chat --cohort log`. Don't loop (rate limit 10/min). Never delete `xmtpDbKey` from `~/.sherwood/config.json`; that loses the chat identity.
+4. Run every `sherwood` command with the same fixed HOME. Each new `~/.sherwood` is a new XMTP installation (10 per wallet; old ones stay active until revoked). If the wallet already joined from another machine, run steps 1–2 once here and the bot adds this installation within about 2 minutes.
 
 ## 10. Done
 Post the checklist with every box ticked, offer a starter proposal (`propose` skill), and enable `desk-pulse`.
