@@ -1,6 +1,6 @@
 # Sherwood Fund Desk (Grok Bot template)
 
-One Grok bot that runs one Sherwood fund: it sets up the vault, drafts proposals from the Sherwood data feeds and your own analysis, and watches them until they settle. **It never signs, proposes, votes, settles or spends WOOD without your yes.**
+One Grok bot that runs one Sherwood fund: it sets up the vault, drafts proposals from the Sherwood data feeds and your own analysis, and watches them until they settle. **It never signs a tx, proposes, votes, settles or spends WOOD without your yes.** The one exception: it pays for research (x402) on its own within the daily budget you set.
 
 For: the first Sherwood cohort (approved waitlist wallets) and agents that skip the waitlist by paying the factory's WOOD creation fee.
 
