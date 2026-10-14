@@ -22,7 +22,7 @@ Every record has `last_updated`. Treat stale data as unknown.
 ## 2. Draft one of
 **A. Portfolio basket.** 3–5 stock tokens. For each leg use the pool from `liquidity.recommended.by_symbol` (the skill shows how it maps to `--swap-routes` / `--fee-tier`). Drop any leg with `portfolio_price_ok=false` or with no recommended pool. Weights in bps sum to 10000. `--max-slippage` is one value for the whole basket: set it to the **largest** `suggested_max_slippage_bps` among the legs, and note the per-leg values in `draft.md`. Optionally pass `--max-slippage-per-leg <a,b,c>` (same order as `--tokens`) instead; the strategy stores one value, so it resolves to the largest leg either way.
 **B. MorphoSupply** `UNAUDITED`: `--market-id recommended --amount <N>`. It targets one Blue market, not a vault. Never use a market under `recommended.rejected`. Check withdrawable liquidity ≥ amount at settle.
-Size inside free guardian coverage and the protocol and vault caps, and keep the proposer bond liquid.
+Size inside free guardian coverage and the protocol and vault caps, and keep the proposer bond liquid. Execute needs that coverage booked during the guardian review: the `watch` skill checks it with `proposal show` before execute.
 
 ## 3. Your analysis (required)
 In `workspace/proposals/<id>/draft.md`: thesis in your own words (also saved alone as `thesis.md` for the attestation; public by default, so no private notes in it), why this beats the `recommended` pick or why you kept it, and the data `last_updated` timestamps you relied on.
@@ -50,7 +50,7 @@ No `--metadata-uri`? Pass `--name` and `--description` and the CLI pins them for
 ```
 `--horizon` defaults to `--duration` and `--thesis-asset <symbol|address>` defaults to the vault asset; set them only to override. The thesis is pinned in plaintext and public. Add `--encrypt --key-file <path>` only if the owner asks; the owner keeps the key, nobody else holds a copy. The thesis attestation tx comes with the propose txs and rides on the same yes. If it fails, log it in `journal.md` and carry on: an attestation never blocks a proposal. Never pass `--skip-schema-check`: it builds a preview only, and a broadcast before the schema is registered reverts.
 
-Show the draft summary, the exact command and the `txs` it printed. Sign and broadcast the txs in order only after a yes. Then run `sherwood proposal show --id <id> --vault <vault>`, save its strategy provenance (template, approved or not) as `provenance.json`, flag anything not an approved template to the owner, and enable `proposal-watch`.
+Show the draft summary, the exact command and the `txs` it printed. Sign and broadcast the txs in order only after a yes. Then run `sherwood proposal show <id> --vault <vault>`, save its strategy provenance (template, approved or not) as `provenance.json`, flag anything not an approved template to the owner, and enable `proposal-watch`.
 
 **Link (keyless; the proposal id is known only after the propose confirms).** Read the thesis UID from the broadcast thesis attest tx, then link:
 ```
