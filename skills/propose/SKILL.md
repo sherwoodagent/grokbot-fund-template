@@ -33,6 +33,9 @@ In `workspace/proposals/<id>/draft.md`: thesis in your own words (also saved alo
 - Risks: weekend window, slippage at size, utilization or withdrawability, unaudited label, coverage and bond
 - Verdict: `GO` / `REWORK` / `PASS`. On REWORK, go back to step 2 once. On PASS, tell the owner and offer 2–3 alternatives.
 
+## 4b. Management plan (required)
+Follow the Sherwood skill's management-plan step (`references/management-plan.md`). Research this strategy type's own mechanics from its contract and docs (what can be adjusted mid-proposal, how risk limits and settle work, what happens at expiry) and the event risk in the window. Write `workspace/proposals/<id>/plan.md` with the triggers, risk levels (set inside any limit that can block settle, math shown), target settle window, check schedule (default: twice on weekdays, owner local time) and reminder times. `plan.md` stays private: never pin, attest or post it. Add to `thesis.md` (public) and `--description` only a short summary with no exact risk levels, trigger prices or settle times, e.g. "Management plan agreed: periodic rebalance checks, early-settle rules, target settle before <event>." Show the owner the plan with the draft; the owner's yes in step 5 covers the plan too. The plan never lets you transact on your own.
+
 ## 5. Owner yes
 The wallet is sign-only, so the proposal is built keyless with the root `--calldata-only` flag:
 ```
