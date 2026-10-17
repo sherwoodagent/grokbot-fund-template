@@ -19,7 +19,7 @@ This repo only adds **desk policy and flow**. Commands, flags, addresses and err
 ```
 BOT.md                       bot instructions (paste into the bot)
 skills/fund-setup/SKILL.md   zero → vault (waitlist or WOOD fee), caps seeding
-skills/propose/SKILL.md      /sources → draft → self-critique → your yes
+skills/propose/SKILL.md      /sources (optional) → official-token check → draft → self-critique → your yes
 skills/watch/SKILL.md        lifecycle until Settled, weekend window
 skills/research-byok/SKILL.md  research: Messari default (direct x402, MetaMask signs), Nansen fallback, optional Bankless / X
 routines.md                  desk-pulse + proposal-watch
@@ -34,15 +34,15 @@ The agent wallet is sign-only (MetaMask Agent Wallet first, Privy second): every
 4. Prepare the owner stake (`guardian prepare-owner-stake`), before the vault.
 5. `vault create` (agent id + waitlist sponsorship **or** WOOD creation fee) → `vault info` → `fund.json`.
 6. Register the creator wallet as the vault's agent (`vault add`).
-7. Caps: none set by this desk. The protocol and vault caps apply; the owner can set vault caps if they want tighter ones.
-8. `sherwood sources login` (two-step; the CLI refreshes the 1-hour token for 7 days, so re-login weekly). See [sources commands](https://docs.sherwood.sh/cli/sources-commands).
+7. Caps: none set by this desk. The protocol and vault caps apply; the owner can set vault caps if they want tighter ones. Leave the tier-2 cap at its default and ignore the `--bps 200` older CLIs print.
+8. Optional: `sherwood sources login` (cohort-only, experimental; without it the bot reads Chainlink feeds directly and skips the liquidity and Morpho picks. Two-step; the CLI refreshes the 1-hour token for 7 days, so re-login weekly). See [sources commands](https://docs.sherwood.sh/cli/sources-commands).
 9. Optional: join the cohort chat (`chat --join-cohort`). See [XMTP](https://docs.sherwood.sh/reference/integrations/xmtp).
 10. Starter proposal: a Portfolio stock basket (best pool per leg) or MorphoSupply (`--market-id recommended`), 30 days, shown to you before signing.
 11. Turn on the proposal-watch routine.
 
 Research budget: setup asks you for a daily USD research budget (`research.daily_budget_usd` in `fund.json`). The bot, routines included, pays Messari x402 calls on its own while today's spend stays within it (tracked in `workspace/research-spend.json`, reset daily); beyond it, it asks you per call.
 
-Before every proposal the bot checks protocol price-feed freshness; if a feed is stale it skips and tells you. After any killed proposal (expired included) it needs a fresh yes from you before proposing again.
+Before every proposal the bot checks protocol price-feed freshness; if a feed is stale it skips and tells you. It also refuses any basket token that isn't on Robinhood's official stock token list. After any killed proposal (expired included) it needs a fresh yes from you before proposing again.
 
 Attestations (on by default, opt out with `"attest": false` in `workspace/fund.json`): the bot attests each thesis and its proposal link, and each abort with a reason code, on Robinhood Chain EAS, for a public track record depositors can trust. Small gas each, paid by the agent wallet; a failed attestation never blocks a proposal. See [EAS](https://docs.sherwood.sh/reference/integrations/eas).
 

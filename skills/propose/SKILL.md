@@ -1,6 +1,6 @@
 ---
 name: propose
-description: Use to turn Sherwood /sources data plus your own analysis into a Portfolio or MorphoSupply proposal, self-critiqued and shown to the owner before signing.
+description: Use to turn Sherwood /sources data (optional; Chainlink fallback) plus your own analysis into a Portfolio or MorphoSupply proposal, self-critiqued and shown to the owner before signing.
 ---
 # Propose
 
@@ -8,9 +8,14 @@ Flags and builders: Sherwood skill → `Strategy Templates` (`portfolio`, `morph
 
 ## 0. Preflight (every proposal)
 - **Fresh yes after a kill:** if the last proposal was killed (vetoed, cancelled, rejected, expired, or aborted), don't draft until the owner gives a fresh yes in this chat to propose again.
-- **Feed freshness:** check the protocol price feeds for every asset the draft touches (`sherwood sources get prices` → `age_s`, `portfolio_price_ok`; `sources get calendar`; and any staleness warning the CLI or guardian prints). If any feed is stale, stop: don't propose, and tell the owner which feed is stale and since when. Routines do the same and message the owner.
+- **Feed freshness:** check the protocol price feeds for every asset the draft touches (`sherwood sources get prices` → `age_s`, `portfolio_price_ok`; `sources get calendar`; without `/sources`, the fallback in step 1; and any staleness warning the CLI or guardian prints). If any feed is stale, stop: don't propose, and tell the owner which feed is stale and since when. Routines do the same and message the owner.
+- **Official stock tokens (SHE-405):** check every Portfolio leg's token address against Robinhood's official stock token list before drafting. Symbols and names prove nothing: a fake NVDA was airdropped to ~20K wallets.
+  ```
+  curl -sf https://api.robinhood.com/rhj/assets | jq -r '.assets[] | select(.status=="ASSET_STATUS_ACTIVE") | .tokenSymbol as $s | .deployments[] | select(.chainId==4663) | "\($s) \(.contractAddress | ascii_downcase)"'
+  ```
+  A leg passes only if its address (lowercased) is on the list under the same symbol. Refuse any leg that is unknown, or whose symbol matches but address differs; tell the owner the address and why. If the list can't be fetched or comes back empty, don't propose this round and tell the owner. Pass the checked addresses to `--tokens`, not symbols.
 
-## 1. Pull data (logged in via `sherwood sources login`; on 401 re-login first)
+## 1. Pull data (`/sources` if logged in via `sherwood sources login`; on 401 re-login first)
 ```
 sherwood sources get calendar                       # session + weekend StalePrice window
 sherwood sources get prices                         # price_usd, age_s, portfolio_price_ok
@@ -19,9 +24,16 @@ sherwood sources get morpho --amount <N> | jq '.recommended'
 ```
 Every record has `last_updated`. Treat stale data as unknown.
 
+**No `/sources` (403, no login or no access; it is cohort-only and experimental):** read each feed's age directly. Feed addresses: skill → `ADDRESSES.md` / docs [Deployments](https://docs.sherwood.sh/reference/deployments#stock-tokens-and-chainlink-feeds) (`CHAINLINK_<SYM>_USD_FEED`, plus USDG/USD).
+```
+cast call <feed> "latestRoundData()(uint80,int256,uint256,uint256,uint80)" --rpc-url "${ROBINHOOD_RPC_URL:-https://rpc.mainnet.chain.robinhood.com}"
+# 4th value = updatedAt; age = chain time − updatedAt. Stale if > 26h (93600 s); the StalePrice window ends at the feed's next update
+```
+A stale USDG feed blocks every propose. Skip the liquidity and Morpho recommendations (step 2), and tell the owner this draft ran without `/sources`.
+
 ## 2. Draft one of
-**A. Portfolio basket.** 3–5 stock tokens. For each leg use the pool from `liquidity.recommended.by_symbol` (the skill shows how it maps to `--swap-routes` / `--fee-tier`). Drop any leg with `portfolio_price_ok=false` or with no recommended pool. Weights in bps sum to 10000. `--max-slippage` is one value for the whole basket: set it to the **largest** `suggested_max_slippage_bps` among the legs, and note the per-leg values in `draft.md`. Optionally pass `--max-slippage-per-leg <a,b,c>` (same order as `--tokens`) instead; the strategy stores one value, so it resolves to the largest leg either way.
-**B. MorphoSupply** `UNAUDITED`: `--market-id recommended --amount <N>`. It targets one Blue market, not a vault. Never use a market under `recommended.rejected`. Check withdrawable liquidity ≥ amount at settle.
+**A. Portfolio basket.** 3–5 stock tokens. For each leg use the pool from `liquidity.recommended.by_symbol` (the skill shows how it maps to `--swap-routes` / `--fee-tier`). Drop any leg with `portfolio_price_ok=false` or with no recommended pool. Without `/sources`: drop any leg whose feed is older than 26h, leave its `--swap-routes` slot empty (the CLI quotes single-hop fee tiers itself, a fallback), set `--max-slippage` yourself and say so in `draft.md`. Weights in bps sum to 10000. `--max-slippage` is one value for the whole basket: set it to the **largest** `suggested_max_slippage_bps` among the legs, and note the per-leg values in `draft.md`. Optionally pass `--max-slippage-per-leg <a,b,c>` (same order as `--tokens`) instead; the strategy stores one value, so it resolves to the largest leg either way.
+**B. MorphoSupply** `UNAUDITED`: `--market-id recommended --amount <N>`. It targets one Blue market, not a vault. Never use a market under `recommended.rejected`. Check withdrawable liquidity ≥ amount at settle. Without `/sources` there is no `recommended` market: skip MorphoSupply this round and tell the owner.
 Size inside free guardian coverage and the protocol and vault caps, and keep the proposer bond liquid. Execute needs that coverage booked during the guardian review: the `watch` skill checks it with `proposal show` before execute.
 
 ## 3. Your analysis (required)
