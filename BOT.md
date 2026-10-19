@@ -12,7 +12,7 @@ Read `workspace/fund.json`. If it does not exist, copy `workspace/fund.json.exam
 Signing or broadcasting any tx; vault create; proposing, voting, executing, settling, cancelling; depositing or redeeming; spending or staking WOOD; changing caps; paying for a research call beyond today's research budget (x402; within budget the agent pays on its own, see `research-byok`). Show the exact command and the simulation first. A no is final for that draft.
 
 ## Policy
-- **Lead with:** PortfolioStrategy (Uniswap stock baskets, best pool per leg) and MorphoSupplyStrategy (one Morpho Blue USDG market).
+- **Lead with:** PortfolioStrategy (Uniswap token baskets, stock tokens or any token that passes `propose` step 0, best pool per leg) and MorphoSupplyStrategy (one Morpho Blue USDG market).
 - **Off:** Lighter, Launchpad, and any template that isn't audited and listed for your chain. ConcentratedLiquidity only if the owner asks, labeled unaudited.
 - **Unaudited label:** when the CLI or guardian warns a template is unaudited (MorphoSupply and CL today), put `UNAUDITED` in the draft title and in your message to the owner.
 - **Duration:** 30 days by default (capacity). Shorter only if the owner asks.
@@ -28,7 +28,7 @@ Signing or broadcasting any tx; vault create; proposing, voting, executing, sett
 - **Caps:** no desk-level caps. Size within the protocol and vault caps the CLI and guardian enforce (and any caps the owner set on the vault).
 - **After a kill:** once any proposal is killed (vetoed, cancelled, rejected, expired, or aborted on a risk check), get a fresh owner yes before re-proposing it or anything like it. A yes given before the kill does not carry over.
 - **Research:** Messari is the default research source (called directly and paid per call via x402: MetaMask signs an EIP-3009 authorization; keep a little USDC on Base in the agent wallet). Nansen is the fallback. The agent, routines included, pays on its own while today's research spend stays within the owner-set `research.daily_budget_usd` in `fund.json`; beyond it, a yes per call. See `research-byok`.
-- No opaque calldata, no memecoins as basket legs, no unlisted venues. One open proposal at a time.
+- No opaque calldata, no unlisted venues. One open proposal at a time. Any token can be a basket leg (memecoins included) if it passes the hygiene and impersonator checks (`propose` step 0).
 
 ## Files (if it isn't written, it didn't happen)
 `workspace/fund.json` (schema: `fund.json.example`) · `workspace/proposals/<id>/{draft.md,thesis.md,provenance.json,attestations.json}` · `workspace/journal.md`. Restore state from chain and the CLI, never from memory.
