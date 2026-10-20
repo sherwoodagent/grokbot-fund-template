@@ -34,9 +34,8 @@ Every record has `last_updated`. Treat stale data as unknown.
 
 **No `/sources` (403, no login or no access; it is cohort-only and experimental):** read each feed's age directly. Feed addresses: skill → `ADDRESSES.md` / docs [Deployments](https://docs.sherwood.sh/reference/deployments#stock-tokens-and-chainlink-feeds) (`CHAINLINK_<SYM>_USD_FEED`, plus USDG/USD).
 ```
-cast call <feed> "latestRoundData()(uint80,int256,uint256,uint256,uint80)" --rpc-url "${ROBINHOOD_RPC_URL:-https://rpc.mainnet.chain.robinhood.com}"
-# 4th value = updatedAt; age = chain time − updatedAt. Stale if > 26h (93600 s); the StalePrice window ends at the feed's next update
-# without Foundry: eth_call latestRoundData() (selector 0xfeaf968c); updatedAt is the 4th 32-byte word
+# eth_call latestRoundData() (selector 0xfeaf968c); updatedAt is the 4th 32-byte word
+# age = chain time − updatedAt. Stale if > 26h (93600 s); the StalePrice window ends at the feed's next update
 curl -s "${ROBINHOOD_RPC_URL:-https://rpc.mainnet.chain.robinhood.com}" -H 'content-type: application/json' -d '{"jsonrpc":"2.0","id":1,"method":"eth_call","params":[{"to":"<feed>","data":"0xfeaf968c"},"latest"]}' | jq -r '.result[194:258]'   # hex updatedAt
 ```
 A stale USDG feed blocks every propose. Skip the liquidity and Morpho recommendations (step 2), and tell the owner this draft ran without `/sources`.
@@ -78,8 +77,6 @@ No `--metadata-uri`? Pass `--name` and `--description` and the CLI pins them for
 **Clone tx: skip it when the clone already exists.** For a strategy with a clone, `txs` include `cloneAndInitDeterministic` on the StrategyFactory, and the output's `clone` field is the predicted address (pinned by factory, template, vault and salt). After a cancel and repropose with the same inputs, the clone is already deployed, yet the CLI still emits that tx and it reverts. Before broadcasting, check the clone's code:
 
 ```bash
-cast code <clone> --rpc-url "${ROBINHOOD_RPC_URL:-https://rpc.mainnet.chain.robinhood.com}"
-# or, without Foundry:
 curl -s "${ROBINHOOD_RPC_URL:-https://rpc.mainnet.chain.robinhood.com}" -H 'content-type: application/json' -d '{"jsonrpc":"2.0","id":1,"method":"eth_getCode","params":["<clone>","latest"]}' | jq -r .result
 ```
 
