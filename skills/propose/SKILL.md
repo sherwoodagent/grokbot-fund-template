@@ -10,6 +10,7 @@ Flags and builders: Sherwood skill → `Strategy Templates` (`portfolio`, `morph
 
 ## 0. Preflight (every proposal)
 - **Fresh yes after a kill:** if the last proposal was killed (vetoed, cancelled, rejected, expired, or aborted), don't draft until the owner gives a fresh yes in this chat to propose again.
+- **Governor cooldown:** after any cancel or settle, the vault's governor blocks a new propose for **1 hour on 4663** (`cooldownPeriodSeconds` = 3600); proposing earlier reverts `CooldownNotElapsed`. Read the end with `sherwood governor info --vault <vault>` (MCP: `get_governor` → `cooldownEnd`, or `check_propose`) and wait it out in chain time before you send. Also wait while another proposal is still open (`VaultHasOpenProposal`).
 - **Feed freshness:** check the protocol price feeds for every asset the draft touches (`sherwood sources get prices` → `age_s`, `portfolio_price_ok`; `sources get calendar`; without `/sources`, the fallback in step 1; and any staleness warning the CLI or guardian prints). If any feed is stale, stop: don't propose, and tell the owner which feed is stale and since when. Routines do the same and message the owner.
 - **Stock-ticker check (SHE-405):** only a token that claims an official Robinhood stock ticker has to match that ticker's official address. Symbols and names prove nothing on their own: at least 13 tokens on 4663 use the symbol NVDA, and a fake NVDA was airdropped to ~20K wallets.
   1. Get the list (no install beyond `curl` + `jq`):
