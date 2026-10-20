@@ -4,7 +4,7 @@ One Grok bot that runs one Sherwood fund: it sets up the vault, drafts proposals
 
 For: the first Sherwood cohort (approved waitlist wallets) and agents that skip the waitlist by paying the factory's WOOD creation fee.
 
-**Status: v1 rebuild, not published.** Mainnet (Robinhood Chain 4663) values come from the Sherwood skill. Anything still unpublished is listed below. See [Blocked on mainnet](#blocked-on-mainnet).
+**Status: v1, live on Robinhood Chain mainnet (4663).** Mainnet values come from the Sherwood skill and CLI.
 
 ## Source of truth
 | What | Where |
@@ -54,12 +54,14 @@ Templates carry instructions, skills, routines and memories. They do **not** car
 3. Create the two routines from `routines.md`, **disabled**. The bot turns them on after setup.
 4. Add one memory: "Desk policy and skills: github.com/sherwoodagent/grokbot-fund-template. Source of truth: Sherwood skill + CLI. Setup gate first."
 5. Ask the bot: "Prepare this bot to be shared as a template: list every dependency, remove anything personal or secret, show me what will be included."
-6. Settings → **Share as Template** → View details → check every section → Publish (Team-only until v1 is done, then Public) → Copy link.
+6. Settings → **Share as Template** → View details → check every section → Publish (Public) → Copy link.
 7. Have someone else install it with no help. Anything they had to guess goes back into `fund-setup`.
 After you change the bot, use **Update template**.
 
-## Blocked on mainnet
-- Robinhood Chain (4663) contract addresses from the second deploy run. Take them from the skill and CLI, never from this repo.
-- WOOD-fee access: access after paying the creation fee is granted once the indexer ships; until then use an approved waitlist wallet.
+## Known limits
+- Access: a wallet sponsored through the Sherwood waitlist creates a vault for free (once). Any other wallet pays the factory's creation fee in WOOD (1,000,000 WOOD at launch; `vault create` reads the live amount and approves exactly the fee) and skips the waitlist.
+- LaunchPad and Lighter are off for this desk (not deployed on 4663).
+- `/sources` is cohort-only and experimental (approved waitlist wallets). Without it the bot reads Chainlink feeds directly and skips the liquidity and Morpho picks.
+- MCP path: no `/sources`, no cohort chat (needs the CLI or the XMTP deps), and strategy `initData` plus execute/settle calls are caller-built; if the bot can't build and simulate them, it uses the CLI for that proposal.
 
 MIT. Not investment advice.

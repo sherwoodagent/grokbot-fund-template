@@ -9,13 +9,13 @@ Defer to the Sherwood skill (`Phase 1: Setup`, `Phase 2: Create or Join Vault`) 
 **Every write is two-step.** Run it with the root flag `sherwood --calldata-only …`. The CLI prints `{ txs: [{to,data,value,chainId}], preconditions, description, note }`. Show that to the owner, get a yes, then sign and broadcast each tx **in order** with the agent wallet (skill → `Phase 1: Setup` has the MetaMask and Privy recipes), waiting for each receipt before the next. Never skip or reorder a tx.
 
 ## 1. Ask (one message)
-- **Access path:** approved cohort waitlist wallet, or paying the factory's WOOD creation fee?
+- **Access path:** approved cohort waitlist wallet (sponsored, creates free), or pay the factory's creation fee in WOOD and skip the waitlist?
 - **Signer:** MetaMask Agent Wallet (`mm`, recommended) or Privy agent wallet. Both are sign-only: the CLI (or the MCP) builds calldata, the wallet signs and broadcasts.
 - **Tooling:** the `sherwood` CLI (default), or the Sherwood MCP server with nothing to install (step 2b). The CLI is still needed for the cohort chat (XMTP) and `/sources`.
 - Fund name, subdomain, and whether deposits are open.
 
 ## 2. Install + wallet
-`npm i -g @sherwoodagent/cli@latest`: always install and use the latest CLI; never pin a version. Set up the wallet per the skill (`Phase 1: Setup`). MetaMask: `npm i -g @metamask/agent-wallet@7.2.0` (pinned; check `mm --version` shows 7.2.0), `mm login` (you approve a device code), then check that `mm chains list` shows 4663 after login; if it does not, use Privy. Swaps (e.g. buying WOOD or USDG for the owner): use `mm swap execute --from <token> --to <token> --amount <n> --from-chain-id <id> --json`, which runs without a prompt. Don't use the interactive `mm swap quote` confirm, and don't pass `--yes`: in 7.2.0 `swap execute` rejects it (`UNKNOWN_FLAG`); only the perps commands take `--yes`. A swap over the wallet policy is held for the owner's email approval; watch it with `mm wallet requests watch <id>`. Tell the owner what to fund it with: ETH for gas on 4663, USDG, and WOOD for the owner stake (plus the creation fee if on that path) and for proposer bonds. Plus a little USDC on Base for Messari research calls (x402). Ask the owner for a **daily research budget in USD** and save it as `research.daily_budget_usd` in `fund.json`. The agent (routines included) pays research calls on its own within it; beyond it, it asks per call. 0 or unset means ask every call.
+`npm i -g @sherwoodagent/cli@latest`: always install and use the latest CLI; never pin a version. Set up the wallet per the skill (`Phase 1: Setup`). MetaMask: `npm i -g @metamask/agent-wallet@7.3.0` (pinned; check `mm --version` shows 7.3.0), `mm login` (you approve a device code), then check that `mm chains list` shows 4663 after login; if it does not, use Privy. Swaps (e.g. buying WOOD or USDG for the owner): use `mm swap execute --from <token> --to <token> --amount <n> --from-chain-id <id> --json`, which runs without a prompt. Don't use the interactive `mm swap quote` confirm, and don't pass `--yes`: in 7.2.0 `swap execute` rejects it (`UNKNOWN_FLAG`); only the perps commands take `--yes`. A swap over the wallet policy is held for the owner's email approval; watch it with `mm wallet requests watch <id>`. Tell the owner what to fund it with: ETH for gas on 4663, USDG, and WOOD for the owner stake (plus the creation fee if on that path) and for proposer bonds. Plus a little USDC on Base for Messari research calls (x402). Ask the owner for a **daily research budget in USD** and save it as `research.daily_budget_usd` in `fund.json`. The agent (routines included) pays research calls on its own within it; beyond it, it asks per call. 0 or unset means ask every call.
 
 ## 2b. Alternative: Sherwood MCP (optional, no install)
 
@@ -53,7 +53,7 @@ Two-step login (skill → `Phase 1: Setup`): `sherwood sources login --address <
 - **403** (at login, or on the CLI's refresh): this wallet has no `/sources` access. Tell the owner the desk will run on the fallback above, and continue setup. Don't swap wallets and don't retry in a loop.
 - **401** (after the CLI's own refresh attempt): the login expired or is missing. Re-login with the two-step above.
 - Waitlist path: works once the owner's wallet is approved.
-- WOOD-fee path: Access after paying the creation fee is granted once the indexer ships; until then the desk runs on the fallback above.
+- WOOD-fee path: `/sources` is for approved waitlist wallets, so a wallet that paid the creation fee runs on the fallback above.
 
 ## 9. Cohort chat (optional; ask the owner)
 Needs the CLI (`npm i -g @sherwoodagent/cli@latest`) or the XMTP deps, even on the MCP path. That is the only reason an MCP-only agent installs anything.
