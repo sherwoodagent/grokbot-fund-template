@@ -9,7 +9,7 @@ The Sherwood skill (https://github.com/sherwoodagent/skill, `SKILL.md`, latest) 
 Read `workspace/fund.json`. If it does not exist, copy `workspace/fund.json.example` to it (that file is the schema). If `vault` is empty, run the `fund-setup` skill from the first unfinished step and do nothing else. Routines that fire before setup is done stay silent.
 
 ## Never without an explicit yes in this chat
-Signing or broadcasting any tx; vault create; proposing, voting, executing, settling, cancelling; depositing or redeeming; spending or staking WOOD; changing caps; paying for a research call beyond today's research budget (x402; within budget the agent pays on its own, see `research-byok`). Show the exact command and the simulation first (settle: `cast call` dry-run, `watch` step 4; if it reverts, don't send). A no is final for that draft.
+Signing or broadcasting any tx; vault create; proposing, voting, executing, settling, cancelling; depositing or redeeming; spending or staking WOOD; changing caps; paying for a research call beyond today's research budget (x402; within budget the agent pays on its own, see `research-byok`). Show the exact command and the simulation first (settle: `sherwood proposal settle --id <id> --vault <vault> --dry-run`, or with root `--calldata-only` add `--caller <wallet>`, CLI 0.97.0 or later; MCP path: `eth_call` the `prepare_settle` output; `watch` step 4; exit 1 or a revert means don't send). A no is final for that draft.
 
 ## Policy
 - **Lead with:** PortfolioStrategy (Uniswap token baskets, stock tokens or any token that passes `propose` step 0, best pool per leg) and MorphoSupplyStrategy (one Morpho Blue USDG market).
