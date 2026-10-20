@@ -3,3 +3,4 @@ workspace/fund.json
 *.pem
 .DS_Store
 workspace/research-spend.json
+workspace/official-stock-tokens.json

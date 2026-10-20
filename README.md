@@ -9,7 +9,8 @@ For: the first Sherwood cohort (approved waitlist wallets) and agents that skip 
 ## Source of truth
 | What | Where |
 |---|---|
-| CLI | `npm i -g @sherwoodagent/cli@latest` |
+| CLI | `npm i -g @sherwoodagent/cli@latest` (always latest, never pinned) |
+| MCP (optional, alternative to the CLI) | `https://mcp.sherwood.sh/mcp`, no install, [docs](https://docs.sherwood.sh/api/mcp) |
 | Skill | https://github.com/sherwoodagent/skill (`SKILL.md`) |
 | Docs | https://docs.sherwood.sh |
 
@@ -19,7 +20,7 @@ This repo only adds **desk policy and flow**. Commands, flags, addresses and err
 ```
 BOT.md                       bot instructions (paste into the bot)
 skills/fund-setup/SKILL.md   zero → vault (waitlist or WOOD fee), caps seeding
-skills/propose/SKILL.md      /sources → draft → self-critique → your yes
+skills/propose/SKILL.md      /sources (optional) → stock-ticker check → draft → self-critique → bond + 5% → your yes
 skills/watch/SKILL.md        lifecycle until Settled, weekend window
 skills/research-byok/SKILL.md  research: Messari default (direct x402, MetaMask signs), Nansen fallback, optional Bankless / X
 routines.md                  desk-pulse + proposal-watch
@@ -29,20 +30,20 @@ workspace/                   empty schemas the bot fills in (fund.json.example)
 ## Steps to a first proposal
 The agent wallet is sign-only (MetaMask Agent Wallet first, Privy second): every write is built with `sherwood --calldata-only …`, shown to you, then signed and broadcast in order after your yes.
 1. Add the template → the bot asks: waitlist or WOOD fee? MetaMask or Privy?
-2. Install the latest CLI and set up the agent wallet on Robinhood Chain (4663); fund it with ETH for gas, USDG and WOOD.
+2. Install the latest CLI **or** connect the Sherwood MCP server instead (`https://mcp.sherwood.sh/mcp`, no npm/CLI install; `fund-setup` step 2b). Set up the agent wallet on Robinhood Chain (4663); fund it with ETH for gas, USDG and WOOD.
 3. Mint the ERC-8004 identity.
 4. Prepare the owner stake (`guardian prepare-owner-stake`), before the vault.
 5. `vault create` (agent id + waitlist sponsorship **or** WOOD creation fee) → `vault info` → `fund.json`.
 6. Register the creator wallet as the vault's agent (`vault add`).
-7. Caps: none set by this desk. The protocol and vault caps apply; the owner can set vault caps if they want tighter ones.
-8. `sherwood sources login` (two-step; the CLI refreshes the 1-hour token for 7 days, so re-login weekly). See [sources commands](https://docs.sherwood.sh/cli/sources-commands).
-9. Optional: join the cohort chat (`chat --join-cohort`). See [XMTP](https://docs.sherwood.sh/reference/integrations/xmtp).
+7. Caps: none set by this desk. The protocol and vault caps apply; the owner can set vault caps if they want tighter ones. Leave the tier-2 cap at its default and ignore the `--bps 200` older CLIs print.
+8. Optional: `sherwood sources login` (cohort-only, experimental; without it the bot reads Chainlink feeds directly and skips the liquidity and Morpho picks. Two-step; the CLI refreshes the 1-hour token for 7 days, so re-login weekly). See [sources commands](https://docs.sherwood.sh/cli/sources-commands).
+9. Optional: join the cohort chat (`chat --join-cohort`; needs the CLI or the XMTP deps, even on the MCP path). See [XMTP](https://docs.sherwood.sh/reference/integrations/xmtp).
 10. Starter proposal: a Portfolio stock basket (best pool per leg) or MorphoSupply (`--market-id recommended`), 30 days, shown to you before signing.
 11. Turn on the proposal-watch routine.
 
 Research budget: setup asks you for a daily USD research budget (`research.daily_budget_usd` in `fund.json`). The bot, routines included, pays Messari x402 calls on its own while today's spend stays within it (tracked in `workspace/research-spend.json`, reset daily); beyond it, it asks you per call.
 
-Before every proposal the bot checks protocol price-feed freshness; if a feed is stale it skips and tells you. After any killed proposal (expired included) it needs a fresh yes from you before proposing again.
+Before every proposal the bot checks protocol price-feed freshness; if a feed is stale it skips and tells you. It also refuses any token that claims an official Robinhood stock ticker but isn't at that ticker's official address (an impersonator). Other tokens aren't blocked by this; if Robinhood's list is down it uses a local cache. It approves the WOOD proposer bond at the quote + 5% (capped) so a small price move doesn't revert the propose. After a cancel or settle it waits the governor's 1-hour cooldown before proposing again, and it dry-runs every settle (`sherwood proposal settle --dry-run`, needs CLI 0.97.0 or later; a plain `eth_call` on the MCP path) before signing; if it would revert, it doesn't send. After any killed proposal (expired included) it needs a fresh yes from you before proposing again.
 
 Attestations (on by default, opt out with `"attest": false` in `workspace/fund.json`): the bot attests each thesis and its proposal link, and each abort with a reason code, on Robinhood Chain EAS, for a public track record depositors can trust. Small gas each, paid by the agent wallet; a failed attestation never blocks a proposal. See [EAS](https://docs.sherwood.sh/reference/integrations/eas).
 
