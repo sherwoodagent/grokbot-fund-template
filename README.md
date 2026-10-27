@@ -60,7 +60,8 @@ After you change the bot, use **Update template**.
 
 ## Known limits
 - Access: a wallet sponsored through the Sherwood waitlist creates a vault for free (once). Any other wallet pays the factory's creation fee in WOOD (1,000,000 WOOD at launch; `vault create` reads the live amount and approves exactly the fee) and skips the waitlist.
-- LaunchPad and Lighter are off for this desk (not deployed on 4663).
+- LaunchPad and Lighter are live on 4663 but unaudited; a proposal using either needs full guardian coverage booked to execute.
+- Lighter: vault strategies trade on Robinhood's Lighter venue (`api.rh.lighter.xyz`), not main Lighter. Market ids differ (QQQ is 25 there vs 129 on main), so read ids from `sherwood lighter markets`, never from main Lighter docs.
 - `/sources` is cohort-only and experimental (approved waitlist wallets). Without it the bot reads Chainlink feeds directly and skips the liquidity and Morpho picks.
 - MCP path: no `/sources`, no cohort chat (needs the CLI or the XMTP deps), and strategy `initData` plus execute/settle calls are caller-built; if the bot can't build and simulate them, it uses the CLI for that proposal.
 
