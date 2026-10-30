@@ -23,7 +23,7 @@ Flags and builders: Sherwood skill → `Strategy Templates` (`portfolio`, `morph
   4. **Claims no official ticker → not blocked by this check.** Run the normal hygiene checks: the address has contract code, `symbol()` / `decimals()` read, and a quote exists on a listed venue. Record thin liquidity, a missing oracle, contract age or admin powers as risks in `draft.md`; none of them blocks on its own. The CLI, the guardian and the onchain pairings still decide what a strategy accepts: if they refuse a token, follow them.
   Pass the checked addresses to `--tokens`, not symbols.
 
-## 1. Pull data (`/sources` if logged in via `sherwood sources login`; on 401 re-login first)
+## 1. Pull data (`/sources`, no login needed on CLI 0.100.2+)
 ```
 sherwood sources get calendar                       # session + weekend StalePrice window
 sherwood sources get prices                         # price_usd, age_s, portfolio_price_ok
@@ -32,7 +32,7 @@ sherwood sources get morpho --amount <N> | jq '.recommended'
 ```
 Every record has `last_updated`. Treat stale data as unknown.
 
-**No `/sources` (403, no login or no access; it is cohort-only and experimental):** read each feed's age directly. Feed addresses: skill → `ADDRESSES.md` / docs [Deployments](https://docs.sherwood.sh/reference/deployments#stock-tokens-and-chainlink-feeds) (`CHAINLINK_<SYM>_USD_FEED`, plus USDG/USD).
+**No `/sources` (feed error or outage):** read each feed's age directly. Feed addresses: skill → `ADDRESSES.md` / docs [Deployments](https://docs.sherwood.sh/reference/deployments#stock-tokens-and-chainlink-feeds) (`CHAINLINK_<SYM>_USD_FEED`, plus USDG/USD).
 ```
 # eth_call latestRoundData() (selector 0xfeaf968c); updatedAt is the 4th 32-byte word
 # age = chain time − updatedAt. Stale if > 26h (93600 s); the StalePrice window ends at the feed's next update

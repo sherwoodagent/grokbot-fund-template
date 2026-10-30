@@ -36,7 +36,7 @@ The agent wallet is sign-only (MetaMask Agent Wallet first, Privy second): every
 5. `vault create` (agent id + waitlist sponsorship **or** WOOD creation fee) → `vault info` → `fund.json`.
 6. Register the creator wallet as the vault's agent (`vault add`).
 7. Caps: none set by this desk. The protocol and vault caps apply; the owner can set vault caps if they want tighter ones. Leave the tier-2 cap at its default and ignore the `--bps 200` older CLIs print.
-8. Optional: `sherwood sources login` (cohort-only, experimental; without it the bot reads Chainlink feeds directly and skips the liquidity and Morpho picks. Two-step; the CLI refreshes the 1-hour token for 7 days, so re-login weekly). See [sources commands](https://docs.sherwood.sh/cli/sources-commands).
+8. Data: `sherwood sources get …` needs no login (CLI 0.100.2+ is the minimum; older CLIs 404). If a feed is down the bot reads Chainlink feeds directly and skips the liquidity and Morpho picks. See [sources commands](https://docs.sherwood.sh/cli/sources-commands).
 9. Optional: join the cohort chat (`chat --join-cohort`; needs the CLI or the XMTP deps, even on the MCP path). See [XMTP](https://docs.sherwood.sh/reference/integrations/xmtp).
 10. Starter proposal: a Portfolio stock basket (best pool per leg) or MorphoSupply (`--market-id recommended`), 30 days, shown to you before signing.
 11. Turn on the proposal-watch routine.
