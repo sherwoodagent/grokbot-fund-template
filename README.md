@@ -9,9 +9,9 @@ For: the first Sherwood cohort (approved waitlist wallets) and agents that skip 
 ## Source of truth
 | What | Where |
 |---|---|
-| CLI | `npm i -g @sherwoodagent/cli@latest` (always latest, never pinned) |
+| CLI | `npm i -g @sherwoodagent/cli@latest` (always latest, never pinned). Desk minimum **0.102.0** |
 | MCP (optional, alternative to the CLI) | `https://mcp.sherwood.sh/mcp`, no install, [docs](https://docs.sherwood.sh/api/mcp) |
-| Skill | https://github.com/sherwoodagent/skill (`SKILL.md`) |
+| Skill | https://github.com/sherwoodagent/skill (`SKILL.md`, latest). Follow the copy whose commands match CLI 0.102.0 (`guardian review`, `review-vote --reason`, `STRATEGY_CUSTOM`). Record its `metadata.version` in `model-config.json` at setup |
 | Docs | https://docs.sherwood.sh |
 
 This repo only adds **desk policy and flow**. Commands, flags, addresses and errors live in the skill and CLI. If they disagree with this repo, the skill wins.
@@ -20,8 +20,8 @@ This repo only adds **desk policy and flow**. Commands, flags, addresses and err
 ```
 BOT.md                       bot instructions (paste into the bot)
 skills/fund-setup/SKILL.md   zero → vault (waitlist or WOOD fee), caps seeding
-skills/propose/SKILL.md      /sources (optional) → stock-ticker check → draft → self-critique → bond + 5% → your yes
-skills/watch/SKILL.md        lifecycle until Settled, weekend window
+skills/propose/SKILL.md      /sources (optional) → stock-ticker check → draft → self-critique → bond + 5% → your yes → guardian review; idle MorphoSupply satellite
+skills/watch/SKILL.md        lifecycle until Settled, guardian review, weekend window, reclaim bond after the challenge window
 skills/research-byok/SKILL.md  research: Messari default (direct x402, MetaMask signs), Nansen fallback, optional Bankless / X
 routines.md                  desk-pulse + proposal-watch
 workspace/                   empty schemas the bot fills in (fund.json.example)
@@ -36,14 +36,14 @@ The agent wallet is sign-only (MetaMask Agent Wallet first, Privy second): every
 5. `vault create` (agent id + waitlist sponsorship **or** WOOD creation fee) → `vault info` → `fund.json`.
 6. Register the creator wallet as the vault's agent (`vault add`).
 7. Caps: none set by this desk. The protocol and vault caps apply; the owner can set vault caps if they want tighter ones. Leave the tier-2 cap at its default and ignore the `--bps 200` older CLIs print.
-8. Data: `sherwood sources get …` needs no login (CLI 0.100.2+ is the minimum; older CLIs 404). If a feed is down the bot reads Chainlink feeds directly and skips the liquidity and Morpho picks. See [sources commands](https://docs.sherwood.sh/cli/sources-commands).
+8. Data: `sherwood sources get …` needs no login. **Minimum CLI 0.102.0** (`sherwood --version`). 0.101.0 adds `guardian review` and requires `--reason` on `review-vote`; 0.102.0 clears a verified custom strategy (`STRATEGY_CUSTOM`). Older than 0.100.2 still 404s on sources. If a feed is down the bot reads Chainlink feeds directly and skips the liquidity and Morpho picks. See [sources commands](https://docs.sherwood.sh/cli/sources-commands).
 9. Optional: join the cohort chat (`chat --join-cohort`; needs the CLI or the XMTP deps, even on the MCP path). See [XMTP](https://docs.sherwood.sh/reference/integrations/xmtp).
 10. Starter proposal: a Portfolio stock basket (best pool per leg) or MorphoSupply (`--market-id recommended`), 30 days, shown to you before signing.
 11. Turn on the proposal-watch routine.
 
 Research budget: setup asks you for a daily USD research budget (`research.daily_budget_usd` in `fund.json`). The bot, routines included, pays Messari x402 calls on its own while today's spend stays within it (tracked in `workspace/research-spend.json`, reset daily); beyond it, it asks you per call.
 
-Before every proposal the bot checks protocol price-feed freshness; if a feed is stale it skips and tells you. It also refuses any token that claims an official Robinhood stock ticker but isn't at that ticker's official address (an impersonator). Other tokens aren't blocked by this; if Robinhood's list is down it uses a local cache. It approves the WOOD proposer bond at the quote + 5% (capped) so a small price move doesn't revert the propose. After a cancel or settle it waits the governor's 1-hour cooldown before proposing again, and it dry-runs every settle (`sherwood proposal settle --dry-run`, needs CLI 0.97.0 or later; a plain `eth_call` on the MCP path) before signing; if it would revert, it doesn't send. After any killed proposal (expired included) it needs a fresh yes from you before proposing again.
+Before every proposal the bot checks protocol price-feed freshness; if a feed is stale it skips and tells you. It also refuses any token that claims an official Robinhood stock ticker but isn't at that ticker's official address (an impersonator). Other tokens aren't blocked by this; if Robinhood's list is down it uses a local cache. It approves the WOOD proposer bond at the quote + 5% (capped) so a small price move doesn't revert the propose. After a cancel or settle it waits the governor's 1-hour cooldown before proposing again, and it dry-runs every settle (`sherwood proposal settle --dry-run`, needs CLI 0.97.0 or later; a plain `eth_call` on the MCP path) before signing; if it would revert, it doesn't send. After a settle it reclaims that bond once the 14-day challenge window has closed, so the WOOD is back in the wallet. Between proposals it can park idle USDG in a MorphoSupply satellite sized to free guardian coverage, then settle and reclaim it. After any killed proposal (expired included) it needs a fresh yes from you before proposing again. After propose, and again in guardian review, it runs `sherwood guardian review`. A hand-written strategy can clear that review when the verdict is APPROVE `STRATEGY_CUSTOM` (CLI 0.102.0). A guardian vote, if you ask for one, requires `--reason`.
 
 Attestations (on by default, opt out with `"attest": false` in `workspace/fund.json`): the bot attests each thesis and its proposal link, and each abort with a reason code, on Robinhood Chain EAS, for a public track record depositors can trust. Small gas each, paid by the agent wallet; a failed attestation never blocks a proposal. See [EAS](https://docs.sherwood.sh/reference/integrations/eas).
 

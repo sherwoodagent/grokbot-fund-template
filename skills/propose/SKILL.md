@@ -1,12 +1,12 @@
 ---
 name: propose
-description: Use to turn Sherwood /sources data (optional; Chainlink fallback) plus your own analysis into a Portfolio or MorphoSupply proposal, self-critiqued and shown to the owner before signing.
+description: Use to turn Sherwood /sources data (optional; Chainlink fallback) plus your own analysis into a Portfolio or MorphoSupply proposal (or, if the owner asks, a custom strategy that guardian review clears), self-critiqued and shown to the owner before signing. Also the idle-vault MorphoSupply satellite.
 ---
 # Propose
 
 Flags and builders: Sherwood skill → `Strategy Templates` (`portfolio`, `morpho-supply`); bond and coverage: `Tiers, coverage, and the proposer bond`. Run `sherwood strategy list` first. If a template isn't deployed on the chain, don't draft it.
 
-**On the MCP path** (`fund-setup` → `2b`), use the matching tools instead of `sherwood` commands. Check with `check_propose`, quote with `quote_proposer_bond`, and build with `prepare_propose` (its bond approve is already quote + 5%, bounded, and skipped when the allowance covers it). Pin with `pin_metadata` and attest with `prepare_attest`. There is no `/sources` on the MCP, so always use the no-`/sources` fallback in step 1. `get_feed_status` covers the WOOD/USD and vault-asset feeds. Read stock feeds with `curl`, as in step 1. `prepare_strategy_deploy` needs template `initData` you encode yourself, and you also supply `executeCalls` / `settleCalls`. If you can't build and simulate those with confidence (`simulate_batch`; a full governor batch can revert `0x8485a0a6`, a known server issue), use the CLI for this proposal. Every rule in this skill still applies.
+**On the MCP path** (`fund-setup` → `2b`), use the matching tools instead of `sherwood` commands. Check with `check_propose`, quote with `quote_proposer_bond`, and build with `prepare_propose` (its bond approve is already quote + 5%, bounded, and skipped when the allowance covers it). Pin with `pin_metadata` and attest with `prepare_attest`. There is no `/sources` on the MCP, so always use the no-`/sources` fallback in step 1. `get_feed_status` covers the WOOD/USD and vault-asset feeds. Read stock feeds with `curl`, as in step 1. `prepare_strategy_deploy` needs template `initData` you encode yourself, and you also supply `executeCalls` / `settleCalls`. If you can't build and simulate those with confidence (`simulate_batch`; a full governor batch can revert `0x8485a0a6`, a known server issue), use the CLI for this proposal. `sherwood guardian review` has no MCP tool: run it from the CLI (read-only). `prepare_review_vote` builds the guardian vote and takes no reason, so a guardian vote goes through the CLI `review-vote --reason` (`watch` step 2b). Every rule in this skill still applies.
 
 ## 0. Preflight (every proposal)
 - **Fresh yes after a kill:** if the last proposal was killed (vetoed, cancelled, rejected, expired, or aborted), don't draft until the owner gives a fresh yes in this chat to propose again.
@@ -23,7 +23,7 @@ Flags and builders: Sherwood skill → `Strategy Templates` (`portfolio`, `morph
   4. **Claims no official ticker → not blocked by this check.** Run the normal hygiene checks: the address has contract code, `symbol()` / `decimals()` read, and a quote exists on a listed venue. Record thin liquidity, a missing oracle, contract age or admin powers as risks in `draft.md`; none of them blocks on its own. The CLI, the guardian and the onchain pairings still decide what a strategy accepts: if they refuse a token, follow them.
   Pass the checked addresses to `--tokens`, not symbols.
 
-## 1. Pull data (`/sources`, no login needed on CLI 0.100.2+)
+## 1. Pull data (`/sources`, no login needed; desk minimum CLI 0.102.0)
 ```
 sherwood sources get calendar                       # session + weekend StalePrice window
 sherwood sources get prices                         # price_usd, age_s, portfolio_price_ok
@@ -92,6 +92,25 @@ If it returns code (anything but `0x`), skip the clone tx and send the remaining
 
 Show the draft summary, the exact command and the `txs` it printed. Sign and broadcast the txs in order (minus a clone tx skipped above) only after a yes. Then run `sherwood proposal show <id> --vault <vault>`, save its strategy provenance (template, approved or not) as `provenance.json`, flag anything not an approved template to the owner, and enable `proposal-watch`.
 
+**Guardian review (read-only).** As soon as the proposal id exists, run the check guardians run. CLI 0.101.0 or later; the hand-written rule below needs 0.102.0:
+
+```
+sherwood guardian review --vault <vault> --id <id>     # --json for the verdict, codes and every contract reached
+```
+
+It walks the strategy, each call target, `approve` spenders, transfer recipients, a template clone's parameters and what the execute simulation moved value through, and behind each contract its proxy, clone target and embedded addresses (depth 5, 64 contracts). Address-book contracts are trusted and not descended into. A critical code is a Block, warnings alone an abstain, a clean walk an Approve. Tell the owner the verdict line (`VERDICT: APPROVE|ABSTAIN|BLOCK <CODE>`). A Block means offer cancel (`watch` step 7b) with the code, and wait for a yes. Set `SHERWOOD_EXPLORER_API_KEY` (a Blockscout API key) before you rely on it. Without that key the public explorer refuses the script, and every contract outside the address book reads `EXPLORER_UNAVAILABLE` (a Block).
+
+**Hand-written strategies (CLI 0.102.0).** A strategy the factory registered but did not clone from a template can clear. The verdict is **APPROVE `STRATEGY_CUSTOM`** when all of these hold: it is registered, its source is verified on the explorer, the walk finds no critical, the settle calls call it, and `vault()` returns this vault. The strategy's own `UNKNOWN_TARGET`, `UNDECODED_CALLDATA` and `APPROVE_TO_UNKNOWN` are then dropped. `STRATEGY_SETTLE_NO_ASSET` (settle never calls it, or `vault()` is missing or names another vault) and `UNVERIFIED_CONTRACT` stay Blocks. The settle check is static: it does not prove `settle()` returns the deposit asset. If provenance cannot be read, the review cannot clear it. CLI 0.101.0 and older Block every strategy that is not a template clone. This desk still leads with Portfolio and MorphoSupply. Draft a custom strategy only when the owner asks, say in the draft that it is hand-written, and take it to the step-5 yes only when this review would clear it.
+
+This desk does not cast guardian votes. If the owner asks you to, `--reason` is required (CLI 0.101.0+; the CLI refuses a vote with an empty reason):
+
+```
+sherwood --calldata-only proposal review-vote --vault <vault> --id <id> \
+  --support <approve|block> --lock-wood <wood> --reason "<why, one line, at most 1000 characters>"
+```
+
+`--lock-wood` is required in both directions; pass `0` on a Block (the ledger ignores it). The CLI runs `guardian review` first and refuses an Approve while it finds a critical, while it finds warnings (unless `--accept-warnings`), and when the review cannot run. A Block records the review's code, or `--code` when you block on something the review did not find (`--code` matches `^[A-Z][A-Z0-9_]{0,63}$`). With `--calldata-only`, after the wallet broadcasts the vote, run the `sherwood guardian verdict submit` line the CLI printed and put the vote tx hash in `--tx`. That is what puts the reason where `proposal status` and the Arena site read it. `prepare_review_vote` on the MCP builds the vote only and has no reason field: use the CLI for this.
+
 **Link (keyless; the proposal id is known only after the propose confirms).** Read the thesis UID from the broadcast thesis attest tx, then link:
 ```
 sherwood attest uid --tx <thesis attest tx hash>     # → { uid, schema, attester, recipient }
@@ -99,3 +118,20 @@ sherwood --calldata-only attest link --vault <vault> --proposal-id <id> --thesis
 ```
 `--provenance-class` defaults to `auto`.
 → sign/broadcast (covered by the same yes). Save `{ "thesisUid", "linkUid", "license" }` in `workspace/proposals/<id>/attestations.json`. On failure, log it and continue.
+
+## Idle vault (between proposals)
+
+When no proposal is open and the vault is holding USDG, park it in a MorphoSupply satellite, then bring the money back before the next real proposal. One open proposal at a time, so this is the book until you settle it.
+
+1. `sherwood sources get morpho --amount <N>`. Propose with `--market-id recommended`. No `/sources`, or a market under `recommended.rejected`: skip the satellite and tell the owner.
+2. Size `--amount` to free guardian coverage, and to the idle USDG. MorphoSupply is uncertified, so required coverage is about the full `--amount` (step 2, non-Portfolio rule). Free coverage is what the cohort guardian can still lock: its stake minus locks still open. Those locks outlive the proposal, so USDG just back from a settle is often more than the coverage still free. The CLI has no quote for that remainder before you propose: stay inside the idle balance and the tier-2 cap, and inside the largest size this vault last executed at `FULL` coverage. The command is the usual MorphoSupply propose (`UNAUDITED` in the title), default duration 30 days, bond at the quote + 5%:
+
+```
+sherwood --calldata-only strategy propose morpho-supply --vault <vault> \
+  --proposer <agent wallet> --market-id recommended --amount <free coverage, USDG> \
+  --max-drawdown-bps <bps from the kill criteria> --duration 30d \
+  --name "Idle USDG satellite" --description "<one line: parks idle cash in the recommended Morpho market>"
+```
+
+3. Say in `draft.md` that this parks idle cash. In GuardianReview, read `proposal show` → **Guardian Coverage** before execute (`watch` step 2b). `FULL` can execute on a yes. `NONE` means cancel. `PARTIAL` only on a yes, and tell the owner the share.
+4. When the next idea needs the cash, or the duration ends: settle (`watch` step 4). Morpho withdraws the position, with interest, back to the vault. Wait the 1-hour cooldown, then reclaim the proposer bond after the challenge window (`watch` step 8).
